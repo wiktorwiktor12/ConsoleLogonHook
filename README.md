@@ -15,3 +15,5 @@ then rename windows.ui.logon.dll so it uses the console logon and then itll just
 unfinished atm ofc, atm u got the security options (ctrl alt delete) and the status view (updates, please wait, logon etc)
 ![pork](https://github.com/wiktorwiktor12/ConsoleLogonHook/assets/85626296/2c6474d0-7dd3-4eef-a6da-f58623a85227)
 Aye pork a freak bruh
+𝓕𝓻𝓮𝓪𝓴𝔂Cheddar
+
