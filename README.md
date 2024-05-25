@@ -10,6 +10,6 @@ Computer\HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\WindowsRuntime\ActivatableClassId
 Computer\HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\WindowsRuntime\ActivatableClassId\Windows.Internal.UI.Logon.Controller.ConsoleLogonUX
 Computer\HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\WindowsRuntime\ActivatableClassId\Windows.Internal.Shell.PlatformExtensions.ConsoleCredUX
 
-then itll just work and do its thing
+then rename windows.ui.logon.dll so it uses the console logon and then itll just work and do its thing
 
 unfinished atm ofc, atm u got the security options (ctrl alt delete) and the status view (updates, please wait, logon etc)
