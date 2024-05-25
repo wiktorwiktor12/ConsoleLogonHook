@@ -6,7 +6,7 @@ how to build:
 
 how to use:
 1. drag and drop the compiled DLL into system32
-2. edit these keys in regedit (as trusted installer), edit the DllPath value to be the path of the consolelogonhook dll
+2. edit these keys by setting the DllPath value to be the path of the consolelogonhook dll
    `Computer\HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\WindowsRuntime\ActivatableClassId\Windows.Internal.UI.Logon.Controller.ConsoleBlockedShutdownResolver`
    
    `Computer\HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\WindowsRuntime\ActivatableClassId\Windows.Internal.UI.Logon.Controller.ConsoleLockScreen`
