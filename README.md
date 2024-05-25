@@ -1,19 +1,39 @@
 # welcome to the uhh consolelogonhook repo
-to build, u clone the shit, build with vs 2022 and enjoy,
+how to build:
+1. download source code
+2. build with visual studio 2022
+3. enjoy
 
-to use the compiled dll, put it into system32, then go to these keys in registry (as trusted installer) and edit
-DllPath in them to the consolelogonhook dll
+how to use:
+1. drag and drop into system32
+2. edit these keys in regedit (as trusted installer), edit the DllPath value to be the path of the consolelogonhook dll
+   `Computer\HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\WindowsRuntime\ActivatableClassId\Windows.Internal.UI.Logon.Controller.ConsoleBlockedShutdownResolver`
+   
+   `Computer\HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\WindowsRuntime\ActivatableClassId\Windows.Internal.UI.Logon.Controller.ConsoleLockScreen`
+   
+   `Computer\HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\WindowsRuntime\ActivatableClassId\Windows.Internal.UI.Logon.Controller.ConsoleLogonUX`
+   
+   `Computer\HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\WindowsRuntime\ActivatableClassId\Windows.Internal.Shell.PlatformExtensions.ConsoleCredUX`
 
-the list is as follows
-Computer\HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\WindowsRuntime\ActivatableClassId\Windows.Internal.UI.Logon.Controller.ConsoleBlockedShutdownResolver
-Computer\HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\WindowsRuntime\ActivatableClassId\Windows.Internal.UI.Logon.Controller.ConsoleLockScreen
-Computer\HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\WindowsRuntime\ActivatableClassId\Windows.Internal.UI.Logon.Controller.ConsoleLogonUX
-Computer\HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\WindowsRuntime\ActivatableClassId\Windows.Internal.Shell.PlatformExtensions.ConsoleCredUX
+3. rename Windows.UI.Logon.dll to literally anything so it uses the console login, it'll just work and do its thing
 
-then rename windows.ui.logon.dll so it uses the console logon and then itll just work and do its thing
+this is currently unfinished, as of right now you have
+1. security options (ctrl alt delete)
+2. status view (updates, please wait, logon, etc)
 
-unfinished atm ofc, atm u got the security options (ctrl alt delete) and the status view (updates, please wait, logon etc)
-![pork](https://github.com/wiktorwiktor12/ConsoleLogonHook/assets/85626296/2c6474d0-7dd3-4eef-a6da-f58623a85227)
-Aye pork a freak bruh
-𝓕𝓻𝓮𝓪𝓴𝔂Cheddar
+(if you're lazy to do the regedit stuff, copy and paste this into a .reg file)
+```
+Windows Registry Editor Version 5.00
 
+[HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\WindowsRuntime\ActivatableClassId\Windows.Internal.UI.Logon.Controller.ConsoleBlockedShutdownResolver]
+"DllPath"="C:\\Windows\\System32\\ConsoleLogonHook.dll"
+
+[HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\WindowsRuntime\ActivatableClassId\Windows.Internal.UI.Logon.Controller.ConsoleLockScreen]
+"DllPath"="C:\\Windows\\System32\\ConsoleLogonHook.dll"
+
+[HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\WindowsRuntime\ActivatableClassId\Windows.Internal.UI.Logon.Controller.ConsoleLogonUX]
+"DllPath"="C:\\Windows\\System32\\ConsoleLogonHook.dll"
+
+[HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\WindowsRuntime\ActivatableClassId\Windows.Internal.Shell.PlatformExtensions.ConsoleCredUX]
+"DllPath"="C:\\Windows\\System32\\ConsoleLogonHook.dll"
+```
