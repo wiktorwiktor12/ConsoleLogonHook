@@ -15,6 +15,7 @@
 #include "../util/util.h"
 #include "../ui/ui_messageview.h"
 #include "../ui/ui_statusview.h"
+#include <ui/ui_userselect.h>
 
 namespace init
 {
@@ -51,11 +52,15 @@ namespace init
             MessageBoxW(0, L"ur fucked", L"ur fucked", 0);
         }
         else
+        {
             fWindowsGetStringRawBuffer = decltype(fWindowsGetStringRawBuffer)(GetProcAddress(stringdll, "WindowsGetStringRawBuffer"));
+            fWindowsDeleteString = decltype(fWindowsDeleteString)(GetProcAddress(stringdll, "WindowsDeleteString"));
+        }
 
         uiSecurityControl::InitHooks(baseaddress);
         uiMessageView::InitHooks(baseaddress);
         uiStatusView::InitHooks(baseaddress);
+        uiUserSelect::InitHooks(baseaddress);
         uiRenderer::SetupUI();
 
         uiSecurityControl* securityControl = new uiSecurityControl();
@@ -66,5 +71,8 @@ namespace init
 
         uiStatusView* statusView = new uiStatusView();
         uiRenderer::AddWindow(std::shared_ptr<uiWindow>(statusView), false);
+
+        uiUserSelect* userSelect = new uiUserSelect();
+        uiRenderer::AddWindow(std::shared_ptr<uiWindow>(userSelect), false);
     }
 }

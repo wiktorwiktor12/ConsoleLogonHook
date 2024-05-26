@@ -23,6 +23,12 @@ __int64 MessageView__RuntimeClassInitialize_Hook(__int64 a1, HSTRING a2, HSTRING
     return res;
 }
 
+__int64(__fastcall* CredUIViewManager__ShowCredentialView)(void* _this, HSTRING a2);
+__int64 CredUIViewManager__ShowCredentialView_Hook(void* _this, HSTRING a2)
+{
+    SPDLOG_INFO("CredUIViewManager__ShowCredentialView_Hook a2 [{}]", ws2s(ConvertHStringToString(a2)));
+    return CredUIViewManager__ShowCredentialView(_this,a2);
+}
 
 void uiMessageView::Draw()
 {
@@ -32,6 +38,8 @@ void uiMessageView::Draw()
 void uiMessageView::InitHooks(uintptr_t baseaddress)
 {
     MessageView__RuntimeClassInitialize = decltype(MessageView__RuntimeClassInitialize)(baseaddress + 0x389B0);
+    CredUIViewManager__ShowCredentialView = decltype(CredUIViewManager__ShowCredentialView)(baseaddress + 0x201BC);
 
     Hook(MessageView__RuntimeClassInitialize, MessageView__RuntimeClassInitialize_Hook);
+    Hook(CredUIViewManager__ShowCredentialView, CredUIViewManager__ShowCredentialView_Hook);
 }

@@ -7,6 +7,7 @@
 #define Hook(a,b) DetourTransactionBegin(); DetourAttach(&(PVOID&)a, b); DetourTransactionCommit();
 
 inline PCWSTR(__stdcall* fWindowsGetStringRawBuffer)(HSTRING string, UINT32* length);
+inline HRESULT(__stdcall* fWindowsDeleteString)(HSTRING string);
 
 static std::string ws2s(const std::wstring& s)
 {
@@ -52,6 +53,12 @@ static std::vector<std::wstring> split(std::wstring s, std::wstring delimiter)
     return res;
 }
 
+static std::wstring ConvertHStringToString(HSTRING string)
+{
+    const wchar_t* convertedString = fWindowsGetStringRawBuffer(string, 0);
+    return convertedString;
+}
+
 static void MinimizeLogonConsole()
 {
     auto consoleWindow = FindWindowW(0, L"C:\\Windows\\system32\\LogonUI.exe");
@@ -59,4 +66,11 @@ static void MinimizeLogonConsole()
 
     ShowWindow(consoleWindow, SW_SHOW);
     ShowWindow(consoleWindow, SW_RESTORE);
+}
+
+static void* GetVirtualFunctionFromTable(void* vtable, int index)
+{
+    uintptr_t* func = (uintptr_t*)((uintptr_t)vtable + index);
+
+    return reinterpret_cast<void*>(*func);
 }

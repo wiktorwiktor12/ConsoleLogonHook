@@ -39,10 +39,13 @@ public:
     bool showWarning = true;
     bool showError = true;
     bool showDebug = false;
+    bool stylePicker = false;
 
     virtual void Tick() override;
     virtual void Draw() override;
 };
+
+class backgroundWindow;
 
 class uiRenderer
 {
@@ -50,18 +53,17 @@ public:
 
     std::shared_ptr<uiWindow> activeWindow;
     std::shared_ptr<logWindow> logWindowInstance;
+    std::shared_ptr<backgroundWindow> backgroundWindowInstance;
     std::vector<std::shared_ptr<uiWindow>> inactiveWindows;
 
     static uiRenderer* Get();
 
-    uiRenderer()
-    {
-        activeWindow = std::shared_ptr<uiWindow>(nullptr);
-        logWindowInstance = std::shared_ptr<::logWindow>(new ::logWindow());
-    }
+    uiRenderer();
 
     static void SetupUI();
     static void AddWindow(std::shared_ptr<uiWindow> newWindow, bool ShouldPushToFront = true);
+    //https://github.com/ocornut/imgui/wiki/Image-Loading-and-Displaying-Examples#example-for-directx11-users
+    static bool LoadTextureFromFile(const char* filename, ID3D11ShaderResourceView** out_srv, int* out_width, int* out_height);
 
     bool DoesWindowOfTypeIdExist(int typeId);
 
@@ -85,4 +87,22 @@ public:
 
     void Tick();
     void Draw();
+};
+
+class backgroundWindow : public uiWindow
+{
+public:
+
+    int h = 0;
+    int w = 0;
+    ID3D11ShaderResourceView* texture = NULL;
+    bool failedToLoadTexture = false;
+
+    backgroundWindow()
+    {
+        windowTypeId = 69420;
+    }
+
+
+    virtual void Draw() override;
 };

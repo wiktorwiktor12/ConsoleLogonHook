@@ -138,12 +138,14 @@ __int64 SecurityOptionsView__Destructor_Hook(__int64 a1, unsigned int a2)
 
 void uiSecurityControl::Draw()
 {
-    ImGui::Begin("Security Options",0, ImGuiWindowFlags_NoTitleBar | ImGuiWindowFlags_NoCollapse | ImGuiWindowFlags_NoBringToFrontOnFocus | ImGuiWindowFlags_NoMove | ImGuiWindowFlags_NoResize);
+    ImGui::Begin("Security Options",0, ImGuiWindowFlags_NoTitleBar | ImGuiWindowFlags_NoCollapse | ImGuiWindowFlags_NoBringToFrontOnFocus | ImGuiWindowFlags_NoMove | ImGuiWindowFlags_NoResize | ImGuiWindowFlags_NoBackground);
     
     ImGui::SetWindowSize(ImGui::GetIO().DisplaySize);
     ImGui::SetWindowPos(ImVec2(0,0));
 
     ImGui::SetCursorPosY(ImGui::GetCursorPosY() + ImGui::GetContentRegionAvail().y * 0.55);
+
+    
 
     TextCenteredOnLine("Security options");
     float longestWidth = 0;
@@ -152,7 +154,7 @@ void uiSecurityControl::Draw()
         auto& button = buttonsList[i];
         if (button.actualInstance)
         {
-            longestWidth = std::max<float>(ImGui::CalcTextSize(ws2s(button.getString()).c_str()).x, longestWidth);
+            longestWidth = std::max<float>(CalcTextButtonSize(ws2s(button.getString())).x, longestWidth);
         }
     }
 
@@ -167,6 +169,8 @@ void uiSecurityControl::Draw()
         ImVec2 size = ImVec2(0, 0);
         if (isLastButton)
         {
+            //size = calcsize(ws2s(button.getString()));
+
             size = ImGui::CalcTextSize(ws2s(button.getString()).c_str());
             size.x *= 2;
 
@@ -174,7 +178,11 @@ void uiSecurityControl::Draw()
 
             size.y *= 2;
         }
-
+        else
+        {
+            size = CalcTextButtonSize(ws2s(button.getString()));
+            size.x = longestWidth;
+        }
         if (ButtonCenteredOnLine(ws2s(button.getString()).c_str(), size,0.5f, (!isLastButton ? longestWidth : 0)))
         {
             button.Press();

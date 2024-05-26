@@ -2,6 +2,9 @@
 #include "ui_sink.h"
 #include "../imgui/imgui.h"
 #include "../imgui/imgui_internal.h"
+#include "ui_helper.h"
+#define STB_IMAGE_IMPLEMENTATION
+#include "stb_image.h"
 
 static ID3D11Device* d3dDevice = nullptr;
 static ID3D11DeviceContext* d3dDeviceContext = nullptr;
@@ -205,6 +208,13 @@ uiRenderer* uiRenderer::Get()
     return &renderer;
 }
 
+uiRenderer::uiRenderer()
+{
+    activeWindow = std::shared_ptr<uiWindow>(nullptr);
+    logWindowInstance = std::shared_ptr<::logWindow>(new ::logWindow());
+    backgroundWindowInstance = std::shared_ptr<::backgroundWindow>(new backgroundWindow());
+}
+
 void uiRenderer::SetupUI()
 {
     CreateThread(0,0,ImGUIThread,0,0,0);
@@ -224,6 +234,51 @@ void uiRenderer::AddWindow(std::shared_ptr<uiWindow> newWindow, bool ShouldPushT
         instance->inactiveWindows.push_back(newWindow);
 }
 
+bool uiRenderer::LoadTextureFromFile(const char* filename, ID3D11ShaderResourceView** out_srv, int* out_width, int* out_height)
+{
+    // Load from disk into a raw RGBA buffer
+    int image_width = 0;
+    int image_height = 0;
+    unsigned char* image_data = stbi_load(filename, &image_width, &image_height, NULL, 4);
+    if (image_data == NULL)
+        return false;
+
+    // Create texture
+    D3D11_TEXTURE2D_DESC desc;
+    ZeroMemory(&desc, sizeof(desc));
+    desc.Width = image_width;
+    desc.Height = image_height;
+    desc.MipLevels = 1;
+    desc.ArraySize = 1;
+    desc.Format = DXGI_FORMAT_R8G8B8A8_UNORM;
+    desc.SampleDesc.Count = 1;
+    desc.Usage = D3D11_USAGE_DEFAULT;
+    desc.BindFlags = D3D11_BIND_SHADER_RESOURCE;
+    desc.CPUAccessFlags = 0;
+
+    ID3D11Texture2D* pTexture = NULL;
+    D3D11_SUBRESOURCE_DATA subResource;
+    subResource.pSysMem = image_data;
+    subResource.SysMemPitch = desc.Width * 4;
+    subResource.SysMemSlicePitch = 0;
+    d3dDevice->CreateTexture2D(&desc, &subResource, &pTexture);
+
+    // Create texture view
+    D3D11_SHADER_RESOURCE_VIEW_DESC srvDesc;
+    ZeroMemory(&srvDesc, sizeof(srvDesc));
+    srvDesc.Format = DXGI_FORMAT_R8G8B8A8_UNORM;
+    srvDesc.ViewDimension = D3D11_SRV_DIMENSION_TEXTURE2D;
+    srvDesc.Texture2D.MipLevels = desc.MipLevels;
+    srvDesc.Texture2D.MostDetailedMip = 0;
+    d3dDevice->CreateShaderResourceView(pTexture, &srvDesc, out_srv);
+    pTexture->Release();
+
+    *out_width = image_width;
+    *out_height = image_height;
+    stbi_image_free(image_data);
+
+    return true;
+}
 bool uiRenderer::DoesWindowOfTypeIdExist(int typeId)
 {
     return false;
@@ -236,6 +291,9 @@ void uiRenderer::Tick()
 
 void uiRenderer::Draw()
 {
+    if (backgroundWindowInstance)
+        backgroundWindowInstance->Draw();
+
     if (activeWindow)
         activeWindow->Draw();
 
@@ -297,6 +355,11 @@ void logWindow::Draw()
         {
             system("start cmd");
         }
+        ImGui::SameLine();
+        if (ImGui::Button("Style Picker"))
+        {
+            stylePicker = !stylePicker;
+        }
 
         if (ImGui::Button("Clear"))
         {
@@ -354,6 +417,26 @@ void logWindow::Draw()
         }
     }
     ImGui::EndChild();
+
+    ImGui::End();
+
+    if (stylePicker)
+        ImGui::ShowStyleSelector("editor");
+}
+
+void backgroundWindow::Draw()
+{
+    if (!texture && !failedToLoadTexture)
+        failedToLoadTexture = !uiRenderer::LoadTextureFromFile("logonhookimage.jpg", &texture, &w, &h);
+
+    ImGui::Begin("background image", 0, ImGuiWindowFlags_NoTitleBar | ImGuiWindowFlags_NoCollapse | ImGuiWindowFlags_NoBringToFrontOnFocus | ImGuiWindowFlags_NoMove | ImGuiWindowFlags_NoResize | ImGuiWindowFlags_NoFocusOnAppearing);
+    ImGui::BringWindowToDisplayBack(ImGui::GetCurrentWindow());
+
+    ImGui::SetWindowSize(ImGui::GetIO().DisplaySize);
+    ImGui::SetWindowPos(ImVec2(0, 0));
+
+    if (texture)
+        ImGui::Image(texture, ImVec2(ImGui::GetIO().DisplaySize.x, ImGui::GetIO().DisplaySize.y));
 
     ImGui::End();
 }

@@ -65,7 +65,7 @@ void* StatusView__Destructor_Hook(void* _this, char a2)
 
 void uiStatusView::Draw()
 {
-    ImGui::Begin("Status View", 0, ImGuiWindowFlags_NoTitleBar | ImGuiWindowFlags_NoCollapse | ImGuiWindowFlags_NoBringToFrontOnFocus | ImGuiWindowFlags_NoMove | ImGuiWindowFlags_NoResize);
+    ImGui::Begin("Status View", 0, ImGuiWindowFlags_NoTitleBar | ImGuiWindowFlags_NoCollapse | ImGuiWindowFlags_NoBringToFrontOnFocus | ImGuiWindowFlags_NoMove | ImGuiWindowFlags_NoResize | ImGuiWindowFlags_NoBackground);
 
     ImGui::SetWindowSize(ImGui::GetIO().DisplaySize);
     ImGui::SetWindowPos(ImVec2(0, 0));

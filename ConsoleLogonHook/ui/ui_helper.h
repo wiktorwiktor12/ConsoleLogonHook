@@ -156,6 +156,21 @@ namespace ImGui
 
 }
 
+static ImVec2 CalcTextButtonSize(std::string text)
+{
+    ImVec2 size;
+    ImGuiWindow* window = ImGui::GetCurrentWindow();
+    ImGuiContext& g = *GImGui;
+    const ImGuiStyle& style = g.Style;
+    const ImGuiID id = window->GetID(text.c_str());
+    const ImVec2 label_size = ImGui::CalcTextSize(text.c_str(), NULL, true);
+
+    ImVec2 pos = window->DC.CursorPos;
+
+    size = ImGui::CalcItemSize(size, label_size.x + style.FramePadding.x * 2.0f, label_size.y + style.FramePadding.y * 2.0f);
+    return size;
+}
+
 static bool ButtonCenteredOnLine(const char* label, const ImVec2& size = ImVec2(0, 0), float alignmentx = 0.5f, float widthOverride = 0.0f)
 {
     ImGuiStyle& style = ImGui::GetStyle();
