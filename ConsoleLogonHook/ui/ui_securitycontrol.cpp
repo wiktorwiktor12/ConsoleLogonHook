@@ -189,7 +189,7 @@ void SecurityOptionControlWrapper::Press()
 {
     _KEY_EVENT_RECORD keyrecord;
     keyrecord.bKeyDown = true;
-    keyrecord.wVirtualKeyCode = 0x0D; // enter
+    keyrecord.wVirtualKeyCode = VK_RETURN;
     int result;
     if (actualInstance)
     {
