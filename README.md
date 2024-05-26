@@ -1,4 +1,4 @@
-# welcome to the uhh consolelogonhook repo
+# welcome to the consolelogonhook repo
 how to build:
 1. download source code
 2. build with visual studio 2022
