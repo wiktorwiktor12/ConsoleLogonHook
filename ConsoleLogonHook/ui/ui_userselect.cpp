@@ -42,6 +42,7 @@ __int64 UserSelectionView__RuntimeClassInitialize_Hook(void* _this, void* a2)
     {
         SPDLOG_INFO("Setting active status userSelect");
         userSelect->SetActive();
+        MinimizeLogonConsole();
     }
 
     return UserSelectionView__RuntimeClassInitialize(_this, a2);
@@ -55,8 +56,22 @@ __int64 CredProvSelectionView__RuntimeClassInitialize_Hook(void* _this, void* a2
     SPDLOG_INFO("CredProvSelectionView__RuntimeClassInitialize a3 [{}]", ws2s(ConvertHStringToString(a3)));
     choiceIteration = 0;
     CredProvSelectionView = _this;
-    return CredProvSelectionView__RuntimeClassInitialize(_this,a2,a3,a4);
+    auto res = CredProvSelectionView__RuntimeClassInitialize(_this, a2, a3, a4);
+
+    return res;
 }
+
+void* ConsoleUIView;
+
+__int64(__fastcall* ConsoleUIView__Initialize)(void* _this);
+__int64 ConsoleUIView__Initialize_Hook(void* _this)
+{
+    ConsoleUIView = _this;
+    return ConsoleUIView__Initialize(_this);
+}
+
+__int64(__fastcall* ConsoleUIView__HandleKeyInput)(void* _this, _KEY_EVENT_RECORD* a2);
+
 
 __int64 (__fastcall* SelectableUserOrCredentialControl__RuntimeClassInitialize)(void* _this, void* a2, void* a3);
 __int64 SelectableUserOrCredentialControl__RuntimeClassInitialize_Hook(void* _this, void* a2, void* a3)
@@ -75,9 +90,22 @@ __int64 SelectableUserOrCredentialControl__RuntimeClassInitialize_Hook(void* _th
                 wrapper.virtualKeyCodeToPress = VK_ESCAPE;
                 wasInSelectedCredentialView = false;
             }
-            wrapper.markedPressed = true; // it wont work if we press here
+            wrapper.markedPressed = true; // it wont work if we press here, so we defer it till it do work
+            wrapper.tickMarkedPressed = GetTickCount64();
         }
         choiceIteration++;
+    }
+
+
+    for (int i = 0; i < *(int*)(__int64(ConsoleUIView) + 0x30); ++i)
+    {
+        void* controlHandle = *(void**)(*(uintptr_t*)(__int64(ConsoleUIView) + 0x28) + 8 * i);
+        if (controlHandle && *(void**)(__int64(controlHandle) + 0x20) == (void*)(__int64(_this) + 8))
+        {
+            SPDLOG_INFO("Found at index {} controlhandleptr {}",i,controlHandle);
+            wrapper.controlHandleIndex = i;
+            break;
+        }
     }
 
     SPDLOG_INFO("SelectableUserOrCredentialControl__RuntimeClassInitialize_Hook, user name {} this {} a3 {}", ws2s(wrapper.GetText()),_this,a3);
@@ -86,13 +114,12 @@ __int64 SelectableUserOrCredentialControl__RuntimeClassInitialize_Hook(void* _th
     return res;
 }
 
-void* ConsoleUIView;
-
-__int64(__fastcall*ConsoleUIView__Initialize)(void* _this);
-__int64 ConsoleUIView__Initialize_Hook(void* _this)
+__int64(__fastcall* CredUIViewManager__ShowCredentialView)(void* _this, HSTRING a2);
+__int64 CredUIViewManager__ShowCredentialView_Hook(void* _this, HSTRING a2)
 {
-    ConsoleUIView = _this;
-    return ConsoleUIView__Initialize(_this);
+    auto res = CredUIViewManager__ShowCredentialView(_this,a2);
+
+    return res;
 }
 
 void* (__fastcall* SelectableUserOrCredentialControl_Destructor)(void* _this,char a2);
@@ -106,6 +133,7 @@ void* SelectableUserOrCredentialControl_Destructor_Hook(void* _this, char a2)
             if (wasInSelectedCredentialView)
             {
                 button.virtualKeyCodeToPress = VK_ESCAPE;
+                button.markedPressed = false;
                 wasInSelectedCredentialView = false;
             }
 
@@ -124,10 +152,12 @@ void uiUserSelect::Tick()
     for (int i = 0; i < buttons.size(); ++i)
     {
         auto& button = buttons[i];
-        if (button.markedPressed)
+        if (button.markedPressed && GetTickCount64() - button.tickMarkedPressed >= 15)
         {
             button.Press();
             button.markedPressed = false;
+            button.virtualKeyCodeToPress = VK_RETURN; //reset after an override
+            button.tickMarkedPressed = 0;
         }
     }
 }
@@ -172,9 +202,10 @@ void uiUserSelect::InitHooks(uintptr_t baseaddress)
     SelectedCredentialView__v_OnKeyInput = decltype(SelectedCredentialView__v_OnKeyInput)(baseaddress + 0x38720);
     SelectableUserOrCredentialControl_Destructor = decltype(SelectableUserOrCredentialControl_Destructor)(baseaddress + 0x363A8);
     UserSelectionView__v_OnKeyInput = decltype(UserSelectionView__v_OnKeyInput)(baseaddress + 0x37C30);
+    CredUIViewManager__ShowCredentialView = decltype(CredUIViewManager__ShowCredentialView)(baseaddress + 0x201BC);
 
     ConsoleUIView__Initialize = decltype(ConsoleUIView__Initialize)(baseaddress + 0x42710);
-    //ConsoleUIView__HandleKeyInput = decltype(ConsoleUIView__HandleKeyInput)(baseaddress + 0x43530);
+    ConsoleUIView__HandleKeyInput = decltype(ConsoleUIView__HandleKeyInput)(baseaddress + 0x43530);
 
     Hook(UserSelectionView__RuntimeClassInitialize, UserSelectionView__RuntimeClassInitialize_Hook);
     Hook(SelectableUserOrCredentialControl__RuntimeClassInitialize, SelectableUserOrCredentialControl__RuntimeClassInitialize_Hook);
@@ -182,6 +213,7 @@ void uiUserSelect::InitHooks(uintptr_t baseaddress)
     Hook(SelectedCredentialView__v_OnKeyInput, SelectedCredentialView__v_OnKeyInput_Hook);
     Hook(SelectableUserOrCredentialControl_Destructor, SelectableUserOrCredentialControl_Destructor_Hook);
     Hook(ConsoleUIView__Initialize, ConsoleUIView__Initialize_Hook);
+    Hook(CredUIViewManager__ShowCredentialView, CredUIViewManager__ShowCredentialView_Hook);
 }
 
 std::wstring SelectableUserOrCredentialControlWrapper::GetText()
@@ -206,6 +238,7 @@ std::wstring SelectableUserOrCredentialControlWrapper::GetText()
     return text;
 }
 
+//please dont touch, its messy, needs clean up, but its fragile af, ill fix at a later date
 void SelectableUserOrCredentialControlWrapper::Press()
 {
     _KEY_EVENT_RECORD keyrecord;
@@ -239,17 +272,28 @@ void SelectableUserOrCredentialControlWrapper::Press()
 
         if (instanceToUse)
         {
-            *(void**)(__int64(instanceToUse) + 0x70) = actualInstance;
             if (isCredentialControl())
-                CredProvSelectionView__v_OnKeyInput((void*)(__int64(instanceToUse) + 8),&keyrecord,&result);
+            {
+                void* plus8 = (void*)(__int64(ConsoleUIView) + 8);
+                *(int*)(__int64(plus8) + 0x40) = controlHandleIndex;
+
+                ConsoleUIView__HandleKeyInput((void*)(__int64(ConsoleUIView) + 8), &keyrecord);
+                //*(void**)(__int64(instanceToUse) + 0x70) = actualInstance;
+                //CredProvSelectionView__v_OnKeyInput((void*)(__int64(instanceToUse) + 8),&keyrecord,&result);
+            }
             else
             {
                 SPDLOG_INFO("Calling UserSelectionView__v_OnKeyInput");
-                *(void**)(__int64(instanceToUse) + 0x70) = actualInstance;
-                UserSelectionView__v_OnKeyInput((void*)(__int64(instanceToUse) + 8), &keyrecord, &result);
+                //*(void**)(__int64(instanceToUse) + 0x48) = actualInstance;
+                //UserSelectionView__v_OnKeyInput((void*)(__int64(instanceToUse) + 8), &keyrecord, &result);
+                //UserSelectionView__v_OnKeyInput((void*)(__int64(instanceToUse) + 8), &keyrecord, &result);
+                void* plus8 = (void*)(__int64(ConsoleUIView) + 8);
+                *(int*)(__int64(plus8) + 0x40) = controlHandleIndex;
+                //UserSelectionView__v_OnKeyInput((void*)(__int64(instanceToUse) + 8), &keyrecord, &result);
+                ConsoleUIView__HandleKeyInput((void*)(__int64(ConsoleUIView) + 8),&keyrecord);
             }
 
-            virtualKeyCodeToPress = VK_RETURN; //reset after an override
+            //virtualKeyCodeToPress = VK_RETURN; //reset after an override
         }
         //else
         //{

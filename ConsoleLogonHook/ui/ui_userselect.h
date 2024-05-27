@@ -8,6 +8,8 @@ public:
     void* actualInstance;
     std::wstring text;
     WORD virtualKeyCodeToPress = VK_RETURN;
+    int controlHandleIndex = -1;
+    unsigned long long tickMarkedPressed = 0;
     bool markedPressed = false;
     bool hastext = false;
 
