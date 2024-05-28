@@ -6,8 +6,16 @@
 
 #define Hook(a,b) DetourTransactionBegin(); DetourAttach(&(PVOID&)a, b); DetourTransactionCommit();
 
+inline HRESULT(__stdcall* fWindowsCreateString)(PCWSTR sourceString,UINT32 length,HSTRING* string);
 inline PCWSTR(__stdcall* fWindowsGetStringRawBuffer)(HSTRING string, UINT32* length);
 inline HRESULT(__stdcall* fWindowsDeleteString)(HSTRING string);
+
+namespace globals
+{
+    inline void* ConsoleUIView;
+    inline __int64(__fastcall* ConsoleUIView__Initialize)(void* _this);
+    inline __int64(__fastcall* ConsoleUIView__HandleKeyInput)(void* _this, _KEY_EVENT_RECORD* a2);
+};
 
 static std::string ws2s(const std::wstring& s)
 {
@@ -17,6 +25,16 @@ static std::string ws2s(const std::wstring& s)
     char* buf = new char[len];
     WideCharToMultiByte(CP_ACP, 0, s.c_str(), slength, buf, len, 0, 0);
     std::string r(buf);
+    delete[] buf;
+    return r;
+}
+
+static std::wstring s2ws(const std::string& s)
+{
+    const int len = MultiByteToWideChar(CP_ACP, 0, s.c_str(), -1, NULL, 0);
+    wchar_t* buf = new wchar_t[len];
+    MultiByteToWideChar(CP_ACP, 0, s.c_str(), -1, buf, len);
+    std::wstring r(buf);
     delete[] buf;
     return r;
 }
@@ -64,8 +82,8 @@ static void MinimizeLogonConsole()
     auto consoleWindow = FindWindowW(0, L"C:\\Windows\\system32\\LogonUI.exe");
     if (!consoleWindow) return;
 
-    ShowWindow(consoleWindow, SW_SHOW);
-    ShowWindow(consoleWindow, SW_RESTORE);
+    ShowWindow(consoleWindow, SW_FORCEMINIMIZE);
+    //ShowWindow(consoleWindow, SW_RESTORE);
 }
 
 static void* GetVirtualFunctionFromTable(void* vtable, int index)

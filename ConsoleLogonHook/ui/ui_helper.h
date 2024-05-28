@@ -154,6 +154,69 @@ namespace ImGui
         return pressed; //-V1020
     }
 
+    struct InputTextCallback_UserData
+    {
+        std::string* Str;
+        ImGuiInputTextCallback  ChainCallback;
+        void* ChainCallbackUserData;
+    };
+    
+    static int InputTextCallback(ImGuiInputTextCallbackData* data)
+    {
+        InputTextCallback_UserData* user_data = (InputTextCallback_UserData*)data->UserData;
+        if (data->EventFlag == ImGuiInputTextFlags_CallbackResize)
+        {
+            // Resize string callback
+            // If for some reason we refuse the new length (BufTextLen) and/or capacity (BufSize) we need to set them back to what we want.
+            std::string* str = user_data->Str;
+            IM_ASSERT(data->Buf == str->c_str());
+            str->resize(data->BufTextLen);
+            data->Buf = (char*)str->c_str();
+        }
+        else if (user_data->ChainCallback)
+        {
+            // Forward to user callback, if any
+            data->UserData = user_data->ChainCallbackUserData;
+            return user_data->ChainCallback(data);
+        }
+        return 0;
+    }
+    
+    static bool  InputText(const char* label, std::string* str, ImGuiInputTextFlags flags = 0, ImGuiInputTextCallback callback = nullptr, void* user_data = nullptr)
+    {
+        IM_ASSERT((flags & ImGuiInputTextFlags_CallbackResize) == 0);
+        flags |= ImGuiInputTextFlags_CallbackResize;
+    
+        InputTextCallback_UserData cb_user_data;
+        cb_user_data.Str = str;
+        cb_user_data.ChainCallback = callback;
+        cb_user_data.ChainCallbackUserData = user_data;
+        return InputText(label, (char*)str->c_str(), str->capacity() + 1, flags, InputTextCallback, &cb_user_data);
+    }
+    
+    static bool  InputTextMultiline(const char* label, std::string* str, const ImVec2& size = ImVec2(0, 0), ImGuiInputTextFlags flags = 0, ImGuiInputTextCallback callback = nullptr, void* user_data = nullptr)
+    {
+        IM_ASSERT((flags & ImGuiInputTextFlags_CallbackResize) == 0);
+        flags |= ImGuiInputTextFlags_CallbackResize;
+    
+        InputTextCallback_UserData cb_user_data;
+        cb_user_data.Str = str;
+        cb_user_data.ChainCallback = callback;
+        cb_user_data.ChainCallbackUserData = user_data;
+        return InputTextMultiline(label, (char*)str->c_str(), str->capacity() + 1, size, flags, InputTextCallback, &cb_user_data);
+    }
+    
+    static bool  InputTextWithHint(const char* label, const char* hint, std::string* str, ImGuiInputTextFlags flags = 0, ImGuiInputTextCallback callback = nullptr, void* user_data = nullptr)
+    {
+        IM_ASSERT((flags & ImGuiInputTextFlags_CallbackResize) == 0);
+        flags |= ImGuiInputTextFlags_CallbackResize;
+    
+        InputTextCallback_UserData cb_user_data;
+        cb_user_data.Str = str;
+        cb_user_data.ChainCallback = callback;
+        cb_user_data.ChainCallbackUserData = user_data;
+        return InputTextWithHint(label, hint, (char*)str->c_str(), str->capacity() + 1, flags, InputTextCallback, &cb_user_data);
+    }
 }
 
 static ImVec2 CalcTextButtonSize(std::string text)
@@ -184,6 +247,21 @@ static bool ButtonCenteredOnLine(const char* label, const ImVec2& size = ImVec2(
 
     return ImGui::Button(label, size);
 }
+
+static void ButtonCenteredOnLineNoCall(const char* label, const ImVec2& size = ImVec2(0, 0), float alignmentx = 0.5f, float widthOverride = 0.0f)
+{
+    ImGuiStyle& style = ImGui::GetStyle();
+
+    float sizex = (size.x <= 0 ? ImGui::CalcTextSize(label).x : size.x) + style.FramePadding.x * 2.0f;
+    float availx = ImGui::GetContentRegionAvail().x;
+
+    float offx = (availx - (widthOverride > 0 ? widthOverride : sizex)) * alignmentx;
+    if (offx > 0.0f)
+        ImGui::SetCursorPosX(ImGui::GetCursorPosX() + offx);
+
+    
+}
+
 
 static void TextCenteredOnLine(const char* label, float alignmentx = 0.5f)
 {

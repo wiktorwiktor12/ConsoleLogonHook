@@ -24,6 +24,8 @@ __int64 StatusView__RuntimeClassInitialize_Hook(/*StatusView*/void* _this, HSTRI
         statusview->statusText = text;
         statusview->SetActive();
     }
+
+    MinimizeLogonConsole();
     /*auto stringtobytes = [&](std::wstring str) -> std::string
         {
             std::stringstream ss;

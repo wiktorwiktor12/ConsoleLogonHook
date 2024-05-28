@@ -276,6 +276,7 @@
     <ClInclude Include="ui\ui_main.h" />
     <ClInclude Include="ui\ui_messageview.h" />
     <ClInclude Include="ui\ui_securitycontrol.h" />
+    <ClInclude Include="ui\ui_selectedcredentialview.h" />
     <ClInclude Include="ui\ui_sink.h" />
     <ClInclude Include="ui\ui_statusview.h" />
     <ClInclude Include="ui\ui_userselect.h" />
@@ -294,6 +295,7 @@
     <ClCompile Include="ui\ui_main.cpp" />
     <ClCompile Include="ui\ui_messageview.cpp" />
     <ClCompile Include="ui\ui_securitycontrol.cpp" />
+    <ClCompile Include="ui\ui_selectedcredentialview.cpp" />
     <ClCompile Include="ui\ui_statusview.cpp" />
     <ClCompile Include="ui\ui_userselect.cpp" />
   </ItemGroup>

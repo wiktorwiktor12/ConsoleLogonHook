@@ -23,6 +23,8 @@ class uiUserSelect : public uiWindow
 {
 public:
 
+	bool wasInSelectedCredentialView = false;
+
     uiUserSelect()
     {
         windowTypeId = 5;

@@ -15,7 +15,8 @@
 #include "../util/util.h"
 #include "../ui/ui_messageview.h"
 #include "../ui/ui_statusview.h"
-#include <ui/ui_userselect.h>
+#include "ui/ui_selectedcredentialview.h"
+#include "ui/ui_userselect.h"
 
 namespace init
 {
@@ -55,12 +56,14 @@ namespace init
         {
             fWindowsGetStringRawBuffer = decltype(fWindowsGetStringRawBuffer)(GetProcAddress(stringdll, "WindowsGetStringRawBuffer"));
             fWindowsDeleteString = decltype(fWindowsDeleteString)(GetProcAddress(stringdll, "WindowsDeleteString"));
+            fWindowsCreateString = decltype(fWindowsCreateString)(GetProcAddress(stringdll, "WindowsCreateString"));
         }
 
         uiSecurityControl::InitHooks(baseaddress);
         uiMessageView::InitHooks(baseaddress);
         uiStatusView::InitHooks(baseaddress);
         uiUserSelect::InitHooks(baseaddress);
+        uiSelectedCredentialView::InitHooks(baseaddress);
         uiRenderer::SetupUI();
 
         uiSecurityControl* securityControl = new uiSecurityControl();
@@ -74,5 +77,8 @@ namespace init
 
         uiUserSelect* userSelect = new uiUserSelect();
         uiRenderer::AddWindow(std::shared_ptr<uiWindow>(userSelect), false);
+
+		uiSelectedCredentialView* selectedCredentialView = new uiSelectedCredentialView();
+        uiRenderer::AddWindow(std::shared_ptr<uiWindow>(selectedCredentialView), false);
     }
 }

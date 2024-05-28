@@ -396,6 +396,9 @@
     <ClInclude Include="ui\ui_userselect.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="ui\ui_selectedcredentialview.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="dllmain.cpp">
@@ -438,6 +441,9 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="ui\ui_userselect.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="ui\ui_selectedcredentialview.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

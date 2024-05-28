@@ -47,9 +47,11 @@ __int64 __fastcall SecurityOptionsView__RuntimeClassInitialize_Hook(__int64 a1, 
         }
     }
 
-    auto consoleWindow = FindWindowW(0,L"C:\\Windows\\system32\\LogonUI.exe");
-    if (consoleWindow)
-        ShowWindow(consoleWindow, SW_FORCEMINIMIZE);
+    MinimizeLogonConsole();
+
+    //auto consoleWindow = FindWindowW(0,L"C:\\Windows\\system32\\LogonUI.exe");
+    //if (consoleWindow)
+    //    ShowWindow(consoleWindow, SW_FORCEMINIMIZE);
         //ShowWindow(consoleWindow, SW_HIDE);
 
     auto res = SecurityOptionsView__RuntimeClassInitialize(a1, a2, a3);
