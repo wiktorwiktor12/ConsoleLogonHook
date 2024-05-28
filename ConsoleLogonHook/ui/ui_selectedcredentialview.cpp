@@ -6,6 +6,7 @@
 #include "ui_helper.h"
 #include "ui_userselect.h"
 #include <vector>
+#include "ui_securitycontrol.h"
 
 std::vector<EditControlWrapper> editControls;
 
@@ -95,9 +96,28 @@ __int64 CheckboxControl__Destructor_Hook(void* _this, char a2)
 	return CheckboxControl__Destructor(_this,a2);
 }
 
+bool bWasInSecurityControl = false;
+
+void uiSelectedCredentialView::Begin()
+{
+	if (!hasSetupNotify)
+	{
+		auto uiRenderer = uiRenderer::Get();
+		if (uiRenderer)
+		{
+			auto securityControl = uiRenderer->GetWindowOfTypeId<uiSecurityControl>(2);
+			if (securityControl)
+			{
+				securityControl->wasInSecurityControlNotifies.push_back([]() -> void { bWasInSecurityControl = true; });
+				hasSetupNotify = true;
+			}
+		}
+	}
+}
+
 void uiSelectedCredentialView::Tick()
 {
-
+	
 }
 
 void uiSelectedCredentialView::Draw()
@@ -159,12 +179,12 @@ void uiSelectedCredentialView::Draw()
 		}
 	}
 
-	const char* text = "Switch User/Cancel";
+	std::string& text = bWasInSecurityControl ? cancel : switchUser;
 	ImVec2 size;
 	size = CalcTextButtonSize(text);
 	size.y *= 2;
 
-	if (ButtonCenteredOnLine(text, size))
+	if (ButtonCenteredOnLine(text.c_str(), size))
 	{
 		KEY_EVENT_RECORD rec;
 		rec.wVirtualKeyCode = VK_ESCAPE;

@@ -310,6 +310,10 @@ void uiRenderer::Draw()
 #endif
 }
 
+void uiWindow::Begin()
+{
+}
+
 void uiWindow::Tick()
 {
 }

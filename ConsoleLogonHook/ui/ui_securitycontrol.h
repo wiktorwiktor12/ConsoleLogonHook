@@ -1,5 +1,6 @@
 #pragma once
 #include "ui_main.h"
+#include <functional>
 
 struct SecurityOptionControlWrapper
 {
@@ -21,6 +22,8 @@ struct SecurityOptionControlWrapper
 class uiSecurityControl : public uiWindow
 {
 public:
+
+    std::vector<std::function<void()>> wasInSecurityControlNotifies;
 
     uiSecurityControl()
     {

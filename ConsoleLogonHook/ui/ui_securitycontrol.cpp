@@ -42,7 +42,16 @@ __int64 __fastcall SecurityOptionsView__RuntimeClassInitialize_Hook(__int64 a1, 
         auto& window = uiRenderer::Get()->inactiveWindows[i];
         if (window->windowTypeId == 2) //typeid for securityoptions
         {
+            auto& notifies = reinterpret_cast<uiSecurityControl*>(window.get())->wasInSecurityControlNotifies;
+            for (int x = 0; x < notifies.size(); ++x)
+            {
+                auto& notify = notifies[x];
+                if (notify)
+                    notify();
+            }
+
             window->SetActive();
+
             break;
         }
     }

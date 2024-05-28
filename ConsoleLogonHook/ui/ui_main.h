@@ -19,6 +19,7 @@ public:
 
     }
 
+    virtual void Begin(); // when all windows are ready, called once
     virtual void Tick();
     virtual void Draw(); //implemented by the classes
 

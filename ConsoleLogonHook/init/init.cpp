@@ -80,5 +80,11 @@ namespace init
 
 		uiSelectedCredentialView* selectedCredentialView = new uiSelectedCredentialView();
         uiRenderer::AddWindow(std::shared_ptr<uiWindow>(selectedCredentialView), false);
+
+        securityControl->Begin();
+        messageView->Begin();
+        statusView->Begin();
+        userSelect->Begin();
+        selectedCredentialView->Begin();
     }
 }

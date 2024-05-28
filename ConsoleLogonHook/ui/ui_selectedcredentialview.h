@@ -18,6 +18,12 @@ class uiSelectedCredentialView : public uiWindow
 {
 public:
 
+    //TODO: LOAD THESE FROM A MUI, SO WE HAVE TRANSLATIONS
+    std::string switchUser = "Switch User";
+    std::string cancel = "Cancel";
+
+    bool hasSetupNotify = false;
+
     std::wstring accountNameToDisplay;
 
     uiSelectedCredentialView()
@@ -25,6 +31,7 @@ public:
         windowTypeId = 6;
     }
 
+    void Begin() override;
     void Tick() override;
     void Draw() override;
 
