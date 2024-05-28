@@ -115,9 +115,27 @@ void uiSelectedCredentialView::Begin()
 	}
 }
 
+static bool bPressedEnter = false;
+
 void uiSelectedCredentialView::Tick()
 {
+	if (GetAsyncKeyState(VK_RETURN))
+	{
+		if (!bPressedEnter)
+		{
+			bPressedEnter = true;
+
+			if (uiRenderer::Get()->activeWindow.get() == this) //only send an enter if we are active window
+			{
+				KEY_EVENT_RECORD rec;
+				rec.wVirtualKeyCode = VK_RETURN; //forward it to consoleuiview
+				globals::ConsoleUIView__HandleKeyInput((void*)(__int64(globals::ConsoleUIView) + 8), &rec);
+			}
+		}
 	
+	}
+	else
+		bPressedEnter = false;
 }
 
 void uiSelectedCredentialView::Draw()
