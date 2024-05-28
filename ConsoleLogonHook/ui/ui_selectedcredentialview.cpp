@@ -69,6 +69,7 @@ __int64 EditControl__RuntimeClassInitialize_Hook(void* _this, void* a2, void* a3
 	EditControlWrapper wrapper;
 	wrapper.actualInstance = _this;
 	wrapper.fieldNameCache = ws2s(wrapper.GetFieldName());
+	wrapper.inputBuffer = ws2s(wrapper.GetInputtedText());
 	//strcpy_s(wrapper.label, ws2s(wrapper.GetFieldName()).c_str());
 	//strcpy_s(wrapper.fieldNameCache, ws2s(wrapper.GetFieldName()).c_str());
 
@@ -115,10 +116,9 @@ void uiSelectedCredentialView::Begin()
 	}
 }
 
-static bool bPressedEnter = false;
-
 void uiSelectedCredentialView::Tick()
 {
+	static bool bPressedEnter = false;
 	if (GetAsyncKeyState(VK_RETURN))
 	{
 		if (!bPressedEnter)

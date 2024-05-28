@@ -27,9 +27,15 @@ __int64 UserSelectionView__RuntimeClassInitialize_Hook(void* _this, void* a2)
         SPDLOG_INFO("Setting active status userSelect");
         userSelect->SetActive();
         MinimizeLogonConsole();
+
+        
     }
 
-    return UserSelectionView__RuntimeClassInitialize(_this, a2);
+    auto res = UserSelectionView__RuntimeClassInitialize(_this, a2);
+
+    std::sort(buttons.begin(), buttons.end(), [](SelectableUserOrCredentialControlWrapper& a, SelectableUserOrCredentialControlWrapper& b) { return a.GetText() < b.GetText(); });
+
+    return res;
 }
 
 void* CredProvSelectionView;
@@ -178,10 +184,33 @@ void uiUserSelect::Draw()
     ImGui::SetWindowSize(ImGui::GetIO().DisplaySize);
     ImGui::SetWindowPos(ImVec2(0, 0));
 
-    ImGui::SetCursorPosY(ImGui::GetCursorPosY() + ImGui::GetContentRegionAvail().y * 0.5);
-    ImGui::SetCursorPosX(ImGui::GetCursorPosX() + ImGui::GetContentRegionAvail().x * 0.5);
+    //ImGui::SetCursorPosY(ImGui::GetCursorPosY() + ImGui::GetContentRegionAvail().y * 0.5);
+    //ImGui::SetCursorPosX(ImGui::GetCursorPosX() + ImGui::GetContentRegionAvail().x * 0.5);
 
-    ImGui::BeginChild("", ImVec2(ImGui::GetContentRegionAvail().x * 0.5, ImGui::GetContentRegionAvail().y * 0.5),0,ImGuiWindowFlags_HorizontalScrollbar);
+    //ImGui::BeginChild("", ImVec2(ImGui::GetContentRegionAvail().x * 0.5, ImGui::GetContentRegionAvail().y * 0.5),0,ImGuiWindowFlags_HorizontalScrollbar);
+    ImGui::SetCursorPosY(ImGui::GetCursorPosY() + ImGui::GetContentRegionAvail().y * 0.45);
+
+    ImVec2 size;
+    for (int i = 0; i < buttons.size(); ++i)
+    {
+        auto& control = buttons[i];
+
+        if (!control.actualInstance)
+            continue;
+
+        if (control.isCredentialControl())
+            continue;
+
+        if (size.y <= 0)
+        {
+            size = CalcTextButtonSize(ws2s(control.GetText()));
+            continue;
+        }
+
+        size.x += CalcTextButtonSize(ws2s(control.GetText())).x;
+    }
+
+    bool bFirst = true;
     for (int i = 0; i < buttons.size(); ++i)
     {
         auto& button = buttons[i];
@@ -191,11 +220,19 @@ void uiUserSelect::Draw()
         if (button.isCredentialControl())
             continue;
 
+        if (bFirst)
+        {
+            ButtonCenteredOnLineNoCall(ws2s(button.GetText()).c_str(), size);
+            bFirst = false;
+        }
+        else if (i < buttons.size())
+            ImGui::SameLine();
+
         if (ImGui::Button(ws2s(button.GetText()).c_str()))
             button.Press();
 
-        if (i != buttons.size() - 1)
-            ImGui::SameLine();
+        //if (i != buttons.size() - 1)
+        //    ImGui::SameLine();
     }
     ImGui::EndChild();
 
