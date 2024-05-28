@@ -1,10 +1,13 @@
+#define STB_IMAGE_IMPLEMENTATION
+#define IM_VEC2_CLASS_EXTRA
+#define IMGUI_DEFINE_MATH_OPERATORS
 #include "ui_main.h"
 #include "ui_sink.h"
 #include "../imgui/imgui.h"
 #include "../imgui/imgui_internal.h"
 #include "ui_helper.h"
-#define STB_IMAGE_IMPLEMENTATION
 #include "stb_image.h"
+#include <util/util.h>
 
 static ID3D11Device* d3dDevice = nullptr;
 static ID3D11DeviceContext* d3dDeviceContext = nullptr;
@@ -129,6 +132,8 @@ DWORD WINAPI ImGUIThread(LPVOID lparam)
 
     ImGui_ImplWin32_Init(windowHandle);
     ImGui_ImplDX11_Init(d3dDevice, d3dDeviceContext);
+
+    MinimizeLogonConsole();
 
     const ImVec4 clear_color = ImVec4(0.45f, 0.55f, 0.60f, 1.00f);
     bool done = false;
@@ -289,6 +294,8 @@ void uiRenderer::Tick()
 
 }
 
+//#define ENABLELOG
+
 void uiRenderer::Draw()
 {
     if (backgroundWindowInstance)
@@ -297,8 +304,10 @@ void uiRenderer::Draw()
     if (activeWindow)
         activeWindow->Draw();
 
+#ifdef ENABLELOG
     if (logWindowInstance)
         logWindowInstance->Draw();
+#endif
 }
 
 void uiWindow::Tick()
@@ -429,14 +438,32 @@ void backgroundWindow::Draw()
     if (!texture && !failedToLoadTexture)
         failedToLoadTexture = !uiRenderer::LoadTextureFromFile("logonhookimage.jpg", &texture, &w, &h);
 
-    ImGui::Begin("background image", 0, ImGuiWindowFlags_NoTitleBar | ImGuiWindowFlags_NoCollapse | ImGuiWindowFlags_NoBringToFrontOnFocus | ImGuiWindowFlags_NoMove | ImGuiWindowFlags_NoResize | ImGuiWindowFlags_NoFocusOnAppearing);
+    ImGuiWindowFlags flags;
+    flags |= ImGuiWindowFlags_NoTitleBar;
+    flags |= ImGuiWindowFlags_NoCollapse;
+    flags |= ImGuiWindowFlags_NoBringToFrontOnFocus;
+    flags |= ImGuiWindowFlags_NoMove;
+    flags |= ImGuiWindowFlags_NoResize;
+    flags |= ImGuiWindowFlags_NoFocusOnAppearing;
+    flags |= ImGuiWindowFlags_NoScrollbar;
+
+    ImGui::Begin("background image", 0, flags);
     ImGui::BringWindowToDisplayBack(ImGui::GetCurrentWindow());
 
     ImGui::SetWindowSize(ImGui::GetIO().DisplaySize);
     ImGui::SetWindowPos(ImVec2(0, 0));
 
     if (texture)
-        ImGui::Image(texture, ImVec2(ImGui::GetIO().DisplaySize.x, ImGui::GetIO().DisplaySize.y));
+    {
+        auto imagesize = ImVec2(w,h);
+
+        float scale = ImGui::GetWindowSize().y / h;
+        if (scale > 1)
+            imagesize *= scale;
+        ImGui::SetCursorPos((ImGui::GetWindowSize() - imagesize) * 0.5f);
+
+        ImGui::Image(texture, imagesize);
+    }
 
     ImGui::End();
 }

@@ -130,6 +130,22 @@ void* SelectableUserOrCredentialControl_Destructor_Hook(void* _this, char a2)
     return SelectableUserOrCredentialControl_Destructor(_this,a2);
 }
 
+unsigned long long tickLocked = INT_MAX - 1;
+bool locked = false;
+
+__int64(__fastcall* LogonViewManager__Lock)(__int64 a1, int a2, char a3, HSTRING a4, __int64 a5);
+__int64 LogonViewManager__Lock_Hook(__int64 a1, int a2, char a3, HSTRING a4, __int64 a5)
+{
+    auto res = LogonViewManager__Lock(a1, a2, a3, a4, a5);
+
+    SPDLOG_INFO("LogonViewManager__Lock_Hook {} {} {} {} {}", (void*)a1, a2, (int)a3, ws2s(ConvertHStringToString(a4)), (void*)a5);
+
+    tickLocked = GetTickCount64();
+    locked = true;
+
+    return res;
+}
+
 void uiUserSelect::Tick()
 {
     for (int i = 0; i < buttons.size(); ++i)
@@ -142,6 +158,16 @@ void uiUserSelect::Tick()
             button.virtualKeyCodeToPress = VK_RETURN; //reset after an override
             button.tickMarkedPressed = 0;
         }
+    }
+    if (locked && GetTickCount64() - tickLocked >= 25)
+    {
+        locked = false;
+
+        KEY_EVENT_RECORD rec;
+        rec.bKeyDown = true;
+        rec.dwControlKeyState = LEFT_CTRL_PRESSED | LEFT_ALT_PRESSED;
+        rec.wVirtualKeyCode = VK_DELETE;
+        globals::ConsoleUIView__HandleKeyInput((void*)(__int64(globals::ConsoleUIView) + 8),&rec);
     }
 }
 
@@ -189,6 +215,9 @@ void uiUserSelect::InitHooks(uintptr_t baseaddress)
 
     globals::ConsoleUIView__Initialize = decltype(globals::ConsoleUIView__Initialize)(baseaddress + 0x42710);
     globals::ConsoleUIView__HandleKeyInput = decltype(globals::ConsoleUIView__HandleKeyInput)(baseaddress + 0x43530);
+
+    LogonViewManager__Lock = decltype(LogonViewManager__Lock)(baseaddress + 0x2884C);
+    Hook(LogonViewManager__Lock, LogonViewManager__Lock_Hook);
 
     Hook(UserSelectionView__RuntimeClassInitialize, UserSelectionView__RuntimeClassInitialize_Hook);
     Hook(SelectableUserOrCredentialControl__RuntimeClassInitialize, SelectableUserOrCredentialControl__RuntimeClassInitialize_Hook);

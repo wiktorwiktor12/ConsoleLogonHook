@@ -39,9 +39,13 @@ __int64 CredUISelectedCredentialView__RuntimeClassInitialize_Hook(void* _this, v
 __int64 (__fastcall* SelectedCredentialView__RuntimeClassInitialize)(void* a1, int a2, __int64 a3, HSTRING a4);
 __int64 SelectedCredentialView__RuntimeClassInitialize_Hook(void* a1, int a2, __int64 a3, HSTRING a4)
 {
-	auto res = SelectedCredentialView__RuntimeClassInitialize(a1,a2,a3,a4);
 
 	auto selectedCredentialView = uiRenderer::Get()->GetWindowOfTypeId<uiSelectedCredentialView>(6);
+	//selectedCredentialView->SetInactive();
+	//editControls.clear();
+
+	auto res = SelectedCredentialView__RuntimeClassInitialize(a1,a2,a3,a4);
+
 	if (selectedCredentialView)
 	{
 		SPDLOG_INFO("Setting active status selectedCredentialView");
@@ -129,8 +133,10 @@ void uiSelectedCredentialView::Draw()
 			ImVec2 size = CalcTextButtonSize(control.fieldNameCache);
 			size.x = width;
 
+			bool bCensor = (i > 0 && i <= 3);
+
 			ButtonCenteredOnLineNoCall(control.fieldNameCache.c_str(), size);
-			if (ImGui::InputTextWithHint("", control.fieldNameCache.c_str(), &control.inputBuffer))
+			if (ImGui::InputTextWithHint("", control.fieldNameCache.c_str(), &control.inputBuffer, bCensor ? ImGuiInputTextFlags_Password : 0))
 			{
 				SPDLOG_INFO("TRUE {}",control.inputBuffer);
 				control.SetInputtedText(s2ws(control.inputBuffer));

@@ -82,7 +82,9 @@ static void MinimizeLogonConsole()
     auto consoleWindow = FindWindowW(0, L"C:\\Windows\\system32\\LogonUI.exe");
     if (!consoleWindow) return;
 
-    ShowWindow(consoleWindow, SW_FORCEMINIMIZE);
+    //MoveWindow(consoleWindow,0,0,1,1,0);
+    //ShowWindow(consoleWindow, SW_FORCEMINIMIZE);
+    ShowWindow(consoleWindow, SW_HIDE);
     //ShowWindow(consoleWindow, SW_RESTORE);
 }
 

@@ -80,6 +80,8 @@ __int64 BasicTextControl__RuntimeClassInitialize2_Hook(void* _this, void* a2, __
 
     SPDLOG_INFO("BasicTextControl__RuntimeClassInitialize2_Hook {} {} {} ", _this, a2, a3);
 
+    SPDLOG_INFO("text is {}",ws2s(*(const wchar_t**)(__int64(_this) + 0x40)));
+
     return res;
 }
 

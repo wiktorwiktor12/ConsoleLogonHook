@@ -104,12 +104,12 @@ void* SecurityOptionControl_Destructor_Hook(__int64 a1, unsigned int a2)
         }
     }
 
-    auto consoleWindow = FindWindowW(0, L"C:\\Windows\\system32\\LogonUI.exe");
-    if (consoleWindow)
-    {
-        ShowWindow(consoleWindow, SW_SHOW);
-        ShowWindow(consoleWindow, SW_RESTORE);
-    }
+    //auto consoleWindow = FindWindowW(0, L"C:\\Windows\\system32\\LogonUI.exe");
+    //if (consoleWindow)
+    //{
+    //    ShowWindow(consoleWindow, SW_SHOW);
+    //    ShowWindow(consoleWindow, SW_RESTORE);
+    //}
 
     return SecurityOptionControl_Destructor(a1,a2);
 }
@@ -223,6 +223,8 @@ void uiSecurityControl::InitHooks(uintptr_t baseaddress)
     CredUIManager__ShowCredentialView = decltype(CredUIManager__ShowCredentialView)(baseaddress + 0x201BC);
     SecurityOptionsView__Destructor = decltype(SecurityOptionsView__Destructor)(baseaddress + 0x37880);
 
+
+
     Hook(LogonViewManager__ShowSecurityOptionsUIThread, LogonViewManager__ShowSecurityOptionsUIThread_Hook);
     Hook(LogonViewManager__ShowSecurityOptions, LogonViewManager__ShowSecurityOptions_Hook);
     Hook(MakeAndInitialize_SecurityOptionControl, MakeAndInitialize_SecurityOptionControl_Hook);
@@ -231,5 +233,6 @@ void uiSecurityControl::InitHooks(uintptr_t baseaddress)
     Hook(SecurityOptionsView__RuntimeClassInitialize, SecurityOptionsView__RuntimeClassInitialize_Hook);
     Hook(CredUIManager__ShowCredentialView, CredUIManager__ShowCredentialView_Hook);
     Hook(SecurityOptionsView__Destructor, SecurityOptionsView__Destructor_Hook);
+
     //Hook(ConsoleUIView__Initialize, ConsoleUIView__Initialize_Hook);
 }
