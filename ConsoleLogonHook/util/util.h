@@ -98,7 +98,7 @@ static void* GetVirtualFunctionFromTable(void* vtable, int index)
 
 //taken from win7 sdk samples
 //https://github.com/Ippei-Murofushi/WindowsSDK7-Samples/blob/e8fe83b043727e71f5179da11fc6228475e7973c/security/parentalcontrols/utilities/Utilities.cpp#L85
-static HRESULT GetSIDStringFromUsername(PCWSTR pcszUserName, PWSTR* ppszSID)
+__declspec(noinline) static HRESULT GetSIDStringFromUsername(PCWSTR pcszUserName, PWSTR* ppszSID)
 {
     HRESULT hr = E_INVALIDARG;
 
@@ -164,14 +164,23 @@ static HRESULT GetSIDStringFromUsername(PCWSTR pcszUserName, PWSTR* ppszSID)
     return (hr);
 }
 
-static std::wstring GetProfilePicturePathFromUsername(std::wstring username)
+__declspec(noinline) static HRESULT GetSIDStringFromUsername(PCWSTR pcszUserName, std::wstring* ppszSID)
+{
+    WCHAR* str = 0;
+    HRESULT hr = GetSIDStringFromUsername(pcszUserName, &str);
+    *ppszSID = str ? str : L"";
+    return hr;
+}
+
+static std::wstring GetProfilePicturePathFromSID(std::wstring sid)
 {
     std::wstring finalpath = L"C:\\ProgramData\\Microsoft\\User Account Pictures\\user-48.png";
 
-    WCHAR* str = 0;
-    GetSIDStringFromUsername(username.c_str(), &str);
+    //WCHAR* str = 0;
+    //auto hr = GetSIDStringFromUsername(username.c_str(), &str);
+    //if (hr != S_OK) return finalpath;
 
-    std::wstring subkey = L"SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\AccountPicture\\Users\\" + std::wstring(str);
+    std::wstring subkey = L"SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\AccountPicture\\Users\\" + sid;
     SPDLOG_INFO("subkey {}", ws2s(subkey));
     BYTE byteArray[MAX_PATH * 2];
     HKEY result;
@@ -191,7 +200,7 @@ static std::wstring GetProfilePicturePathFromUsername(std::wstring username)
         RegCloseKey(result);
     }
 
-    LocalFree(str);
+    //LocalFree(str);
 
     return finalpath;
 }

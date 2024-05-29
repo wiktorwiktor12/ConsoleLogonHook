@@ -130,12 +130,18 @@ __int64 SelectableUserOrCredentialControl__RuntimeClassInitialize_Hook(void* _th
         //
         //    RegCloseKey(result);
         //}
-        auto path = GetProfilePicturePathFromUsername(wrapper.GetText());
-        SPDLOG_INFO("path {}",ws2s(path));
-        int w = 0;
-        int h = 0;
-        if (uiRenderer::LoadTextureFromFile(ws2s(path).c_str(), &wrapper.texture, &w, &h))
-            SPDLOG_INFO("TEXTURE LOADED");
+        std::wstring sid;
+        auto hr = GetSIDStringFromUsername(wrapper.GetText().c_str(), &sid);
+        if (hr == S_OK)
+        {
+            auto path = GetProfilePicturePathFromSID(sid);
+            SPDLOG_INFO("path {}", ws2s(path));
+            int w = 0;
+            int h = 0;
+            if (uiRenderer::LoadTextureFromFile(ws2s(path).c_str(), &wrapper.texture, &w, &h))
+                SPDLOG_INFO("TEXTURE LOADED");
+        }
+
 
     }
 
@@ -332,8 +338,15 @@ void uiUserSelect::Draw()
 
         //if (ImGui::ImageButton(ws2s(button.GetText()).c_str()))
         //if (ImGui::ImageButton(ws2s(button.GetText()).c_str(),button.texture,ImVec2(64,64)))
-        if (ImGui::ImageButtonLabelled(ws2s(button.GetText()).c_str(),button.texture,ImVec2(64,64)))
-            button.Press();
+        if (button.texture)
+        {
+            if (ImGui::ImageButtonLabelled(ws2s(button.GetText()).c_str(), button.texture, ImVec2(64, 64)))
+                button.Press();
+        }
+        else
+            if (ImGui::Button(ws2s(button.GetText()).c_str()))
+                button.Press();
+
 
         //if (i != buttons.size() - 1)
         //    ImGui::SameLine();
