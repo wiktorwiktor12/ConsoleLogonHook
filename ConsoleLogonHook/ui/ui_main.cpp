@@ -39,6 +39,9 @@ LRESULT CALLBACK WndProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
     case WM_DESTROY:
         ::PostQuitMessage(0);
         return 0;
+    case WM_ACTIVATEAPP:
+        uiRenderer::Get()->bAppIsFocused = (bool)wParam;
+        break;
     }
     return ::DefWindowProcW(hwnd, uMsg, wParam, lParam);
 }

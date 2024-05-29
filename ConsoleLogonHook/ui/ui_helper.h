@@ -368,7 +368,7 @@ namespace ImGui
 
 
         //RenderTextClipped(textmin, textmax, label, NULL, &label_size, g.Style.SelectableTextAlign, &bb);
-        RenderTextWrapped(textmin, label, 0, image_size.x);
+        RenderTextWrapped(textmin, label, 0, image_size.x + padding.x * 2.0f);
 
         return pressed;
     }

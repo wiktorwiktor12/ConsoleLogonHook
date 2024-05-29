@@ -56,6 +56,7 @@ public:
     std::shared_ptr<logWindow> logWindowInstance;
     std::shared_ptr<backgroundWindow> backgroundWindowInstance;
     std::vector<std::shared_ptr<uiWindow>> inactiveWindows;
+    bool bAppIsFocused;
 
     static uiRenderer* Get();
 

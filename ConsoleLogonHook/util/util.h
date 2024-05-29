@@ -4,6 +4,7 @@
 #include <string>
 #include <winstring.h>
 #include <sddl.h>
+#include <Shlwapi.h>
 
 #define Hook(a,b) DetourTransactionBegin(); DetourAttach(&(PVOID&)a, b); DetourTransactionCommit();
 
@@ -200,7 +201,11 @@ static std::wstring GetProfilePicturePathFromSID(std::wstring sid, bool bHighRes
         {
             LPWSTR path = (LPWSTR)(&byteArray);
             SPDLOG_INFO("path {}", ws2s(path));
-            finalpath = path;
+
+            if (PathFileExistsW(path))
+            {
+                finalpath = path;
+            }
         }
 
         RegCloseKey(result);

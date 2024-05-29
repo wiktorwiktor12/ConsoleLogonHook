@@ -138,7 +138,7 @@ void uiSelectedCredentialView::Tick()
 		{
 			bPressedEnter = true;
 
-			if (uiRenderer::Get()->activeWindow.get() == this) //only send an enter if we are active window
+			if (uiRenderer::Get()->activeWindow.get() == this && uiRenderer::Get()->bAppIsFocused) //only send an enter if we are active window
 			{
 				KEY_EVENT_RECORD rec;
 				rec.wVirtualKeyCode = VK_RETURN; //forward it to consoleuiview
