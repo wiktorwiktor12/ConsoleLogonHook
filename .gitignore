@@ -79,6 +79,7 @@ StyleCopReport.xml
 *.iobj
 *.pch
 *.pdb
+!ConsoleLogonHook/detours/detours.pdb
 *.ipdb
 *.pgc
 *.pgd
