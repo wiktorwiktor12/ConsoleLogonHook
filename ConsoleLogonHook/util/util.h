@@ -177,7 +177,7 @@ static std::wstring GetProfilePicturePathFromSID(std::wstring sid, bool bHighRes
     std::wstring finalpath = L"C:\\ProgramData\\Microsoft\\User Account Pictures\\user-48.png";
 
     if (bHighRes)
-        finalpath = L"C:\\ProgramData\\Microsoft\\User Account Pictures\\user.png";
+        finalpath = L"C:\\ProgramData\\Microsoft\\User Account Pictures\\user-192.png";
 
     //WCHAR* str = 0;
     //auto hr = GetSIDStringFromUsername(username.c_str(), &str);
