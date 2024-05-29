@@ -337,6 +337,7 @@ namespace ImGui
 
         const ImVec2 padding = g.Style.FramePadding;
         const ImRect bb(window->DC.CursorPos, window->DC.CursorPos + image_size + padding * 2.0f);
+        const ImVec2 ogpos = window->DC.CursorPos;
         ItemSize(bb);
         if (!ItemAdd(bb, id))
             return false;
@@ -354,17 +355,20 @@ namespace ImGui
 
         auto label_size = ImGui::CalcTextSize(label, NULL, true);
 
-        const ImVec2 text_pos(window->DC.CursorPos.x, window->DC.CursorPos.y + image_size.y + padding.y * 2.0f);
+        const ImVec2 text_pos(ogpos.x, ogpos.y + image_size.y + padding.y * 2.0f);
         ImRect bb2(text_pos, text_pos + label_size);
         //ItemSize(label_size, 0.0f);
-
+        //ItemSize(bb2);
+        //if (!ItemAdd(bb2, id))
+        //    return false;
         ImVec2 textmin = bb2.Min + padding;
         //textmin.y += image_size.y + padding.y * 2;
         ImVec2 textmax = bb2.Max - padding;
         //textmax.y += image_size.y + padding.y * 2;
 
 
-        RenderTextClipped(textmin, textmax, label, NULL, &label_size, g.Style.SelectableTextAlign, &bb);
+        //RenderTextClipped(textmin, textmax, label, NULL, &label_size, g.Style.SelectableTextAlign, &bb);
+        RenderTextWrapped(textmin, label, 0, image_size.x);
 
         return pressed;
     }

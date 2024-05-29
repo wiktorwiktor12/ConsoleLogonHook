@@ -21,10 +21,11 @@ public:
     //TODO: LOAD THESE FROM A MUI, SO WE HAVE TRANSLATIONS
     std::string switchUser = "Switch User";
     std::string cancel = "Cancel";
-
-    bool hasSetupNotify = false;
-
     std::wstring accountNameToDisplay;
+    ID3D11ShaderResourceView* texture = 0;
+
+    bool textureExists = true;
+    bool hasSetupNotify = false;
 
     uiSelectedCredentialView()
     {

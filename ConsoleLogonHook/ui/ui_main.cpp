@@ -126,6 +126,7 @@ DWORD WINAPI ImGUIThread(LPVOID lparam)
     //travis — Today at 20:05
     //pixel font mogs
     //io.Fonts->AddFontFromFileTTF("C:/Windows/Fonts/segoeui.ttf",16);
+    //io.Fonts->AddFontFromFileTTF("C:/Windows/Fonts/MS Sans Serif.ttf",12);
 
     ImGui::StyleColorsClassic();
     ImGui::GetStyle().FrameBorderSize = 1;
@@ -294,7 +295,7 @@ void uiRenderer::Tick()
 
 }
 
-#define ENABLELOG
+//#define ENABLELOG
 
 void uiRenderer::Draw()
 {

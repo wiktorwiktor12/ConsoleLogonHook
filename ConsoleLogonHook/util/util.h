@@ -172,9 +172,12 @@ __declspec(noinline) static HRESULT GetSIDStringFromUsername(PCWSTR pcszUserName
     return hr;
 }
 
-static std::wstring GetProfilePicturePathFromSID(std::wstring sid)
+static std::wstring GetProfilePicturePathFromSID(std::wstring sid, bool bHighRes = false)
 {
     std::wstring finalpath = L"C:\\ProgramData\\Microsoft\\User Account Pictures\\user-48.png";
+
+    if (bHighRes)
+        finalpath = L"C:\\ProgramData\\Microsoft\\User Account Pictures\\user.png";
 
     //WCHAR* str = 0;
     //auto hr = GetSIDStringFromUsername(username.c_str(), &str);
@@ -189,8 +192,11 @@ static std::wstring GetProfilePicturePathFromSID(std::wstring sid)
         SPDLOG_INFO("OK");
 
         DWORD size = MAX_PATH * 2;
-        DWORD type = REG_SZ;;
-        if (RegQueryValueExW(result, L"Image64", 0, &type, byteArray, &size) == S_OK)
+        DWORD type = REG_SZ;
+
+        const wchar_t* imageKey = bHighRes ? L"Image240" : L"Image64";
+
+        if (RegQueryValueExW(result, imageKey, 0, &type, byteArray, &size) == S_OK)
         {
             LPWSTR path = (LPWSTR)(&byteArray);
             SPDLOG_INFO("path {}", ws2s(path));

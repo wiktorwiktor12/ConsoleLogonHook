@@ -51,7 +51,10 @@ __int64 SelectedCredentialView__RuntimeClassInitialize_Hook(void* a1, int a2, __
 	{
 		SPDLOG_INFO("Setting active status selectedCredentialView");
 		selectedCredentialView->accountNameToDisplay = ConvertHStringToString(a4);
+		selectedCredentialView->texture = nullptr;
+		selectedCredentialView->textureExists = true;
 		selectedCredentialView->SetActive();
+
 		MinimizeLogonConsole();
 	}
 
@@ -155,7 +158,40 @@ void uiSelectedCredentialView::Draw()
     ImGui::SetWindowSize(ImGui::GetIO().DisplaySize);
     ImGui::SetWindowPos(ImVec2(0, 0));
 
-	ImGui::SetCursorPosY(ImGui::GetCursorPosY() + ImGui::GetContentRegionAvail().y * 0.45);
+	float prcntToTakeInAccount = (128.f) / ImGui::GetContentRegionAvail().y;
+
+	ImGui::SetCursorPosY(ImGui::GetCursorPosY() + ImGui::GetContentRegionAvail().y * (0.45 - prcntToTakeInAccount));
+
+	if (!texture && textureExists)
+	{
+		std::wstring sid = L"NULL";
+		auto hr = GetSIDStringFromUsername(accountNameToDisplay.c_str(),&sid);
+		if (hr != S_OK && editControls.size() > 0)
+		{
+			auto& firstControl = editControls[0];
+			SPDLOG_INFO("Inputted TEXT {}",ws2s(firstControl.GetInputtedText()));
+			hr = GetSIDStringFromUsername(firstControl.GetInputtedText().c_str(), &sid);
+			if (hr != S_OK)
+				textureExists = false;
+			else
+				goto work;
+		}
+		else if (editControls.size() > 0)
+		{
+		work:
+			SPDLOG_INFO("In work");
+			auto path = GetProfilePicturePathFromSID(sid, true);
+			if (path.size() > 0)
+			{
+				int w = 0;
+				int h = 0;
+				textureExists = uiRenderer::LoadTextureFromFile(ws2s(path).c_str(), &texture, &w, &h);
+			}
+		}
+	}
+
+	ImGui::SetCursorPosX((ImGui::GetIO().DisplaySize.x - 128) * 0.5f);
+	ImGui::Image(texture, ImVec2(128, 128));
 
 	TextCenteredOnLine(ws2s(accountNameToDisplay).c_str());
 

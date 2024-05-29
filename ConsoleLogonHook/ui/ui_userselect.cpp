@@ -340,7 +340,7 @@ void uiUserSelect::Draw()
         //if (ImGui::ImageButton(ws2s(button.GetText()).c_str(),button.texture,ImVec2(64,64)))
         if (button.texture)
         {
-            if (ImGui::ImageButtonLabelled(ws2s(button.GetText()).c_str(), button.texture, ImVec2(64, 64)))
+            if (ImGui::ImageButtonLabelled(ws2s(button.GetText()).c_str(), button.texture, ImVec2(48, 48)))
                 button.Press();
         }
         else
@@ -351,6 +351,48 @@ void uiUserSelect::Draw()
         //if (i != buttons.size() - 1)
         //    ImGui::SameLine();
     }
+
+    //bFirst = true;
+    //for (int i = 0; i < buttons.size(); ++i)
+    //{
+    //    auto& button = buttons[i];
+    //    if (!button.actualInstance)
+    //        continue;
+    //
+    //    if (button.isCredentialControl())
+    //        continue;
+    //
+    //    if (!button.texture)
+    //        continue;
+    //
+    //    //float xStart = (ImGui::GetIO().DisplaySize.x / 2) - ((48) * (buttons.size() - i)) /* - (ImGui::GetStyle().FramePadding.x * i)*/;
+    //    float xStart = (ImGui::GetIO().DisplaySize.x - (48 * 3 * 0.5) );
+    //    xStart = xStart + (48 * i) + ImGui::GetStyle().FramePadding.x * 2*i;
+    //    float xEnd = xStart + ImGui::GetStyle().FramePadding.x * 2 + 48;
+    //    //ImGui::SetCursorPosX(xStart);
+    //
+    //    if (bFirst)
+    //    {
+    //        //ButtonCenteredOnLineNoCall(ws2s(button.GetText()).c_str(), size);
+    //        bFirst = false;
+    //    }
+    //    else if (i < buttons.size())
+    //    {
+    //        ImGui::SameLine();
+    //    
+    //    
+    //        //if (textSize.x < 48)
+    //        //    ImGui::SetCursorPosX(ImGui::GetCursorPosX() + ((textSize.x - 24) / 2));
+    //        
+    //        //ImGui::SetCursorPosX(ImGui::GetCursorPosX() + textSize.x / 2);
+    //    }
+    //
+    //    ImVec2 textSize = ImGui::CalcTextSize(ws2s(button.GetText()).c_str());
+    //    ImGui::SetCursorPosX(xStart + textSize.x / 2);
+    //
+    //    ImGui::PushTextWrapPos(ImGui::GetCursorPosX() + xEnd);
+    //    ImGui::TextWrapped(ws2s(button.GetText()).c_str());
+    //}
     ImGui::EndChild();
 
     ImGui::End();
