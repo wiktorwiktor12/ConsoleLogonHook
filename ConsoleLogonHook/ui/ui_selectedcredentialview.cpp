@@ -75,6 +75,16 @@ __int64 EditControl__RuntimeClassInitialize_Hook(void* _this, void* a2, void* a3
 
 	SPDLOG_INFO("{}: {} is visible {}", ws2s(wrapper.GetFieldName()) , ws2s(wrapper.GetInputtedText()), (int)wrapper.isVisible());
 
+	for (int i = editControls.size() - 1; i >= 0; --i)
+	{
+		auto& control = editControls[i];
+		if (control.GetFieldName() == wrapper.GetFieldName())
+		{
+			editControls.erase(editControls.begin() + i);
+			break;
+		}
+	}
+
 	editControls.push_back(wrapper);
 
 	return res;

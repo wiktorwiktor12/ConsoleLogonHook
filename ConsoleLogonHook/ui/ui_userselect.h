@@ -7,6 +7,7 @@ struct SelectableUserOrCredentialControlWrapper
 public:
     void* actualInstance;
     std::wstring text;
+    ID3D11ShaderResourceView* texture = 0;
     WORD virtualKeyCodeToPress = VK_RETURN;
     int controlHandleIndex = -1;
     unsigned long long tickMarkedPressed = 0;

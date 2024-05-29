@@ -294,7 +294,7 @@ void uiRenderer::Tick()
 
 }
 
-//#define ENABLELOG
+#define ENABLELOG
 
 void uiRenderer::Draw()
 {

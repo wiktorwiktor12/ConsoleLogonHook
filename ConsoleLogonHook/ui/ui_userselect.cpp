@@ -4,7 +4,9 @@
 #include "../util/util.h"
 #include <winstring.h>
 #include "ui_helper.h"
+#include <sddl.h>
 #include <vector>
+#include <atlbase.h>
 
 std::vector<SelectableUserOrCredentialControlWrapper> buttons;
 const int signInOptionChoice = 0;
@@ -59,7 +61,6 @@ __int64 ConsoleUIView__Initialize_Hook(void* _this)
     return globals::ConsoleUIView__Initialize(_this);
 }
 
-
 __int64 (__fastcall* SelectableUserOrCredentialControl__RuntimeClassInitialize)(void* _this, void* a2, void* a3);
 __int64 SelectableUserOrCredentialControl__RuntimeClassInitialize_Hook(void* _this, void* a2, void* a3)
 {
@@ -96,8 +97,74 @@ __int64 SelectableUserOrCredentialControl__RuntimeClassInitialize_Hook(void* _th
         }
     }
 
-    SPDLOG_INFO("SelectableUserOrCredentialControl__RuntimeClassInitialize_Hook, user name {} this {} a3 {}", ws2s(wrapper.GetText()),_this,a3);
+    WCHAR* str = 0;
+    //GetSIDStringFromUsername(wrapper.GetText().c_str(), &str);
+    //PCWSTR fromString = wrapper.GetText().c_str();
+    
+    //std::wstring wstr = wrapper.GetText();
+    //int size = (wstr.length() + 1) * sizeof(wchar_t);
+    //wchar_t* username = (wchar_t*)malloc(size);;
+    //wcscpy_s(username, size, wstr.c_str());
+
+    //MessageBoxW(0, username, username, 0);
+
+    if (!wrapper.isCredentialControl())
+    {
+        //GetSIDStringFromUsername(wrapper.GetText().c_str(), &str);
+        //
+        //std::wstring subkey = L"SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\AccountPicture\\Users\\" + std::wstring(str);
+        //SPDLOG_INFO("subkey {}", ws2s(subkey));
+        //BYTE byteArray[MAX_PATH * 2];
+        //HKEY result;
+        //if (RegOpenKeyExW(HKEY_LOCAL_MACHINE, subkey.c_str(), 0, KEY_READ, &result) == S_OK)
+        //{
+        //    SPDLOG_INFO("OK");
+        //
+        //    DWORD size = MAX_PATH * 2;
+        //    DWORD type = REG_SZ;
+        //    if (RegQueryValueExW(result, L"Image64", 0, &type, byteArray, &size) == S_OK)
+        //    {
+        //        LPWSTR path = (LPWSTR)(&byteArray);
+        //        SPDLOG_INFO("path {}", ws2s(path));
+        //    }
+        //
+        //    RegCloseKey(result);
+        //}
+        auto path = GetProfilePicturePathFromUsername(wrapper.GetText());
+        SPDLOG_INFO("path {}",ws2s(path));
+        int w = 0;
+        int h = 0;
+        if (uiRenderer::LoadTextureFromFile(ws2s(path).c_str(), &wrapper.texture, &w, &h))
+            SPDLOG_INFO("TEXTURE LOADED");
+
+    }
+
+
+
+    //WCHAR* sidstr = NULL;
+    //DWORD sidsize = 0;
+    //DWORD domsize = 0;
+    //
+    //SID_NAME_USE use;
+    //
+    //LPCWSTR accountName = L"wiktor";
+    //
+    //if (!LookupAccountNameW(NULL, accountName, NULL, &sidsize, NULL, &domsize, &use))
+    //{
+    //    PSID psid = (PSID)malloc(sidsize);
+    //
+    //    MessageBoxW(0,L"1", L"1",0);
+    //
+    //    if (LookupAccountNameW(NULL, accountName, psid, &sidsize, NULL, &domsize, &use))
+    //        ConvertSidToStringSidW(psid, &sidstr);
+    //
+    //    free(psid);
+    //}
+
+    SPDLOG_INFO("SelectableUserOrCredentialControl__RuntimeClassInitialize_Hook, user name {} this {} a3 {} SID {}", ws2s(wrapper.GetText()),_this,a3, str ? ws2s(str) : "NULL");
     buttons.push_back(wrapper);
+
+    //free(username);
 
     return res;
 }
@@ -210,6 +277,36 @@ void uiUserSelect::Draw()
         size.x += CalcTextButtonSize(ws2s(control.GetText())).x;
     }
 
+    //bool bFirst = true;
+    //for (int i = 0; i < buttons.size(); ++i)
+    //{
+    //    auto& button = buttons[i];
+    //    if (!button.actualInstance)
+    //        continue;
+    //
+    //    if (button.isCredentialControl())
+    //        continue;
+    //    //ImGui::Image(button.texture, ImVec2(32, 32));
+    //    if (bFirst)
+    //    {
+    //        //ImGui::SameLine();
+    //        ButtonCenteredOnLineNoCall(ws2s(button.GetText()).c_str(), size);
+    //        bFirst = false;
+    //    }
+    //    else if (i < buttons.size())
+    //    {
+    //        //ImGui::SameLine();
+    //        ImGui::SameLine();
+    //    }
+    //
+    //    auto btnsize = CalcTextButtonSize(ws2s(button.GetText()).c_str());
+    //
+    //    ImGui::SetCursorPosX(ImGui::GetCursorPosX() + ((btnsize.x - 32) / 2));
+    //    ImGui::Image(button.texture, ImVec2(64, 64));
+    //
+    //    //if (i != buttons.size() - 1)
+    //    //    ImGui::SameLine();
+    //}
     bool bFirst = true;
     for (int i = 0; i < buttons.size(); ++i)
     {
@@ -219,16 +316,23 @@ void uiUserSelect::Draw()
 
         if (button.isCredentialControl())
             continue;
-
+        //ImGui::Image(button.texture, ImVec2(32, 32));
         if (bFirst)
         {
+            //ImGui::SameLine();
             ButtonCenteredOnLineNoCall(ws2s(button.GetText()).c_str(), size);
             bFirst = false;
         }
         else if (i < buttons.size())
+        {
+            //ImGui::SameLine();
             ImGui::SameLine();
+        }
 
-        if (ImGui::Button(ws2s(button.GetText()).c_str()))
+
+        //if (ImGui::ImageButton(ws2s(button.GetText()).c_str()))
+        //if (ImGui::ImageButton(ws2s(button.GetText()).c_str(),button.texture,ImVec2(64,64)))
+        if (ImGui::ImageButtonLabelled(ws2s(button.GetText()).c_str(),button.texture,ImVec2(64,64)))
             button.Press();
 
         //if (i != buttons.size() - 1)

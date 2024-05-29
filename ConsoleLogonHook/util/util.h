@@ -3,6 +3,7 @@
 #include <windows.h>
 #include <string>
 #include <winstring.h>
+#include <sddl.h>
 
 #define Hook(a,b) DetourTransactionBegin(); DetourAttach(&(PVOID&)a, b); DetourTransactionCommit();
 
@@ -93,4 +94,104 @@ static void* GetVirtualFunctionFromTable(void* vtable, int index)
     uintptr_t* func = (uintptr_t*)((uintptr_t)vtable + index);
 
     return reinterpret_cast<void*>(*func);
+}
+
+//taken from win7 sdk samples
+//https://github.com/Ippei-Murofushi/WindowsSDK7-Samples/blob/e8fe83b043727e71f5179da11fc6228475e7973c/security/parentalcontrols/utilities/Utilities.cpp#L85
+static HRESULT GetSIDStringFromUsername(PCWSTR pcszUserName, PWSTR* ppszSID)
+{
+    HRESULT hr = E_INVALIDARG;
+
+    if (pcszUserName && ppszSID)
+    {
+        DWORD cbSID = 0, cchDomain = 0;
+        SID_NAME_USE SidNameUse;
+
+        // Call twice, first with null SID buffer.  Retrieves required buffer
+        //  size for domain name
+        LookupAccountNameW(NULL, pcszUserName, NULL, &cbSID, NULL,
+            &cchDomain, &SidNameUse);
+        if (!cbSID || !cchDomain)
+        {
+            hr = E_FAIL;
+        }
+        else
+        {
+            WCHAR* pszDomain = NULL;
+            // Allocate properly sized buffer (with termination character) 
+            //  for domain name
+            pszDomain = new WCHAR[cchDomain];
+            if (!pszDomain)
+            {
+                hr = E_OUTOFMEMORY;
+            }
+            else
+            {
+                // Allocate properly sized buffer (with termination character)
+                //  for PSID
+                PSID pSID = static_cast<PSID> (new BYTE[cbSID]); //(LocalAlloc (LMEM_FIXED, cbSID));
+                if (!pSID)
+                {
+                    hr = E_OUTOFMEMORY;
+                }
+                else
+                {
+                    // Second call with buffers allocated and sizes set
+                    if (!LookupAccountName(NULL, pcszUserName, pSID, &cbSID,
+                        pszDomain, &cchDomain, &SidNameUse))
+                    {
+                        hr = HRESULT_FROM_WIN32(GetLastError());
+                    }
+                    else
+                    {
+                        // Convert PSID to SID string
+                        if (!ConvertSidToStringSidW(pSID, ppszSID))
+                        {
+                            hr = HRESULT_FROM_WIN32(GetLastError());
+                        }
+                        else
+                        {
+                            hr = S_OK;
+                        }
+                    }
+                    delete[] pSID; // (LocalFree (pSID);
+                }
+                delete[] pszDomain;
+            }
+        }
+    }
+
+    return (hr);
+}
+
+static std::wstring GetProfilePicturePathFromUsername(std::wstring username)
+{
+    std::wstring finalpath = L"C:\\ProgramData\\Microsoft\\User Account Pictures\\user-48.png";
+
+    WCHAR* str = 0;
+    GetSIDStringFromUsername(username.c_str(), &str);
+
+    std::wstring subkey = L"SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\AccountPicture\\Users\\" + std::wstring(str);
+    SPDLOG_INFO("subkey {}", ws2s(subkey));
+    BYTE byteArray[MAX_PATH * 2];
+    HKEY result;
+    if (RegOpenKeyExW(HKEY_LOCAL_MACHINE, subkey.c_str(), 0, KEY_READ, &result) == S_OK)
+    {
+        SPDLOG_INFO("OK");
+
+        DWORD size = MAX_PATH * 2;
+        DWORD type = REG_SZ;;
+        if (RegQueryValueExW(result, L"Image64", 0, &type, byteArray, &size) == S_OK)
+        {
+            LPWSTR path = (LPWSTR)(&byteArray);
+            SPDLOG_INFO("path {}", ws2s(path));
+            finalpath = path;
+        }
+
+        RegCloseKey(result);
+    }
+
+    LocalFree(str);
+
+    return finalpath;
 }

@@ -1,4 +1,6 @@
 #pragma once
+#define IM_VEC2_CLASS_EXTRA
+#define IMGUI_DEFINE_MATH_OPERATORS
 #include <imgui.h>
 #include <imgui_internal.h>
 
@@ -216,6 +218,165 @@ namespace ImGui
         cb_user_data.ChainCallback = callback;
         cb_user_data.ChainCallbackUserData = user_data;
         return InputTextWithHint(label, hint, (char*)str->c_str(), str->capacity() + 1, flags, InputTextCallback, &cb_user_data);
+    }
+
+    static void TextExNoAdd(const char* text, const char* text_end, ImGuiTextFlags flags)
+    {
+        ImGuiWindow* window = GetCurrentWindow();
+        if (window->SkipItems)
+            return;
+        ImGuiContext& g = *GImGui;
+
+        // Accept null ranges
+        if (text == text_end)
+            text = text_end = "";
+
+        // Calculate length
+        const char* text_begin = text;
+        if (text_end == NULL)
+            text_end = text + strlen(text); // FIXME-OPT
+
+        const ImVec2 text_pos(window->DC.CursorPos.x, window->DC.CursorPos.y + window->DC.CurrLineTextBaseOffset);
+        const float wrap_pos_x = window->DC.TextWrapPos;
+        const bool wrap_enabled = (wrap_pos_x >= 0.0f);
+        if (text_end - text <= 2000 || wrap_enabled)
+        {
+            // Common case
+            const float wrap_width = wrap_enabled ? CalcWrapWidthForPos(window->DC.CursorPos, wrap_pos_x) : 0.0f;
+            const ImVec2 text_size = CalcTextSize(text_begin, text_end, false, wrap_width);
+
+            ImRect bb(text_pos, text_pos + text_size);
+            ItemSize(text_size, 0.0f);
+            //if (!ItemAdd(bb, 0))
+            //    return;
+
+            // Render (we don't hide text after ## in this end-user function)
+            RenderTextWrapped(bb.Min, text_begin, text_end, wrap_width);
+        }
+        else
+        {
+            // Long text!
+            // Perform manual coarse clipping to optimize for long multi-line text
+            // - From this point we will only compute the width of lines that are visible. Optimization only available when word-wrapping is disabled.
+            // - We also don't vertically center the text within the line full height, which is unlikely to matter because we are likely the biggest and only item on the line.
+            // - We use memchr(), pay attention that well optimized versions of those str/mem functions are much faster than a casually written loop.
+            const char* line = text;
+            const float line_height = GetTextLineHeight();
+            ImVec2 text_size(0, 0);
+
+            // Lines to skip (can't skip when logging text)
+            ImVec2 pos = text_pos;
+            if (!g.LogEnabled)
+            {
+                int lines_skippable = (int)((window->ClipRect.Min.y - text_pos.y) / line_height);
+                if (lines_skippable > 0)
+                {
+                    int lines_skipped = 0;
+                    while (line < text_end && lines_skipped < lines_skippable)
+                    {
+                        const char* line_end = (const char*)memchr(line, '\n', text_end - line);
+                        if (!line_end)
+                            line_end = text_end;
+                        if ((flags & ImGuiTextFlags_NoWidthForLargeClippedText) == 0)
+                            text_size.x = ImMax(text_size.x, CalcTextSize(line, line_end).x);
+                        line = line_end + 1;
+                        lines_skipped++;
+                    }
+                    pos.y += lines_skipped * line_height;
+                }
+            }
+
+            // Lines to render
+            if (line < text_end)
+            {
+                ImRect line_rect(pos, pos + ImVec2(FLT_MAX, line_height));
+                while (line < text_end)
+                {
+                    if (IsClippedEx(line_rect, 0))
+                        break;
+
+                    const char* line_end = (const char*)memchr(line, '\n', text_end - line);
+                    if (!line_end)
+                        line_end = text_end;
+                    text_size.x = ImMax(text_size.x, CalcTextSize(line, line_end).x);
+                    RenderText(pos, line, line_end, false);
+                    line = line_end + 1;
+                    line_rect.Min.y += line_height;
+                    line_rect.Max.y += line_height;
+                    pos.y += line_height;
+                }
+
+                // Count remaining lines
+                int lines_skipped = 0;
+                while (line < text_end)
+                {
+                    const char* line_end = (const char*)memchr(line, '\n', text_end - line);
+                    if (!line_end)
+                        line_end = text_end;
+                    if ((flags & ImGuiTextFlags_NoWidthForLargeClippedText) == 0)
+                        text_size.x = ImMax(text_size.x, CalcTextSize(line, line_end).x);
+                    line = line_end + 1;
+                    lines_skipped++;
+                }
+                pos.y += lines_skipped * line_height;
+            }
+            text_size.y = (pos - text_pos).y;
+
+            ImRect bb(text_pos, text_pos + text_size);
+            ItemSize(text_size, 0.0f);
+            //ItemAdd(bb, 0);
+        }
+    }
+
+    static bool ImageButtonExCustom(ImGuiID id, const char* label, ImTextureID texture_id, const ImVec2& image_size, const ImVec2& uv0, const ImVec2& uv1, const ImVec4& bg_col, const ImVec4& tint_col, ImGuiButtonFlags flags)
+    {
+        ImGuiContext& g = *GImGui;
+        ImGuiWindow* window = GetCurrentWindow();
+        if (window->SkipItems)
+            return false;
+
+        const ImVec2 padding = g.Style.FramePadding;
+        const ImRect bb(window->DC.CursorPos, window->DC.CursorPos + image_size + padding * 2.0f);
+        ItemSize(bb);
+        if (!ItemAdd(bb, id))
+            return false;
+
+        bool hovered, held;
+        bool pressed = ButtonBehavior(bb, id, &hovered, &held, flags);
+
+        // Render
+        const ImU32 col = GetColorU32((held && hovered) ? ImGuiCol_ButtonActive : hovered ? ImGuiCol_ButtonHovered : ImGuiCol_Button);
+        RenderNavHighlight(bb, id);
+        RenderFrame(bb.Min, bb.Max, col, true, ImClamp((float)ImMin(padding.x, padding.y), 0.0f, g.Style.FrameRounding));
+        if (bg_col.w > 0.0f)
+            window->DrawList->AddRectFilled(bb.Min + padding, bb.Max - padding, GetColorU32(bg_col));
+        window->DrawList->AddImage(texture_id, bb.Min + padding, bb.Max - padding, uv0, uv1, GetColorU32(tint_col));
+
+        auto label_size = ImGui::CalcTextSize(label, NULL, true);
+
+        const ImVec2 text_pos(window->DC.CursorPos.x, window->DC.CursorPos.y + image_size.y + padding.y * 2.0f);
+        ImRect bb2(text_pos, text_pos + label_size);
+        //ItemSize(label_size, 0.0f);
+
+        ImVec2 textmin = bb2.Min + padding;
+        //textmin.y += image_size.y + padding.y * 2;
+        ImVec2 textmax = bb2.Max - padding;
+        //textmax.y += image_size.y + padding.y * 2;
+
+
+        RenderTextClipped(textmin, textmax, label, NULL, &label_size, g.Style.SelectableTextAlign, &bb);
+
+        return pressed;
+    }
+
+    static bool ImageButtonLabelled(const char* label, ImTextureID user_texture_id, const ImVec2& image_size, const ImVec2& uv0 = ImVec2(0, 0), const ImVec2& uv1 = ImVec2(1, 1), const ImVec4& bg_col = ImVec4(0, 0, 0, 0), const ImVec4& tint_col = ImVec4(1, 1, 1, 1))
+    {
+        ImGuiContext& g = *GImGui;
+        ImGuiWindow* window = g.CurrentWindow;
+        if (window->SkipItems)
+            return false;
+
+        return ImageButtonExCustom(window->GetID(label), label, user_texture_id, image_size, uv0, uv1, bg_col, tint_col,0);
     }
 }
 
