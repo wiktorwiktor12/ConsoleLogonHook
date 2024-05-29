@@ -442,16 +442,7 @@ void backgroundWindow::Draw()
     if (!texture && !failedToLoadTexture)
         failedToLoadTexture = !uiRenderer::LoadTextureFromFile("logonhookimage.jpg", &texture, &w, &h);
 
-    ImGuiWindowFlags flags;
-    flags |= ImGuiWindowFlags_NoTitleBar;
-    flags |= ImGuiWindowFlags_NoCollapse;
-    flags |= ImGuiWindowFlags_NoBringToFrontOnFocus;
-    flags |= ImGuiWindowFlags_NoMove;
-    flags |= ImGuiWindowFlags_NoResize;
-    flags |= ImGuiWindowFlags_NoFocusOnAppearing;
-    flags |= ImGuiWindowFlags_NoScrollbar;
-
-    ImGui::Begin("background image", 0, flags);
+    ImGui::Begin("background image", 0, ImGuiWindowFlags_NoTitleBar | ImGuiWindowFlags_NoCollapse | ImGuiWindowFlags_NoBringToFrontOnFocus | ImGuiWindowFlags_NoMove | ImGuiWindowFlags_NoResize | ImGuiWindowFlags_NoFocusOnAppearing | ImGuiWindowFlags_NoScrollbar);
     ImGui::BringWindowToDisplayBack(ImGui::GetCurrentWindow());
 
     ImGui::SetWindowSize(ImGui::GetIO().DisplaySize);
