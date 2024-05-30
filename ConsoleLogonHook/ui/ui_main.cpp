@@ -446,6 +446,11 @@ void backgroundWindow::Draw()
     if (!texture && !failedToLoadTexture)
         failedToLoadTexture = !uiRenderer::LoadTextureFromFile("logonhookimage.jpg", &texture, &w, &h);
 
+    ImGui::PushStyleVar(ImGuiStyleVar_FramePadding, ImVec2(0, 0));
+    ImGui::PushStyleVar(ImGuiStyleVar_PopupBorderSize, 0.0f);
+    ImGui::PushStyleVar(ImGuiStyleVar_WindowPadding, ImVec2(0, 0));
+    ImGui::PushStyleVar(ImGuiStyleVar_WindowBorderSize, 0.0f);
+
     ImGui::Begin("background image", 0, ImGuiWindowFlags_NoTitleBar | ImGuiWindowFlags_NoCollapse | ImGuiWindowFlags_NoBringToFrontOnFocus | ImGuiWindowFlags_NoMove | ImGuiWindowFlags_NoResize | ImGuiWindowFlags_NoFocusOnAppearing | ImGuiWindowFlags_NoScrollbar);
     ImGui::BringWindowToDisplayBack(ImGui::GetCurrentWindow());
 
@@ -471,10 +476,15 @@ void backgroundWindow::Draw()
                 imagesize *= scale;
         }
 
-        ImGui::SetCursorPos((ImGui::GetWindowSize() - imagesize) * 0.5f);
+        ImGui::SetCursorPos((ImGui::GetIO().DisplaySize - imagesize) * 0.5f);
 
         ImGui::Image(texture, imagesize);
     }
 
     ImGui::End();
+
+    ImGui::PopStyleVar(ImGuiStyleVar_FramePadding);
+    ImGui::PopStyleVar(ImGuiStyleVar_PopupBorderSize);
+    ImGui::PopStyleVar(ImGuiStyleVar_WindowPadding);
+    ImGui::PopStyleVar(ImGuiStyleVar_WindowBorderSize);
 }
