@@ -47,6 +47,12 @@ namespace init
         if (!baseaddress)
             MessageBox(0, L"FAILED TO LOAD", L"FAILED TO LOAD", 0);
 
+        //check we are running correct consolelogon, very very low chance will this check pass if diff version dll
+        auto SecurityOptionsView__RuntimeClassIntialise = (uint8_t*)(baseaddress + 0x36EB4);
+        if (SecurityOptionsView__RuntimeClassIntialise[0] != 0x48 || SecurityOptionsView__RuntimeClassIntialise[1] != 0x89 || SecurityOptionsView__RuntimeClassIntialise[2] != 0x5C)
+            return;
+
+
         auto stringdll = LoadLibraryW(L"api-ms-win-core-winrt-string-l1-1-0.dll");
         if (!stringdll)
         {
