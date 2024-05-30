@@ -456,9 +456,21 @@ void backgroundWindow::Draw()
     {
         auto imagesize = ImVec2(w,h);
 
-        float scale = ImGui::GetWindowSize().y / h;
-        if (scale > 1)
-            imagesize *= scale;
+        if (imagesize.x / imagesize.y == ImGui::GetIO().DisplaySize.x / ImGui::GetIO().DisplaySize.y)
+        {
+            if (imagesize.x != ImGui::GetIO().DisplaySize.x)
+                imagesize.x = ImGui::GetIO().DisplaySize.x;
+
+            if (imagesize.y != ImGui::GetIO().DisplaySize.y)
+                imagesize.y = ImGui::GetIO().DisplaySize.y;
+        }
+        else
+        {
+            float scale = ImGui::GetWindowSize().y / h;
+            if (scale > 1)
+                imagesize *= scale;
+        }
+
         ImGui::SetCursorPos((ImGui::GetWindowSize() - imagesize) * 0.5f);
 
         ImGui::Image(texture, imagesize);

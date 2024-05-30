@@ -111,9 +111,9 @@ __int64 SelectableUserOrCredentialControl__RuntimeClassInitialize_Hook(void* _th
     if (!wrapper.isCredentialControl())
     {
 
-        std::wstring sid;
+        std::wstring sid = L"";
         auto hr = GetSIDStringFromUsername(wrapper.GetText().c_str(), &sid);
-        if (hr == S_OK)
+        //if (hr == S_OK)
         {
             auto path = GetProfilePicturePathFromSID(sid);
             SPDLOG_INFO("path {}", ws2s(path));

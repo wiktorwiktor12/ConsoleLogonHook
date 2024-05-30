@@ -39,6 +39,19 @@ namespace init
         spdlog::flush_every(std::chrono::microseconds(100));
     }
 
+    __int64(__fastcall* EditControl__Repaint)(void* a1);
+    __int64 EditControl__Repaint_Hook(void* a1)
+    {
+        if (!a1) return 0;
+
+        if (IsBadReadPtr(a1, 8)) return 0;
+
+        if (IsBadReadPtr(*(uintptr_t**)(__int64(a1) + 0x20), 8)) return 0;
+        if (IsBadReadPtr(**(void***)(__int64(a1) + 0x20), 8)) return 0;
+
+        return EditControl__Repaint(a1);
+    }
+
     void InitHooks()
     {
         InitSpdlog();
@@ -64,6 +77,9 @@ namespace init
             fWindowsDeleteString = decltype(fWindowsDeleteString)(GetProcAddress(stringdll, "WindowsDeleteString"));
             fWindowsCreateString = decltype(fWindowsCreateString)(GetProcAddress(stringdll, "WindowsCreateString"));
         }
+
+        EditControl__Repaint = (decltype(EditControl__Repaint))(baseaddress + 0x44528);
+        Hook(EditControl__Repaint, EditControl__Repaint_Hook);
 
         uiSecurityControl::InitHooks(baseaddress);
         uiMessageView::InitHooks(baseaddress);
