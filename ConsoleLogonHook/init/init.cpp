@@ -9,7 +9,6 @@
 #include "spdlog/spdlog.h"
 #include "spdlog/sinks/basic_file_sink.h"
 #include "spdlog/sinks/stdout_color_sinks.h"
-#include "../ui/ui_main.h"
 #include "../ui/ui_sink.h"
 #include "../ui/ui_securitycontrol.h"
 #include "../util/util.h"
@@ -17,21 +16,18 @@
 #include "../ui/ui_statusview.h"
 #include "ui/ui_selectedcredentialview.h"
 #include "ui/ui_userselect.h"
+#include "util\interop.h"
 
 namespace init
 {
     void InitSpdlog()
     {
-        //auto file_sink = std::make_shared<spdlog::sinks::basic_file_sink_mt>("logs/CLH.log", true);
-        auto ui_sink = std::make_shared<::ui_sink_mt>();
+        auto file_sink = std::make_shared<spdlog::sinks::basic_file_sink_mt>("logs/CLH.log", true);
 
-        //file_sink->set_level(spdlog::level::debug);
-        //file_sink->set_pattern("[%H:%M:%S] [%! (%s:%#)] %^%l%$: %v");
+        file_sink->set_level(spdlog::level::debug);
+        file_sink->set_pattern("[%H:%M:%S] [%! (%s:%#)] %^%l%$: %v");
 
-        ui_sink->set_level(spdlog::level::debug);
-        ui_sink->set_pattern("[%s:%#] %^%l%$: %v");
-
-        spdlog::logger logger("multi_sink", { ui_sink });
+        spdlog::logger logger("multi_sink", { file_sink });
         logger.set_level(spdlog::level::debug);
 
         register_logger(std::make_shared<spdlog::logger>(logger));
@@ -54,8 +50,6 @@ namespace init
 
     void InitHooks()
     {
-        InitSpdlog();
-
         auto baseaddress = (uintptr_t)LoadLibraryW(L"C:\\Windows\\System32\\ConsoleLogon.dll");
         if (!baseaddress)
             MessageBox(0, L"FAILED TO LOAD", L"FAILED TO LOAD", 0);
@@ -65,6 +59,7 @@ namespace init
         if (SecurityOptionsView__RuntimeClassIntialise[0] != 0x48 || SecurityOptionsView__RuntimeClassIntialise[1] != 0x89 || SecurityOptionsView__RuntimeClassIntialise[2] != 0x5C)
             return;
 
+        external::InitExternal();
 
         auto stringdll = LoadLibraryW(L"api-ms-win-core-winrt-string-l1-1-0.dll");
         if (!stringdll)
@@ -86,27 +81,12 @@ namespace init
         uiStatusView::InitHooks(baseaddress);
         uiUserSelect::InitHooks(baseaddress);
         uiSelectedCredentialView::InitHooks(baseaddress);
-        uiRenderer::SetupUI();
 
-        uiSecurityControl* securityControl = new uiSecurityControl();
-        uiRenderer::AddWindow(std::shared_ptr<uiWindow>(securityControl), false);
+        external::InitUI();
+    }
 
-        uiMessageView* messageView = new uiMessageView();
-        uiRenderer::AddWindow(std::shared_ptr<uiWindow>(messageView), false);
-
-        uiStatusView* statusView = new uiStatusView();
-        uiRenderer::AddWindow(std::shared_ptr<uiWindow>(statusView), false);
-
-        uiUserSelect* userSelect = new uiUserSelect();
-        uiRenderer::AddWindow(std::shared_ptr<uiWindow>(userSelect), false);
-
-		uiSelectedCredentialView* selectedCredentialView = new uiSelectedCredentialView();
-        uiRenderer::AddWindow(std::shared_ptr<uiWindow>(selectedCredentialView), false);
-
-        securityControl->Begin();
-        messageView->Begin();
-        statusView->Begin();
-        userSelect->Begin();
-        selectedCredentialView->Begin();
+    void Unload()
+    {
+        external::Unload();
     }
 }

@@ -48,9 +48,6 @@
     <ClInclude Include="imgui\imgui_impl_dx11.h">
       <Filter>imgui</Filter>
     </ClInclude>
-    <ClInclude Include="ui\ui_main.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="ui\ui_sink.h">
       <Filter>Header Files</Filter>
     </ClInclude>
@@ -67,9 +64,6 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="ui\ui_statusview.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="ui\ui_helper.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="detours\detours.h">
@@ -399,6 +393,9 @@
     <ClInclude Include="ui\ui_selectedcredentialview.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="util\interop.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="dllmain.cpp">
@@ -425,9 +422,6 @@
     <ClCompile Include="imgui\imgui_impl_win32.cpp">
       <Filter>imgui</Filter>
     </ClCompile>
-    <ClCompile Include="ui\ui_main.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="ui\ui_securitycontrol.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
@@ -444,6 +438,9 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="ui\ui_selectedcredentialview.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="util\util.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

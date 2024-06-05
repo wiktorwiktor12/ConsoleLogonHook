@@ -1,13 +1,14 @@
 #include "ui_securitycontrol.h"
+#include <Windows.h>
 #include "detours.h"
 #include "spdlog/spdlog.h"
 #include "../util/util.h"
 #include <winstring.h>
-#include "ui_helper.h"
+#include <util/interop.h>
 
-std::vector<SecurityOptionControlWrapper> buttonsList;
+//std::vector<SecurityOptionControlWrapper> buttonsList;
 
-inline long(__fastcall* SecurityOptionControlHandleKeyInput)(void* _this, _KEY_EVENT_RECORD* keyrecord, int* result);
+inline long(__fastcall* SecurityOptionControlHandleKeyInput)(void* _this, const _KEY_EVENT_RECORD* keyrecord, int* result);
 long SecurityOptionControlHandleKeyInput_Hook(void* _this, _KEY_EVENT_RECORD* keyrecord, int* result)
 {
     auto res = SecurityOptionControlHandleKeyInput(_this, keyrecord, result);
@@ -20,7 +21,8 @@ __int64 __fastcall LogonViewManager__ShowSecurityOptionsUIThread_Hook(unsigned _
 {
     SPDLOG_INFO("LogonViewManager__ShowSecurityOptionsUIThread_Hook Called! {} {} {}", (void*)a1, a2, (void*)a3);
 
-    buttonsList.clear();
+    external::SecurityControlButtonsList_Clear();
+    //buttonsList.clear();
 
     return LogonViewManager__ShowSecurityOptionsUIThread(a1, a2, a3);
 }
@@ -36,8 +38,9 @@ __int64 __fastcall LogonViewManager__ShowSecurityOptions_Hook(__int64 a1, int a2
 __int64(__fastcall* SecurityOptionsView__RuntimeClassInitialize)(__int64 a1, char a2, __int64* a3);
 __int64 __fastcall SecurityOptionsView__RuntimeClassInitialize_Hook(__int64 a1, char a2, __int64* a3)
 {
-    buttonsList.clear();
-    for (int i = 0; i < uiRenderer::Get()->inactiveWindows.size(); ++i) //theres prob a better and nicer way to do this
+    external::SecurityControl_SetActive();
+
+    /*for (int i = 0; i < uiRenderer::Get()->inactiveWindows.size(); ++i) //theres prob a better and nicer way to do this
     {
         auto& window = uiRenderer::Get()->inactiveWindows[i];
         if (window->windowTypeId == 2) //typeid for securityoptions
@@ -54,9 +57,9 @@ __int64 __fastcall SecurityOptionsView__RuntimeClassInitialize_Hook(__int64 a1, 
 
             break;
         }
-    }
+    }*/
 
-    MinimizeLogonConsole();
+    //MinimizeLogonConsole();
 
     //auto consoleWindow = FindWindowW(0,L"C:\\Windows\\system32\\LogonUI.exe");
     //if (consoleWindow)
@@ -64,8 +67,8 @@ __int64 __fastcall SecurityOptionsView__RuntimeClassInitialize_Hook(__int64 a1, 
         //ShowWindow(consoleWindow, SW_HIDE);
 
     auto res = SecurityOptionsView__RuntimeClassInitialize(a1, a2, a3);
-
-    auto SwapButton = [&](int a, int b) -> void
+    external::SecurityControl_ButtonsReady();
+    /*auto SwapButton = [&](int a, int b) -> void
         {
             SecurityOptionControlWrapper temp = buttonsList[a];
             buttonsList[a] = buttonsList[b];
@@ -73,7 +76,7 @@ __int64 __fastcall SecurityOptionsView__RuntimeClassInitialize_Hook(__int64 a1, 
         };
 
     SwapButton(0,1);
-    SwapButton(1,3);
+    SwapButton(1,3);*/
 
     return res;
 }
@@ -90,11 +93,13 @@ __int64 __fastcall MakeAndInitialize_SecurityOptionControl_Hook(void** _this, vo
 
         wchar_t* text = *(wchar_t**)(__int64(control) + 0x48);
 
-        SecurityOptionControlWrapper button(control);
+        //SecurityOptionControlWrapper button(control);
 
         SPDLOG_INFO("text: {}, comptr: {}, controlptr {} a2 {} a3 {} a4 {}", ws2s(text).c_str(), (void*)_this, (void*)control,(void*)a2,(void*)a3,(void*)a4);
 
-        buttonsList.push_back(button);
+        external::SecurityOptionControl_Create(control);
+
+        //buttonsList.push_back(button);
     }
 
     return res;
@@ -102,7 +107,7 @@ __int64 __fastcall MakeAndInitialize_SecurityOptionControl_Hook(void** _this, vo
 void* (__fastcall* SecurityOptionControl_Destructor)(__int64 a1, unsigned int a2);
 void* SecurityOptionControl_Destructor_Hook(__int64 a1, unsigned int a2)
 {
-    for (int i = 0; i < buttonsList.size(); ++i)
+    /*for (int i = 0; i < buttonsList.size(); ++i)
     {
         auto& button = buttonsList[i];
         if ((void*)(__int64(button.actualInstance) + 8) == (void*)a1)
@@ -111,7 +116,9 @@ void* SecurityOptionControl_Destructor_Hook(__int64 a1, unsigned int a2)
             buttonsList.erase(buttonsList.begin() + i);
             break;
         }
-    }
+    }*/
+    
+    external::SecurityOptionControl_Destroy((void*)(__int64(a1) - 8));
 
     //auto consoleWindow = FindWindowW(0, L"C:\\Windows\\system32\\LogonUI.exe");
     //if (consoleWindow)
@@ -138,73 +145,31 @@ __int64 CredUIManager__ShowCredentialView_Hook(void* _this, HSTRING a2)
 __int64(__fastcall* SecurityOptionsView__Destructor)(__int64 a1, unsigned int a2);
 __int64 SecurityOptionsView__Destructor_Hook(__int64 a1, unsigned int a2)
 {
-    auto securityControl = uiRenderer::Get()->GetWindowOfTypeId<uiSecurityControl>(2);
-    if (securityControl)
-    {
-        SPDLOG_INFO("setting inactive security control instance");
-        securityControl->SetInactive();
-    }
+    //auto securityControl = uiRenderer::Get()->GetWindowOfTypeId<uiSecurityControl>(2);
+    //if (securityControl)
+    //{
+    //    SPDLOG_INFO("setting inactive security control instance");
+    //    securityControl->SetInactive();
+    //}
+    external::SecurityControl_SetInactive();
     return SecurityOptionsView__Destructor(a1,a2);
 }
 
-void uiSecurityControl::Draw()
+void external::SecurityOptionControl_Press(void* actualInstance, const struct _KEY_EVENT_RECORD* keyrecord, int* success)
 {
-    ImGui::Begin("Security Options",0, ImGuiWindowFlags_NoTitleBar | ImGuiWindowFlags_NoCollapse | ImGuiWindowFlags_NoBringToFrontOnFocus | ImGuiWindowFlags_NoMove | ImGuiWindowFlags_NoResize | ImGuiWindowFlags_NoBackground);
-    
-    ImGui::SetWindowSize(ImGui::GetIO().DisplaySize);
-    ImGui::SetWindowPos(ImVec2(0,0));
-
-    ImGui::SetCursorPosY(ImGui::GetCursorPosY() + ImGui::GetContentRegionAvail().y * 0.55);
-
-    
-
-    TextCenteredOnLine("Security options");
-    float longestWidth = 0;
-    for (int i = 0; i < buttonsList.size(); ++i)
+    if (actualInstance)
     {
-        auto& button = buttonsList[i];
-        if (button.actualInstance)
-        {
-            longestWidth = std::max<float>(CalcTextButtonSize(ws2s(button.getString())).x, longestWidth);
-        }
+
+        SecurityOptionControlHandleKeyInput((void*)(__int64(actualInstance) + 8), keyrecord, success);
     }
-
-    for (int i = 0; i < buttonsList.size(); ++i)
-    {
-        auto& button = buttonsList[i];
-        if (!button.actualInstance)
-            continue;
-
-        bool isLastButton = i == buttonsList.size() - 1;
-
-        ImVec2 size = ImVec2(0, 0);
-        if (isLastButton)
-        {
-            //size = calcsize(ws2s(button.getString()));
-
-            size = ImGui::CalcTextSize(ws2s(button.getString()).c_str());
-            size.x *= 2;
-
-            ImGui::SetCursorPosY(ImGui::GetCursorPosY() + size.y);
-
-            size.y *= 2;
-        }
-        else
-        {
-            size = CalcTextButtonSize(ws2s(button.getString()));
-            size.x = longestWidth;
-        }
-        if (ButtonCenteredOnLine(ws2s(button.getString()).c_str(), size,0.5f, (!isLastButton ? longestWidth : 0)))
-        {
-            button.Press();
-        }
-    }
-
-
-    ImGui::End();
 }
 
-void SecurityOptionControlWrapper::Press()
+const wchar_t* external::SecurityOptionControl_getString(void* actualInstance)
+{
+    return std::wstring(*(wchar_t**)(__int64(actualInstance) + 0x48)).c_str(); //force a copy
+}
+
+/*void SecurityOptionControlWrapper::Press()
 {
     _KEY_EVENT_RECORD keyrecord;
     keyrecord.bKeyDown = true;
@@ -216,7 +181,7 @@ void SecurityOptionControlWrapper::Press()
 
         SecurityOptionControlHandleKeyInput((void*)(__int64(actualInstance) + 8), &keyrecord, &result); // + 8 makes it work, weird af class structure but fuck it we ball
     }
-}
+}*/
 
 void uiSecurityControl::InitHooks(uintptr_t baseaddress)
 {

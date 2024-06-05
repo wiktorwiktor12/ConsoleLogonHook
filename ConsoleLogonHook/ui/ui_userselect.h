@@ -1,5 +1,5 @@
 #pragma once
-#include "ui_main.h"
+#include <Windows.h>
 #include <string>
 
 struct SelectableUserOrCredentialControlWrapper
@@ -7,7 +7,6 @@ struct SelectableUserOrCredentialControlWrapper
 public:
     void* actualInstance;
     std::wstring text;
-    ID3D11ShaderResourceView* texture = 0;
     WORD virtualKeyCodeToPress = VK_RETURN;
     int controlHandleIndex = -1;
     unsigned long long tickMarkedPressed = 0;
@@ -20,19 +19,10 @@ public:
     bool isCredentialControl();
 };
 
-class uiUserSelect : public uiWindow
+class uiUserSelect
 {
 public:
 
-	bool wasInSelectedCredentialView = false;
-
-    uiUserSelect()
-    {
-        windowTypeId = 5;
-    }
-
-    void Tick() override;
-    void Draw() override;
 
     static void InitHooks(uintptr_t baseaddress);
 };

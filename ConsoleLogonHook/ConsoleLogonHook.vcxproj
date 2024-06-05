@@ -272,14 +272,13 @@
     <ClInclude Include="spdlog\stopwatch.h" />
     <ClInclude Include="spdlog\tweakme.h" />
     <ClInclude Include="spdlog\version.h" />
-    <ClInclude Include="ui\ui_helper.h" />
-    <ClInclude Include="ui\ui_main.h" />
     <ClInclude Include="ui\ui_messageview.h" />
     <ClInclude Include="ui\ui_securitycontrol.h" />
     <ClInclude Include="ui\ui_selectedcredentialview.h" />
     <ClInclude Include="ui\ui_sink.h" />
     <ClInclude Include="ui\ui_statusview.h" />
     <ClInclude Include="ui\ui_userselect.h" />
+    <ClInclude Include="util\interop.h" />
     <ClInclude Include="util\util.h" />
   </ItemGroup>
   <ItemGroup>
@@ -292,12 +291,12 @@
     <ClCompile Include="imgui\imgui_tables.cpp" />
     <ClCompile Include="imgui\imgui_widgets.cpp" />
     <ClCompile Include="init\init.cpp" />
-    <ClCompile Include="ui\ui_main.cpp" />
     <ClCompile Include="ui\ui_messageview.cpp" />
     <ClCompile Include="ui\ui_securitycontrol.cpp" />
     <ClCompile Include="ui\ui_selectedcredentialview.cpp" />
     <ClCompile Include="ui\ui_statusview.cpp" />
     <ClCompile Include="ui\ui_userselect.cpp" />
+    <ClCompile Include="util\util.cpp" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="spdlog\spdlog.lib" />

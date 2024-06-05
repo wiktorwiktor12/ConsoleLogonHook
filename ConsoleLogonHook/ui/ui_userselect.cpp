@@ -3,10 +3,10 @@
 #include "spdlog/spdlog.h"
 #include "../util/util.h"
 #include <winstring.h>
-#include "ui_helper.h"
 #include <sddl.h>
 #include <vector>
 #include <atlbase.h>
+#include "util/interop.h"
 
 std::vector<SelectableUserOrCredentialControlWrapper> buttons;
 const int signInOptionChoice = 0;
@@ -23,7 +23,7 @@ __int64 UserSelectionView__RuntimeClassInitialize_Hook(void* _this, void* a2)
     SPDLOG_INFO("UserSelectionView__RuntimeClassInitialize_Hook a2 [{}]", a2);
     UserSelectionView = _this;
 
-    auto userSelect = uiRenderer::Get()->GetWindowOfTypeId<uiUserSelect>(5);
+    /*auto userSelect = uiRenderer::Get()->GetWindowOfTypeId<uiUserSelect>(5);
     if (userSelect)
     {
         SPDLOG_INFO("Setting active status userSelect");
@@ -31,9 +31,12 @@ __int64 UserSelectionView__RuntimeClassInitialize_Hook(void* _this, void* a2)
         MinimizeLogonConsole();
 
         
-    }
+    }*/
+    external::UserSelect_SetActive();
 
     auto res = UserSelectionView__RuntimeClassInitialize(_this, a2);
+
+    external::SelectableUserOrCredentialControl_Sort();
 
     std::sort(buttons.begin(), buttons.end(), [](SelectableUserOrCredentialControlWrapper& a, SelectableUserOrCredentialControlWrapper& b) { return a.GetText() < b.GetText(); });
 
@@ -53,8 +56,6 @@ __int64 CredProvSelectionView__RuntimeClassInitialize_Hook(void* _this, void* a2
     return res;
 }
 
-
-
 __int64 ConsoleUIView__Initialize_Hook(void* _this)
 {
     globals::ConsoleUIView = _this;
@@ -73,11 +74,11 @@ __int64 SelectableUserOrCredentialControl__RuntimeClassInitialize_Hook(void* _th
     {
         if (choiceIteration == signInOptionChoice)
         {
-			auto userSelect = uiRenderer::Get()->GetWindowOfTypeId<uiUserSelect>(5);
-            if (userSelect->wasInSelectedCredentialView)
+			//auto userSelect = uiRenderer::Get()->GetWindowOfTypeId<uiUserSelect>(5);
+            if (globals::wasInSelectedCredentialView)
             {
                 wrapper.virtualKeyCodeToPress = VK_ESCAPE;
-                userSelect->wasInSelectedCredentialView = false;
+                globals::wasInSelectedCredentialView = false;
             }
             wrapper.markedPressed = true; // it wont work if we press here, so we defer it till it do work
             wrapper.tickMarkedPressed = GetTickCount64();
@@ -113,16 +114,9 @@ __int64 SelectableUserOrCredentialControl__RuntimeClassInitialize_Hook(void* _th
 
         std::wstring sid = L"";
         auto hr = GetSIDStringFromUsername(wrapper.GetText().c_str(), &sid);
-        //if (hr == S_OK)
-        {
-            auto path = GetProfilePicturePathFromSID(sid);
-            SPDLOG_INFO("path {}", ws2s(path));
-            int w = 0;
-            int h = 0;
-            if (uiRenderer::LoadTextureFromFile(ws2s(path).c_str(), &wrapper.texture, &w, &h))
-                SPDLOG_INFO("TEXTURE LOADED");
-        }
-
+        auto path = GetProfilePicturePathFromSID(sid);
+            
+        external::SelectableUserOrCredentialControl_Create(wrapper.actualInstance, path);
 
     }
 
@@ -143,17 +137,18 @@ __int64 CredUIViewManager__ShowCredentialView_Hook(void* _this, HSTRING a2)
 void* (__fastcall* SelectableUserOrCredentialControl_Destructor)(void* _this,char a2);
 void* SelectableUserOrCredentialControl_Destructor_Hook(void* _this, char a2)
 {
+    external::SelectableUserOrCredentialControl_Destroy(_this);
     for (int i = 0; i < buttons.size(); ++i)
     {
         auto& button = buttons[i];
         if (button.actualInstance == _this)
         {
-			auto userSelect = uiRenderer::Get()->GetWindowOfTypeId<uiUserSelect>(5);
-            if (userSelect->wasInSelectedCredentialView)
+			//auto userSelect = uiRenderer::Get()->GetWindowOfTypeId<uiUserSelect>(5);
+            if (globals::wasInSelectedCredentialView)
             {
                 button.virtualKeyCodeToPress = VK_ESCAPE;
                 button.markedPressed = false;
-                userSelect->wasInSelectedCredentialView = false;
+                globals::wasInSelectedCredentialView = false;
             }
 
             SPDLOG_INFO("Found button instance and removing!");
@@ -182,177 +177,34 @@ __int64 LogonViewManager__Lock_Hook(__int64 a1, int a2, char a3, HSTRING a4, __i
     return res;
 }
 
-void uiUserSelect::Tick()
+DWORD WINAPI TickThread(LPVOID lparam)
 {
-    for (int i = 0; i < buttons.size(); ++i)
+    while (true)
     {
-        auto& button = buttons[i];
-        if (button.markedPressed && GetTickCount64() - button.tickMarkedPressed >= 15)
+        for (int i = 0; i < buttons.size(); ++i)
         {
-            button.Press();
-            button.markedPressed = false;
-            button.virtualKeyCodeToPress = VK_RETURN; //reset after an override
-            button.tickMarkedPressed = 0;
-        }
-    }
-    if (locked && GetTickCount64() - tickLocked >= 25)
-    {
-        locked = false;
-
-        KEY_EVENT_RECORD rec;
-        rec.bKeyDown = true;
-        rec.dwControlKeyState = LEFT_CTRL_PRESSED | LEFT_ALT_PRESSED;
-        rec.wVirtualKeyCode = VK_DELETE;
-        globals::ConsoleUIView__HandleKeyInput((void*)(__int64(globals::ConsoleUIView) + 8),&rec);
-    }
-}
-
-void uiUserSelect::Draw()
-{
-    ImGui::Begin("Status View", 0, ImGuiWindowFlags_NoTitleBar | ImGuiWindowFlags_NoCollapse | ImGuiWindowFlags_NoBringToFrontOnFocus | ImGuiWindowFlags_NoMove | ImGuiWindowFlags_NoResize | ImGuiWindowFlags_NoBackground);
-
-    ImGui::SetWindowSize(ImGui::GetIO().DisplaySize);
-    ImGui::SetWindowPos(ImVec2(0, 0));
-
-    //ImGui::SetCursorPosY(ImGui::GetCursorPosY() + ImGui::GetContentRegionAvail().y * 0.5);
-    //ImGui::SetCursorPosX(ImGui::GetCursorPosX() + ImGui::GetContentRegionAvail().x * 0.5);
-
-    //ImGui::BeginChild("", ImVec2(ImGui::GetContentRegionAvail().x * 0.5, ImGui::GetContentRegionAvail().y * 0.5),0,ImGuiWindowFlags_HorizontalScrollbar);
-    ImGui::SetCursorPosY(ImGui::GetCursorPosY() + ImGui::GetContentRegionAvail().y * 0.45);
-
-    ImVec2 size;
-    for (int i = 0; i < buttons.size(); ++i)
-    {
-        auto& control = buttons[i];
-
-        if (!control.actualInstance)
-            continue;
-
-        if (control.isCredentialControl())
-            continue;
-
-        if (size.y <= 0)
-        {
-            size = CalcTextButtonSize(ws2s(control.GetText()));
-            continue;
-        }
-
-        size.x += CalcTextButtonSize(ws2s(control.GetText())).x;
-    }
-
-    //bool bFirst = true;
-    //for (int i = 0; i < buttons.size(); ++i)
-    //{
-    //    auto& button = buttons[i];
-    //    if (!button.actualInstance)
-    //        continue;
-    //
-    //    if (button.isCredentialControl())
-    //        continue;
-    //    //ImGui::Image(button.texture, ImVec2(32, 32));
-    //    if (bFirst)
-    //    {
-    //        //ImGui::SameLine();
-    //        ButtonCenteredOnLineNoCall(ws2s(button.GetText()).c_str(), size);
-    //        bFirst = false;
-    //    }
-    //    else if (i < buttons.size())
-    //    {
-    //        //ImGui::SameLine();
-    //        ImGui::SameLine();
-    //    }
-    //
-    //    auto btnsize = CalcTextButtonSize(ws2s(button.GetText()).c_str());
-    //
-    //    ImGui::SetCursorPosX(ImGui::GetCursorPosX() + ((btnsize.x - 32) / 2));
-    //    ImGui::Image(button.texture, ImVec2(64, 64));
-    //
-    //    //if (i != buttons.size() - 1)
-    //    //    ImGui::SameLine();
-    //}
-    bool bFirst = true;
-    for (int i = 0; i < buttons.size(); ++i)
-    {
-        auto& button = buttons[i];
-        if (!button.actualInstance)
-            continue;
-
-        if (button.isCredentialControl())
-            continue;
-        //ImGui::Image(button.texture, ImVec2(32, 32));
-        if (bFirst)
-        {
-            //ImGui::SameLine();
-            ButtonCenteredOnLineNoCall(ws2s(button.GetText()).c_str(), size);
-            bFirst = false;
-        }
-        else if (i < buttons.size())
-        {
-            //ImGui::SameLine();
-            ImGui::SameLine();
-        }
-
-
-        //if (ImGui::ImageButton(ws2s(button.GetText()).c_str()))
-        //if (ImGui::ImageButton(ws2s(button.GetText()).c_str(),button.texture,ImVec2(64,64)))
-        if (button.texture)
-        {
-            if (ImGui::ImageButtonLabelled(ws2s(button.GetText()).c_str(), button.texture, ImVec2(48, 48)))
+            auto& button = buttons[i];
+            if (button.markedPressed && GetTickCount64() - button.tickMarkedPressed >= 15)
+            {
                 button.Press();
+                button.markedPressed = false;
+                button.virtualKeyCodeToPress = VK_RETURN; //reset after an override
+                button.tickMarkedPressed = 0;
+            }
         }
-        else
-            if (ImGui::Button(ws2s(button.GetText()).c_str()))
-                button.Press();
+        if (locked && GetTickCount64() - tickLocked >= 25)
+        {
+            locked = false;
 
-
-        //if (i != buttons.size() - 1)
-        //    ImGui::SameLine();
+            KEY_EVENT_RECORD rec;
+            rec.bKeyDown = true;
+            rec.dwControlKeyState = LEFT_CTRL_PRESSED | LEFT_ALT_PRESSED;
+            rec.wVirtualKeyCode = VK_DELETE;
+            globals::ConsoleUIView__HandleKeyInput((void*)(__int64(globals::ConsoleUIView) + 8), &rec);
+        }
     }
 
-    //bFirst = true;
-    //for (int i = 0; i < buttons.size(); ++i)
-    //{
-    //    auto& button = buttons[i];
-    //    if (!button.actualInstance)
-    //        continue;
-    //
-    //    if (button.isCredentialControl())
-    //        continue;
-    //
-    //    if (!button.texture)
-    //        continue;
-    //
-    //    //float xStart = (ImGui::GetIO().DisplaySize.x / 2) - ((48) * (buttons.size() - i)) /* - (ImGui::GetStyle().FramePadding.x * i)*/;
-    //    float xStart = (ImGui::GetIO().DisplaySize.x - (48 * 3 * 0.5) );
-    //    xStart = xStart + (48 * i) + ImGui::GetStyle().FramePadding.x * 2*i;
-    //    float xEnd = xStart + ImGui::GetStyle().FramePadding.x * 2 + 48;
-    //    //ImGui::SetCursorPosX(xStart);
-    //
-    //    if (bFirst)
-    //    {
-    //        //ButtonCenteredOnLineNoCall(ws2s(button.GetText()).c_str(), size);
-    //        bFirst = false;
-    //    }
-    //    else if (i < buttons.size())
-    //    {
-    //        ImGui::SameLine();
-    //    
-    //    
-    //        //if (textSize.x < 48)
-    //        //    ImGui::SetCursorPosX(ImGui::GetCursorPosX() + ((textSize.x - 24) / 2));
-    //        
-    //        //ImGui::SetCursorPosX(ImGui::GetCursorPosX() + textSize.x / 2);
-    //    }
-    //
-    //    ImVec2 textSize = ImGui::CalcTextSize(ws2s(button.GetText()).c_str());
-    //    ImGui::SetCursorPosX(xStart + textSize.x / 2);
-    //
-    //    ImGui::PushTextWrapPos(ImGui::GetCursorPosX() + xEnd);
-    //    ImGui::TextWrapped(ws2s(button.GetText()).c_str());
-    //}
-    ImGui::EndChild();
-
-    ImGui::End();
+    return 0;
 }
 
 void uiUserSelect::InitHooks(uintptr_t baseaddress)
@@ -378,6 +230,58 @@ void uiUserSelect::InitHooks(uintptr_t baseaddress)
     Hook(SelectableUserOrCredentialControl_Destructor, SelectableUserOrCredentialControl_Destructor_Hook);
     Hook(globals::ConsoleUIView__Initialize, ConsoleUIView__Initialize_Hook);
     Hook(CredUIViewManager__ShowCredentialView, CredUIViewManager__ShowCredentialView_Hook);
+
+    CreateThread(0,0, TickThread,0,0,0);
+}
+
+void external::ConsoleUIView__HandleKeyInputExternal(void* instance, const struct _KEY_EVENT_RECORD* keyrecord)
+{
+    globals::ConsoleUIView__HandleKeyInput(instance,keyrecord);
+}
+
+void* external::GetConsoleUIView()
+{
+    return globals::ConsoleUIView;
+}
+
+const wchar_t* external::SelectableUserOrCredentialControl_GetText(void* actualInstance)
+{
+    for (int i = 0; i < buttons.size(); ++i)
+    {
+        auto& button = buttons[i];
+        if (button.actualInstance != actualInstance)
+            continue;
+
+        return button.GetText().c_str();
+    }
+    return L"";
+}
+
+void external::SelectableUserOrCredentialControl_Press(void* actualInstance)
+{
+    for (int i = 0; i < buttons.size(); ++i)
+    {
+        auto& button = buttons[i];
+        if (button.actualInstance != actualInstance)
+            continue;
+
+        button.Press();
+
+        break;
+    }
+}
+
+bool external::SelectableUserOrCredentialControl_isCredentialControl(void* actualInstance)
+{
+    for (int i = 0; i < buttons.size(); ++i)
+    {
+        auto& button = buttons[i];
+        if (button.actualInstance != actualInstance)
+            continue;
+
+        return button.isCredentialControl();
+    }
+    return false;
 }
 
 std::wstring SelectableUserOrCredentialControlWrapper::GetText()

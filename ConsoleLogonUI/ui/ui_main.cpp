@@ -137,7 +137,7 @@ DWORD WINAPI ImGUIThread(LPVOID lparam)
     ImGui_ImplWin32_Init(windowHandle);
     ImGui_ImplDX11_Init(d3dDevice, d3dDeviceContext);
 
-    MinimizeLogonConsole();
+    //MinimizeLogonConsole();
 
     const ImVec4 clear_color = ImVec4(0.45f, 0.55f, 0.60f, 1.00f);
     bool done = false;
@@ -298,7 +298,7 @@ void uiRenderer::Tick()
 
 }
 
-//#define ENABLELOG
+#define ENABLELOG
 
 void uiRenderer::Draw()
 {

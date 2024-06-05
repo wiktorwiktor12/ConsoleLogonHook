@@ -1,14 +1,15 @@
 #include "ui_selectedcredentialview.h"
+#include <Windows.h>
 #include "detours.h"
 #include "spdlog/spdlog.h"
 #include "../util/util.h"
 #include <winstring.h>
-#include "ui_helper.h"
 #include "ui_userselect.h"
 #include <vector>
 #include "ui_securitycontrol.h"
+#include "util/interop.h"
 
-std::vector<EditControlWrapper> editControls;
+//std::vector<EditControlWrapper> editControls;
 
 __int64 (__fastcall* CredentialFieldControlBase__GetVisibility)(void* _this, bool* a2);
 __int64(__fastcall* EditControl__v_HandleKeyInput)(__int64 _this, const struct _KEY_EVENT_RECORD* a2, int* a3);
@@ -18,7 +19,9 @@ __int64 SelectedCredentialView__v_OnKeyInput_Hook(void* _this, const struct _KEY
 {
     if (a2->wVirtualKeyCode == VK_ESCAPE || a2->wVirtualKeyCode == VK_BACK)
     {
-        uiRenderer::Get()->GetWindowOfTypeId<uiUserSelect>(5)->wasInSelectedCredentialView = true;
+        //uiRenderer::Get()->GetWindowOfTypeId<uiUserSelect>(5)->wasInSelectedCredentialView = true;
+		external::NotifyWasInSelectedCredentialView();
+		globals::wasInSelectedCredentialView = true;
     }
 
     SPDLOG_INFO("SelectedCredentialView__v_OnKeyInput_Hook");
@@ -41,22 +44,23 @@ __int64 (__fastcall* SelectedCredentialView__RuntimeClassInitialize)(void* a1, i
 __int64 SelectedCredentialView__RuntimeClassInitialize_Hook(void* a1, int a2, __int64 a3, HSTRING a4)
 {
 
-	auto selectedCredentialView = uiRenderer::Get()->GetWindowOfTypeId<uiSelectedCredentialView>(6);
+	//auto selectedCredentialView = uiRenderer::Get()->GetWindowOfTypeId<uiSelectedCredentialView>(6);
 	//selectedCredentialView->SetInactive();
 	//editControls.clear();
 
 	auto res = SelectedCredentialView__RuntimeClassInitialize(a1,a2,a3,a4);
 
-	if (selectedCredentialView)
-	{
-		SPDLOG_INFO("Setting active status selectedCredentialView");
-		selectedCredentialView->accountNameToDisplay = ConvertHStringToString(a4);
-		selectedCredentialView->texture = nullptr;
-		selectedCredentialView->textureExists = true;
-		selectedCredentialView->SetActive();
-
-		MinimizeLogonConsole();
-	}
+	//if (selectedCredentialView)
+	//{
+	//	SPDLOG_INFO("Setting active status selectedCredentialView");
+	//	selectedCredentialView->accountNameToDisplay = ConvertHStringToString(a4);
+	//	selectedCredentialView->texture = nullptr;
+	//	selectedCredentialView->textureExists = true;
+	//	selectedCredentialView->SetActive();
+	//
+	//	MinimizeLogonConsole();
+	//}
+	external::SelectedCredentialView_SetActive(ConvertHStringToString(a4).c_str());
 
 	SPDLOG_INFO("SelectedCredentialView__RuntimeClassInitialize_Hook {} {} {} {}",a1,a2,a3,ws2s(ConvertHStringToString(a4)));
 
@@ -69,26 +73,26 @@ __int64 EditControl__RuntimeClassInitialize_Hook(void* _this, void* a2, void* a3
 	auto res = EditControl__RuntimeClassInitialize(_this,a2,a3);
 	SPDLOG_INFO("EditControl__RuntimeClassInitialize_Hook {} {} {} ",_this,a2,a3);
 
-	EditControlWrapper wrapper;
-	wrapper.actualInstance = _this;
-	wrapper.fieldNameCache = ws2s(wrapper.GetFieldName());
-	wrapper.inputBuffer = ws2s(wrapper.GetInputtedText());
+	//EditControlWrapper wrapper;
+	//wrapper.actualInstance = _this;
+	//wrapper.fieldNameCache = ws2s(wrapper.GetFieldName());
+	//wrapper.inputBuffer = ws2s(wrapper.GetInputtedText());
 	//strcpy_s(wrapper.label, ws2s(wrapper.GetFieldName()).c_str());
 	//strcpy_s(wrapper.fieldNameCache, ws2s(wrapper.GetFieldName()).c_str());
+	external::EditControl_Create(_this);
+	//SPDLOG_INFO("{}: {} is visible {}", ws2s(wrapper.GetFieldName()) , ws2s(wrapper.GetInputtedText()), (int)wrapper.isVisible());
 
-	SPDLOG_INFO("{}: {} is visible {}", ws2s(wrapper.GetFieldName()) , ws2s(wrapper.GetInputtedText()), (int)wrapper.isVisible());
-
-	for (int i = editControls.size() - 1; i >= 0; --i)
-	{
-		auto& control = editControls[i];
-		if (control.GetFieldName() == wrapper.GetFieldName())
-		{
-			editControls.erase(editControls.begin() + i);
-			break;
-		}
-	}
-
-	editControls.push_back(wrapper);
+	//for (int i = editControls.size() - 1; i >= 0; --i)
+	//{
+	//	auto& control = editControls[i];
+	//	if (control.GetFieldName() == wrapper.GetFieldName())
+	//	{
+	//		editControls.erase(editControls.begin() + i);
+	//		break;
+	//	}
+	//}
+	//
+	//editControls.push_back(wrapper);
 
 	return res;
 }
@@ -96,166 +100,19 @@ __int64 EditControl__RuntimeClassInitialize_Hook(void* _this, void* a2, void* a3
 __int64 (__fastcall* CheckboxControl__Destructor)(void* _this, char a2); //Edit Control inherits this, and this will be called on it
 __int64 CheckboxControl__Destructor_Hook(void* _this, char a2)
 {
-	for (int i = 0; i < editControls.size(); ++i)
-    {
-        auto& button = editControls[i];
-        if (button.actualInstance == _this)
-        {
-            SPDLOG_INFO("FOUND AND DELETING edit control");
-            editControls.erase(editControls.begin() + i);
-            break;
-        }
-    }
+	//for (int i = 0; i < editControls.size(); ++i)
+    //{
+    //    auto& button = editControls[i];
+    //    if (button.actualInstance == _this)
+    //    {
+    //        SPDLOG_INFO("FOUND AND DELETING edit control");
+    //        editControls.erase(editControls.begin() + i);
+    //        break;
+    //    }
+    //}
+	external::EditControl_Destroy(_this);
 
 	return CheckboxControl__Destructor(_this,a2);
-}
-
-bool bWasInSecurityControl = false;
-
-void uiSelectedCredentialView::Begin()
-{
-	if (!hasSetupNotify)
-	{
-		auto uiRenderer = uiRenderer::Get();
-		if (uiRenderer)
-		{
-			auto securityControl = uiRenderer->GetWindowOfTypeId<uiSecurityControl>(2);
-			if (securityControl)
-			{
-				securityControl->wasInSecurityControlNotifies.push_back([]() -> void { bWasInSecurityControl = true; });
-				hasSetupNotify = true;
-			}
-		}
-	}
-}
-
-void uiSelectedCredentialView::Tick()
-{
-	static bool bPressedEnter = false;
-	if (GetAsyncKeyState(VK_RETURN))
-	{
-		if (!bPressedEnter)
-		{
-			bPressedEnter = true;
-
-			if (uiRenderer::Get()->activeWindow.get() == this && uiRenderer::Get()->bAppIsFocused) //only send an enter if we are active window
-			{
-				KEY_EVENT_RECORD rec;
-				rec.wVirtualKeyCode = VK_RETURN; //forward it to consoleuiview
-				globals::ConsoleUIView__HandleKeyInput((void*)(__int64(globals::ConsoleUIView) + 8), &rec);
-			}
-		}
-	
-	}
-	else
-		bPressedEnter = false;
-}
-
-void uiSelectedCredentialView::Draw()
-{
-	ImGui::Begin("Selected Credential View", 0, ImGuiWindowFlags_NoTitleBar | ImGuiWindowFlags_NoCollapse | ImGuiWindowFlags_NoBringToFrontOnFocus | ImGuiWindowFlags_NoMove | ImGuiWindowFlags_NoResize | ImGuiWindowFlags_NoBackground);
-
-    ImGui::SetWindowSize(ImGui::GetIO().DisplaySize);
-    ImGui::SetWindowPos(ImVec2(0, 0));
-
-	float prcntToTakeInAccount = (128.f) / ImGui::GetContentRegionAvail().y;
-
-	ImGui::SetCursorPosY(ImGui::GetCursorPosY() + ImGui::GetContentRegionAvail().y * (0.45 - prcntToTakeInAccount));
-
-	if (!texture && textureExists)
-	{
-		std::wstring sid = L"NULL";
-		auto hr = GetSIDStringFromUsername(accountNameToDisplay.c_str(),&sid);
-		if (hr != S_OK && editControls.size() > 0)
-		{
-			auto& firstControl = editControls[0];
-			SPDLOG_INFO("Inputted TEXT {}",ws2s(firstControl.GetInputtedText()));
-			hr = GetSIDStringFromUsername(firstControl.GetInputtedText().c_str(), &sid);
-			if (hr != S_OK)
-				textureExists = false;
-			else
-				goto work;
-		}
-		else if (editControls.size() > 0)
-		{
-		work:
-			SPDLOG_INFO("In work");
-			auto path = GetProfilePicturePathFromSID(sid, true);
-			if (path.size() > 0)
-			{
-				int w = 0;
-				int h = 0;
-				textureExists = uiRenderer::LoadTextureFromFile(ws2s(path).c_str(), &texture, &w, &h);
-			}
-		}
-	}
-
-	ImGui::SetCursorPosX((ImGui::GetIO().DisplaySize.x - 128) * 0.5f);
-	ImGui::Image(texture, ImVec2(128, 128));
-
-	TextCenteredOnLine(ws2s(accountNameToDisplay).c_str());
-
-	int lastIndex = -1;
-	for (int x = editControls.size() - 1; x >= 0; --x)
-	{
-		auto& control = editControls[x];
-		if (control.isVisible())
-		{
-			lastIndex = x;
-			break;
-		}
-	}
-
-	for (int i = 0; i < editControls.size(); ++i)
-	{
-		auto& control = editControls[i];
-		if (control.isVisible())
-		{
-			ImGui::PushID(&control);
-			float width = ImGui::CalcTextSize("a").x * 28;
-			ImGui::SetNextItemWidth(width);
-			ImVec2 size = CalcTextButtonSize(control.fieldNameCache);
-			size.x = width;
-
-			bool bCensor = (i > 0 && i <= 3);
-
-			ButtonCenteredOnLineNoCall(control.fieldNameCache.c_str(), size);
-			if (ImGui::InputTextWithHint("", control.fieldNameCache.c_str(), &control.inputBuffer, bCensor ? ImGuiInputTextFlags_Password : 0))
-			{
-				SPDLOG_INFO("TRUE {}",control.inputBuffer);
-				control.SetInputtedText(s2ws(control.inputBuffer));
-			}
-			ImGui::PopID();
-
-			bool isLast = (i == lastIndex);
-
-			if (isLast)
-			{
-				ImGui::SameLine();
-
-				if (ImGui::Button("->"))
-				{
-					KEY_EVENT_RECORD rec;
-					rec.wVirtualKeyCode = VK_RETURN;
-					globals::ConsoleUIView__HandleKeyInput((void*)(__int64(globals::ConsoleUIView) + 8),&rec);
-				}
-			}
-		}
-	}
-
-	std::string& text = bWasInSecurityControl ? cancel : switchUser;
-	ImVec2 size;
-	size = CalcTextButtonSize(text);
-	size.y *= 2;
-
-	if (ButtonCenteredOnLine(text.c_str(), size))
-	{
-		KEY_EVENT_RECORD rec;
-		rec.wVirtualKeyCode = VK_ESCAPE;
-		globals::ConsoleUIView__HandleKeyInput((void*)(__int64(globals::ConsoleUIView) + 8), &rec);
-	}
-
-	ImGui::End();
 }
 
 GUID guid;
@@ -286,7 +143,7 @@ void uiSelectedCredentialView::InitHooks(uintptr_t baseaddress)
 	Hook(CheckboxControl__Destructor, CheckboxControl__Destructor_Hook);
 }
 
-std::wstring EditControlWrapper::GetFieldName()
+const wchar_t* external::EditControl_GetFieldName(void* actualInstance)
 {
 	__int64 v28 = 0;
 	(***(__int64(__fastcall****)(uintptr_t, GUID*, void*))(__int64(actualInstance) + 0x70))(
@@ -305,40 +162,45 @@ std::wstring EditControlWrapper::GetFieldName()
 
 	std::wstring result;
 	result = ConvertHStringToString(v27);
-	return result;
+	return result.c_str();
 }
 
-std::wstring EditControlWrapper::GetInputtedText()
+const wchar_t* external::EditControl_GetInputtedText(void* actualInstance)
 {
 	HSTRING string;
 	uintptr_t v2 = *(uintptr_t*)(__int64(actualInstance) + 0x70);
 	(*(__int64(__fastcall**)(__int64, HSTRING*))(*(__int64*)v2 + 0x30i64))(v2, &string);
 
-	return ConvertHStringToString(string);
+	return ConvertHStringToString(string).c_str();
 }
 
-void EditControlWrapper::SetInputtedText(std::wstring input)
+void external::EditControl_SetInputtedText(void* actualInstance, const wchar_t* input)
 {
 	//HSTRING string;
 	//uintptr_t v2 = *(uintptr_t*)(__int64(actualInstance) + 0x70);
 	//(*(__int64(__fastcall**)(__int64, HSTRING*))(*(__int64*)v2 + 0x30i64))(v2, &string);
 
+	std::wstring winput = input;
+
 	HSTRING newString;
-	fWindowsCreateString(input.c_str(), input.size(), &newString);
+	fWindowsCreateString(winput.c_str(), winput.size(), &newString);
 
 	auto plus8 = (uintptr_t)(__int64(actualInstance) + 8);
-	SPDLOG_INFO("plus8");
 
 	auto v16 = (*(__int64(__fastcall**)(uintptr_t, HSTRING))(**(uintptr_t**)(plus8 + 0x68) + 0x38i64))(
 		*(uintptr_t*)(plus8 + 0x68),
 		newString);
-	SPDLOG_INFO("call");
-	
 }
 
-bool EditControlWrapper::isVisible()
+bool external::EditControl_isVisible(void* actualInstance)
 {
 	bool returnval = *(bool*)(__int64(actualInstance) + 0x78);
-	//CredentialFieldControlBase__GetVisibility(actualInstance,&returnval);
 	return returnval;
 }
+
+//bool EditControlWrapper::isVisible()
+//{
+//	bool returnval = *(bool*)(__int64(actualInstance) + 0x78);
+//	//CredentialFieldControlBase__GetVisibility(actualInstance,&returnval);
+//	return returnval;
+//}

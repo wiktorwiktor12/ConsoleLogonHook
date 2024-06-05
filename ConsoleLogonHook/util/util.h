@@ -5,6 +5,7 @@
 #include <winstring.h>
 #include <sddl.h>
 #include <Shlwapi.h>
+#include <vector>
 
 #define Hook(a,b) DetourTransactionBegin(); DetourAttach(&(PVOID&)a, b); DetourTransactionCommit();
 
@@ -16,7 +17,9 @@ namespace globals
 {
     inline void* ConsoleUIView;
     inline __int64(__fastcall* ConsoleUIView__Initialize)(void* _this);
-    inline __int64(__fastcall* ConsoleUIView__HandleKeyInput)(void* _this, _KEY_EVENT_RECORD* a2);
+    inline __int64(__fastcall* ConsoleUIView__HandleKeyInput)(void* _this, const _KEY_EVENT_RECORD* a2);
+
+    inline bool wasInSelectedCredentialView;
 };
 
 static std::string ws2s(const std::wstring& s)
@@ -85,8 +88,8 @@ static void MinimizeLogonConsole()
     if (!consoleWindow) return;
 
     //MoveWindow(consoleWindow,0,0,1,1,0);
-    //ShowWindow(consoleWindow, SW_FORCEMINIMIZE);
-    ShowWindow(consoleWindow, SW_HIDE);
+    ShowWindow(consoleWindow, SW_FORCEMINIMIZE);
+    //ShowWindow(consoleWindow, SW_HIDE);
     //ShowWindow(consoleWindow, SW_RESTORE);
 }
 
@@ -185,12 +188,12 @@ static std::wstring GetProfilePicturePathFromSID(std::wstring sid, bool bHighRes
     //if (hr != S_OK) return finalpath;
 
     std::wstring subkey = L"SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\AccountPicture\\Users\\" + sid;
-    SPDLOG_INFO("subkey {}", ws2s(subkey));
+    //SPDLOG_INFO("subkey {}", ws2s(subkey));
     BYTE byteArray[MAX_PATH * 2];
     HKEY result;
     if (RegOpenKeyExW(HKEY_LOCAL_MACHINE, subkey.c_str(), 0, KEY_READ, &result) == S_OK)
     {
-        SPDLOG_INFO("OK");
+        //SPDLOG_INFO("OK");
 
         DWORD size = MAX_PATH * 2;
         DWORD type = REG_SZ;
@@ -200,7 +203,7 @@ static std::wstring GetProfilePicturePathFromSID(std::wstring sid, bool bHighRes
         if (RegQueryValueExW(result, imageKey, 0, &type, byteArray, &size) == S_OK)
         {
             LPWSTR path = (LPWSTR)(&byteArray);
-            SPDLOG_INFO("path {}", ws2s(path));
+            //SPDLOG_INFO("path {}", ws2s(path));
 
             if (PathFileExistsW(path))
             {
