@@ -37,20 +37,21 @@ void external::SecurityControl_SetActive()
 
 void external::SecurityControl_ButtonsReady()
 {
-    //auto SwapButton = [&](int a, int b) -> void
-    //    {
-    //        SecurityOptionControlWrapper temp = buttonsList[a];
-    //        buttonsList[a] = buttonsList[b];
-    //        buttonsList[b] = temp;
-    //    };
-    //
-    //SwapButton(0, 1);
-    //SwapButton(1, 3);
+    auto SwapButton = [&](int a, int b) -> void
+        {
+            SecurityOptionControlWrapper temp = buttonsList[a];
+            buttonsList[a] = buttonsList[b];
+            buttonsList[b] = temp;
+        };
+    
+    SwapButton(0, 1);
+    SwapButton(1, 3);
 }
 
 void external::SecurityOptionControl_Create(void* actualInstance)
 {
     SecurityOptionControlWrapper button(actualInstance);
+    SPDLOG_INFO("SecurityOptionControl_Create {} {}",(void*)actualInstance, ws2s(button.getString()));
 
     buttonsList.push_back(button);
 }

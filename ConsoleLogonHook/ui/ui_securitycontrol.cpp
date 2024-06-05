@@ -166,7 +166,7 @@ void external::SecurityOptionControl_Press(void* actualInstance, const struct _K
 
 const wchar_t* external::SecurityOptionControl_getString(void* actualInstance)
 {
-    return std::wstring(*(wchar_t**)(__int64(actualInstance) + 0x48)).c_str(); //force a copy
+    return *(wchar_t**)(__int64(actualInstance) + 0x48);
 }
 
 /*void SecurityOptionControlWrapper::Press()

@@ -45,7 +45,7 @@ namespace external
     {
         static auto fSecurityOptionControl_getString = EXTERNAL(const wchar_t*(*)(void* actualInstance), "SecurityOptionControl_getString");
         if (fSecurityOptionControl_getString)
-            return fSecurityOptionControl_getString(actualInstance);
+            return std::wstring(fSecurityOptionControl_getString(actualInstance));
     }
 
     static void ConsoleUIView__HandleKeyInputExternal(void* instance, const struct _KEY_EVENT_RECORD* keyrecord)

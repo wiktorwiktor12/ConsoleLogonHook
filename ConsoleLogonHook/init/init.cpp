@@ -50,6 +50,8 @@ namespace init
 
     void InitHooks()
     {
+        InitSpdlog();
+
         auto baseaddress = (uintptr_t)LoadLibraryW(L"C:\\Windows\\System32\\ConsoleLogon.dll");
         if (!baseaddress)
             MessageBox(0, L"FAILED TO LOAD", L"FAILED TO LOAD", 0);
@@ -74,13 +76,15 @@ namespace init
         }
 
         EditControl__Repaint = (decltype(EditControl__Repaint))(baseaddress + 0x44528);
-        Hook(EditControl__Repaint, EditControl__Repaint_Hook);
+        //Hook(EditControl__Repaint, EditControl__Repaint_Hook);
 
         uiSecurityControl::InitHooks(baseaddress);
         uiMessageView::InitHooks(baseaddress);
         uiStatusView::InitHooks(baseaddress);
         uiUserSelect::InitHooks(baseaddress);
         uiSelectedCredentialView::InitHooks(baseaddress);
+
+        MinimizeLogonConsole();
 
         external::InitUI();
     }
