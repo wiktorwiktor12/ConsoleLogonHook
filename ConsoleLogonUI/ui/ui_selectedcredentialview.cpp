@@ -33,17 +33,20 @@ void external::EditControl_Create(void* actualInstance)
 	EditControlWrapper wrapper;
 	wrapper.actualInstance = actualInstance;
 	wrapper.fieldNameCache = ws2s(wrapper.GetFieldName());
+	//MessageBox(0, wrapper.GetFieldName().c_str(), wrapper.GetFieldName().c_str(),0);
 	wrapper.inputBuffer = ws2s(wrapper.GetInputtedText());
+	//MessageBox(0, wrapper.GetInputtedText().c_str(), wrapper.GetInputtedText().c_str(),0);
 
-	for (int i = editControls.size() - 1; i >= 0; --i)
-	{
-		auto& control = editControls[i];
-		if (control.GetFieldName() == wrapper.GetFieldName())
-		{
-			editControls.erase(editControls.begin() + i);
-			break;
-		}
-	}
+
+	//for (int i = editControls.size() - 1; i >= 0; --i)
+	//{
+	//	auto& control = editControls[i];
+	//	if (control.GetFieldName() == wrapper.GetFieldName())
+	//	{
+	//		editControls.erase(editControls.begin() + i);
+	//		break;
+	//	}
+	//}
 
 	editControls.push_back(wrapper);
 }
@@ -125,7 +128,8 @@ void uiSelectedCredentialView::Draw()
 	}
 
 	ImGui::SetCursorPosX((ImGui::GetIO().DisplaySize.x - 128) * 0.5f);
-	ImGui::Image(texture, ImVec2(128, 128));
+	if (texture)
+		ImGui::Image(texture, ImVec2(128, 128));
 
 	TextCenteredOnLine(ws2s(accountNameToDisplay).c_str());
 
@@ -133,7 +137,7 @@ void uiSelectedCredentialView::Draw()
 	for (int x = editControls.size() - 1; x >= 0; --x)
 	{
 		auto& control = editControls[x];
-		if (control.isVisible())
+		//if (control.isVisible())
 		{
 			lastIndex = x;
 			break;
@@ -143,16 +147,16 @@ void uiSelectedCredentialView::Draw()
 	for (int i = 0; i < editControls.size(); ++i)
 	{
 		auto& control = editControls[i];
-		if (control.isVisible())
+		//if (control.isVisible())
 		{
 			ImGui::PushID(&control);
 			float width = ImGui::CalcTextSize("a").x * 28;
 			ImGui::SetNextItemWidth(width);
 			ImVec2 size = CalcTextButtonSize(control.fieldNameCache);
 			size.x = width;
-
+	
 			bool bCensor = (i > 0 && i <= 3);
-
+	
 			ButtonCenteredOnLineNoCall(control.fieldNameCache.c_str(), size);
 			if (ImGui::InputTextWithHint("", control.fieldNameCache.c_str(), &control.inputBuffer, bCensor ? ImGuiInputTextFlags_Password : 0))
 			{
@@ -160,13 +164,13 @@ void uiSelectedCredentialView::Draw()
 				control.SetInputtedText(s2ws(control.inputBuffer));
 			}
 			ImGui::PopID();
-
+	
 			bool isLast = (i == lastIndex);
-
+	
 			if (isLast)
 			{
 				ImGui::SameLine();
-
+	
 				if (ImGui::Button("->"))
 				{
 					KEY_EVENT_RECORD rec;

@@ -124,7 +124,7 @@ void external::MessageOptionControl_Press(void* actualInstance, const struct _KE
 const wchar_t* external::MessageOptionControl_GetText(void* actualInstance)
 {
     const wchar_t*& rawptr = *(const wchar_t**)(__int64(actualInstance) + 0x48);
-    return std::wstring(rawptr).c_str();
+    return rawptr;
 }
 
 /*void MessageOptionControlWrapper::Press()

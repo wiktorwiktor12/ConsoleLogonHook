@@ -236,7 +236,7 @@ void uiUserSelect::InitHooks(uintptr_t baseaddress)
 
 void external::ConsoleUIView__HandleKeyInputExternal(void* instance, const struct _KEY_EVENT_RECORD* keyrecord)
 {
-    globals::ConsoleUIView__HandleKeyInput(instance,keyrecord);
+    globals::ConsoleUIView__HandleKeyInput((void*)(__int64(instance) + 8),keyrecord);
 }
 
 void* external::GetConsoleUIView()

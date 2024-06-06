@@ -160,18 +160,16 @@ const wchar_t* external::EditControl_GetFieldName(void* actualInstance)
 	HSTRING v27;
 	(*(__int64(__fastcall**)(__int64, HSTRING*))(*(uintptr_t*)v28 + 48i64))(v28, &v27);
 
-	std::wstring result;
-	result = ConvertHStringToString(v27);
-	return result.c_str();
+	return ConvertHStringToRawString(v27);
 }
 
 const wchar_t* external::EditControl_GetInputtedText(void* actualInstance)
 {
-	HSTRING string;
+	HSTRING string{};
 	uintptr_t v2 = *(uintptr_t*)(__int64(actualInstance) + 0x70);
 	(*(__int64(__fastcall**)(__int64, HSTRING*))(*(__int64*)v2 + 0x30i64))(v2, &string);
 
-	return ConvertHStringToString(string).c_str();
+	return ConvertHStringToRawString(string);
 }
 
 void external::EditControl_SetInputtedText(void* actualInstance, const wchar_t* input)

@@ -20,7 +20,7 @@ namespace external
 
     static void Unload()
     {
-        FreeLibraryAndExitThread(externalUiModule,0);
+        //FreeLibraryAndExitThread(externalUiModule,0);
     }
 
     static void InitUI()
@@ -109,9 +109,9 @@ namespace external
 
     static void SelectedCredentialView_SetActive(const wchar_t* accountNameToDisplay)
     {
-        static auto fSelectedCredentialView_SetActive = EXTERNAL(void(*)(), "SelectedCredentialView_SetActive");
+        static auto fSelectedCredentialView_SetActive = EXTERNAL(void(*)(const wchar_t* accountNameToDisplay), "SelectedCredentialView_SetActive");
         if (fSelectedCredentialView_SetActive)
-            fSelectedCredentialView_SetActive();
+            fSelectedCredentialView_SetActive(accountNameToDisplay);
     }
 
     static void EditControl_Create(void* actualInstance)

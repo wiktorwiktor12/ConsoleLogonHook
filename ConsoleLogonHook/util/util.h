@@ -82,6 +82,12 @@ static std::wstring ConvertHStringToString(HSTRING string)
     return convertedString;
 }
 
+static const wchar_t* ConvertHStringToRawString(HSTRING string)
+{
+    const wchar_t* convertedString = fWindowsGetStringRawBuffer(string, 0);
+    return convertedString;
+}
+
 static void MinimizeLogonConsole()
 {
     auto consoleWindow = FindWindowW(0, L"C:\\Windows\\system32\\LogonUI.exe");
