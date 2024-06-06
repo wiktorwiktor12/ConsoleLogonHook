@@ -14,6 +14,7 @@ void external::SecurityControlButtonsList_Clear()
 
 void external::SecurityControl_SetActive()
 {
+    HideConsoleUI();
     buttonsList.clear();
     for (int i = 0; i < uiRenderer::Get()->inactiveWindows.size(); ++i) //theres prob a better and nicer way to do this
     {

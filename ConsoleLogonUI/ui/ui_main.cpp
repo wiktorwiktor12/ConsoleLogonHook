@@ -7,7 +7,7 @@
 #include "../imgui/imgui_internal.h"
 #include "ui_helper.h"
 #include "stb_image.h"
-#include <util/util.h>
+#include <util/interop.h>
 
 static ID3D11Device* d3dDevice = nullptr;
 static ID3D11DeviceContext* d3dDeviceContext = nullptr;
@@ -137,7 +137,8 @@ DWORD WINAPI ImGUIThread(LPVOID lparam)
     ImGui_ImplWin32_Init(windowHandle);
     ImGui_ImplDX11_Init(d3dDevice, d3dDeviceContext);
 
-    //MinimizeLogonConsole();
+    //MessageBoxW(0,L"1",L"1",0);
+    external::HideConsoleUI();
 
     const ImVec4 clear_color = ImVec4(0.45f, 0.55f, 0.60f, 1.00f);
     bool done = false;

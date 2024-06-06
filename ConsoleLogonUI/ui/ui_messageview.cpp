@@ -9,6 +9,7 @@ std::vector<MessageOptionControlWrapper> controls;
 
 void external::MessageView_SetActive()
 {
+    HideConsoleUI();
     auto messageView = uiRenderer::Get()->GetWindowOfTypeId<uiMessageView>(3);
     if (messageView)
         messageView->SetActive();

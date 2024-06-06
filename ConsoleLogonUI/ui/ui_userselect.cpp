@@ -12,6 +12,8 @@ std::vector<SelectableUserOrCredentialControlWrapper> buttons;
 
 void external::UserSelect_SetActive()
 {
+    //MessageBoxW(0, L"1", L"1", 0);
+    HideConsoleUI();
     auto userSelect = uiRenderer::Get()->GetWindowOfTypeId<uiUserSelect>(5);
     if (userSelect)
     {
@@ -27,6 +29,7 @@ void external::SelectableUserOrCredentialControl_Sort()
     std::sort(buttons.begin(), buttons.end(), [](SelectableUserOrCredentialControlWrapper& a, SelectableUserOrCredentialControlWrapper& b) { return a.GetText() < b.GetText(); });
 }
 
+//TODO: move the texture loading to another thread so that it does not delay the whole program loading the textures
 void external::SelectableUserOrCredentialControl_Create(void* actualInstance, const wchar_t* path)
 {
     SelectableUserOrCredentialControlWrapper wrapper;

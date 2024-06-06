@@ -55,13 +55,14 @@ namespace init
         auto baseaddress = (uintptr_t)LoadLibraryW(L"C:\\Windows\\System32\\ConsoleLogon.dll");
         if (!baseaddress)
             MessageBox(0, L"FAILED TO LOAD", L"FAILED TO LOAD", 0);
-
+        //MessageBox(0,L"1",L"1",0);
         //check we are running correct consolelogon, very very low chance will this check pass if diff version dll
         auto SecurityOptionsView__RuntimeClassIntialise = (uint8_t*)(baseaddress + 0x36EB4);
         if (SecurityOptionsView__RuntimeClassIntialise[0] != 0x48 || SecurityOptionsView__RuntimeClassIntialise[1] != 0x89 || SecurityOptionsView__RuntimeClassIntialise[2] != 0x5C)
             return;
-
-        external::InitExternal();
+        //MessageBox(0,L"2",L"2",0);
+        MinimizeLogonConsole();
+        //MessageBox(0,L"3",L"3",0);
 
         auto stringdll = LoadLibraryW(L"api-ms-win-core-winrt-string-l1-1-0.dll");
         if (!stringdll)
@@ -78,6 +79,7 @@ namespace init
         EditControl__Repaint = (decltype(EditControl__Repaint))(baseaddress + 0x44528);
         //Hook(EditControl__Repaint, EditControl__Repaint_Hook);
 
+        external::InitExternal();
         uiSecurityControl::InitHooks(baseaddress);
         uiMessageView::InitHooks(baseaddress);
         uiStatusView::InitHooks(baseaddress);
@@ -87,10 +89,12 @@ namespace init
         MinimizeLogonConsole();
 
         external::InitUI();
+        //MessageBox(0,L"4",L"4",0);
     }
 
     void Unload()
     {
+        TerminateThread(uiUserSelectThreadHandle, 0);
         external::Unload();
     }
 }

@@ -6,12 +6,17 @@
 #include <pplwin.h>
 #include "init/init.h"
 
+HMODULE consoleLogon = 0;
+
 HMODULE GetConsoleLogonDLL()
 {
-    static auto lib = LoadLibraryW(L"C:\\Windows\\System32\\ConsoleLogon.dll");
-    if (!lib)
+    if (consoleLogon)
+        return consoleLogon;
+
+    consoleLogon = LoadLibraryW(L"C:\\Windows\\System32\\ConsoleLogon.dll");
+    if (!consoleLogon)
         MessageBox(0, L"FAILED TO LOAD", L"FAILED TO LOAD", 0);
-    return lib;
+    return consoleLogon;
 }
 
 extern "C" __declspec(dllexport) HRESULT __stdcall DllCanUnloadNow()
@@ -39,10 +44,10 @@ BOOL APIENTRY DllMain( HMODULE hModule,
     case DLL_PROCESS_ATTACH:
         init::InitHooks();
         break;
-    case DLL_THREAD_ATTACH:
-    case DLL_THREAD_DETACH:
-    case DLL_PROCESS_DETACH:
 
+    case DLL_PROCESS_DETACH:
+        //FreeLibraryAndExitThread(consoleLogon,0);
+        init::Unload();
         break;
     }
     return TRUE;

@@ -9,10 +9,10 @@ namespace external
 
     static bool InitExternal()
     {
-        externalUiModule = LoadLibrary(L"ConsoleLogonUI.dll");
+        externalUiModule = LoadLibraryW(L"ConsoleLogonUI.dll");
         if (!externalUiModule)
         {
-            MessageBox(0, L"UI DLL NOT FOUND", L"UI DLL NOT FOUND", 0);
+            MessageBox(0, L"UI DLL NOT FOUND", L"UI DLL NOT FOUND", MB_ICONERROR);
             return false;
         }
         return true;
@@ -20,7 +20,7 @@ namespace external
 
     static void Unload()
     {
-        //FreeLibraryAndExitThread(externalUiModule,0);
+        FreeLibraryAndExitThread(externalUiModule,0);
     }
 
     static void InitUI()
@@ -107,11 +107,11 @@ namespace external
             fNotifyWasInSelectedCredentialView();
     }
 
-    static void SelectedCredentialView_SetActive(const wchar_t* accountNameToDisplay)
+    static void SelectedCredentialView_SetActive(const wchar_t* accountNameToDisplay, int flag)
     {
-        static auto fSelectedCredentialView_SetActive = EXTERNAL(void(*)(const wchar_t* accountNameToDisplay), "SelectedCredentialView_SetActive");
+        static auto fSelectedCredentialView_SetActive = EXTERNAL(void(*)(const wchar_t* accountNameToDisplay, int flag), "SelectedCredentialView_SetActive");
         if (fSelectedCredentialView_SetActive)
-            fSelectedCredentialView_SetActive(accountNameToDisplay);
+            fSelectedCredentialView_SetActive(accountNameToDisplay, flag);
     }
 
     static void EditControl_Create(void* actualInstance)
@@ -177,10 +177,14 @@ namespace external
     extern "C" __declspec(dllexport) void ConsoleUIView__HandleKeyInputExternal(void* instance, const struct _KEY_EVENT_RECORD* keyrecord);
     extern "C" __declspec(dllexport) void* GetConsoleUIView();
     extern "C" __declspec(dllexport) const wchar_t* GetProfilePicturePathFromUsername(const wchar_t* username, bool bHighRes);
+    extern "C" __declspec(dllexport) void GetProfilePicturePathFromSID(const wchar_t* sid, const wchar_t* outUsername, bool bHighRes);
+    extern "C" __declspec(dllexport) void GetSIDFromName(const wchar_t* username, wchar_t** sid);
 
     extern "C" __declspec(dllexport) const wchar_t* SelectableUserOrCredentialControl_GetText(void* actualInstance);
     extern "C" __declspec(dllexport) void SelectableUserOrCredentialControl_Press(void* actualInstance);
     extern "C" __declspec(dllexport) bool SelectableUserOrCredentialControl_isCredentialControl(void* actualInstance);
+
+    extern "C" __declspec(dllexport) void HideConsoleUI();
 }
 
 #ifdef EXTERNAL

@@ -23,6 +23,7 @@ public:
     std::string cancel = "Cancel";
     std::wstring accountNameToDisplay;
     ID3D11ShaderResourceView* texture = 0;
+    int flag = 0;
 
     bool textureExists = true;
     bool hasSetupNotify = false;

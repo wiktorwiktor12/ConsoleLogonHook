@@ -6,6 +6,7 @@
 #include <sddl.h>
 #include <Shlwapi.h>
 #include <vector>
+#include <spdlog/spdlog.h>
 
 #define Hook(a,b) DetourTransactionBegin(); DetourAttach(&(PVOID&)a, b); DetourTransactionCommit();
 
@@ -94,8 +95,8 @@ static void MinimizeLogonConsole()
     if (!consoleWindow) return;
 
     //MoveWindow(consoleWindow,0,0,1,1,0);
-    ShowWindow(consoleWindow, SW_FORCEMINIMIZE);
-    //ShowWindow(consoleWindow, SW_HIDE);
+    //ShowWindow(consoleWindow, SW_FORCEMINIMIZE);
+    ShowWindow(consoleWindow, SW_HIDE);
     //ShowWindow(consoleWindow, SW_RESTORE);
 }
 
@@ -182,9 +183,9 @@ __declspec(noinline) static HRESULT GetSIDStringFromUsername(PCWSTR pcszUserName
     return hr;
 }
 
-static std::wstring GetProfilePicturePathFromSID(std::wstring sid, bool bHighRes = false)
+static const wchar_t* GetProfilePicturePathFromSID(const wchar_t* sid, bool bHighRes = false)
 {
-    std::wstring finalpath = L"C:\\ProgramData\\Microsoft\\User Account Pictures\\user-48.png";
+    const wchar_t* finalpath = L"C:\\ProgramData\\Microsoft\\User Account Pictures\\user-48.png";
 
     if (bHighRes)
         finalpath = L"C:\\ProgramData\\Microsoft\\User Account Pictures\\user-192.png";
@@ -193,9 +194,11 @@ static std::wstring GetProfilePicturePathFromSID(std::wstring sid, bool bHighRes
     //auto hr = GetSIDStringFromUsername(username.c_str(), &str);
     //if (hr != S_OK) return finalpath;
 
-    std::wstring subkey = L"SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\AccountPicture\\Users\\" + sid;
+    std::wstring subkey = L"SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\AccountPicture\\Users\\" + std::wstring(sid);
     //SPDLOG_INFO("subkey {}", ws2s(subkey));
     BYTE byteArray[MAX_PATH * 2];
+    for (int i = 0; i < MAX_PATH; ++i)
+        reinterpret_cast<WCHAR*>(byteArray)[i] = L'\0';
     HKEY result;
     if (RegOpenKeyExW(HKEY_LOCAL_MACHINE, subkey.c_str(), 0, KEY_READ, &result) == S_OK)
     {
@@ -209,6 +212,9 @@ static std::wstring GetProfilePicturePathFromSID(std::wstring sid, bool bHighRes
         if (RegQueryValueExW(result, imageKey, 0, &type, byteArray, &size) == S_OK)
         {
             LPWSTR path = (LPWSTR)(&byteArray);
+            //if (size > MAX_PATH * 2)
+            //    size = MAX_PATH * 2;
+            //path[((int)(size / 2)) - 1] = L'\0';
             //SPDLOG_INFO("path {}", ws2s(path));
 
             if (PathFileExistsW(path))
@@ -223,4 +229,58 @@ static std::wstring GetProfilePicturePathFromSID(std::wstring sid, bool bHighRes
     //LocalFree(str);
 
     return finalpath;
+}
+
+
+static const wchar_t* GetProfilePicturePathFromSID(std::wstring sid, bool bHighRes = false)
+{
+    return GetProfilePicturePathFromSID(sid.c_str(),bHighRes);
+}
+
+static void GetProfilePicturePathFromSID(std::wstring sid, const wchar_t* outUsername, bool bHighRes = false)
+{
+    const wchar_t* finalpath = L"C:\\ProgramData\\Microsoft\\User Account Pictures\\user-48.png";
+
+    if (bHighRes)
+        finalpath = L"C:\\ProgramData\\Microsoft\\User Account Pictures\\user-192.png";
+
+    //WCHAR* str = 0;
+    //auto hr = GetSIDStringFromUsername(username.c_str(), &str);
+    //if (hr != S_OK) return finalpath;
+
+    std::wstring subkey = L"SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\AccountPicture\\Users\\" + std::wstring(sid);
+    //SPDLOG_INFO("subkey {}", ws2s(subkey));
+    BYTE byteArray[MAX_PATH * 2];
+    for (int i = 0; i < MAX_PATH; ++i)
+        reinterpret_cast<WCHAR*>(byteArray)[i] = L'\0';
+    HKEY result;
+    if (RegOpenKeyExW(HKEY_LOCAL_MACHINE, subkey.c_str(), 0, KEY_READ, &result) == S_OK)
+    {
+        //SPDLOG_INFO("OK");
+
+        DWORD size = MAX_PATH * 2;
+        DWORD type = REG_SZ;
+
+        const wchar_t* imageKey = bHighRes ? L"Image240" : L"Image64";
+
+        if (RegQueryValueExW(result, imageKey, 0, &type, byteArray, &size) == S_OK)
+        {
+            LPWSTR path = (LPWSTR)(&byteArray);
+            //if (size > MAX_PATH * 2)
+            //    size = MAX_PATH * 2;
+            //path[((int)(size / 2)) - 1] = L'\0';
+            //SPDLOG_INFO("path {}", ws2s(path));
+
+            if (PathFileExistsW(path))
+            {
+                finalpath = path;
+            }
+        }
+
+        RegCloseKey(result);
+    }
+
+    //LocalFree(str);
+
+    wcscpy_s(const_cast<WCHAR*>(outUsername),MAX_PATH + 2, finalpath);
 }

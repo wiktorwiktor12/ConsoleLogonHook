@@ -14,15 +14,19 @@ public:
     bool hastext = false;
 
     std::wstring GetText();
+    const wchar_t* GetTextRaw();
 
     void Press();
     bool isCredentialControl();
 };
 
-class uiUserSelect
+inline HANDLE uiUserSelectThreadHandle;
+
+static class uiUserSelect
 {
 public:
 
+    
 
     static void InitHooks(uintptr_t baseaddress);
 };

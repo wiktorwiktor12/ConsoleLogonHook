@@ -9,7 +9,7 @@ namespace external
 
     static bool InitExternal()
     {
-        externalHookModule = LoadLibrary(L"ConsoleLogonHook.dll");
+        externalHookModule = GetModuleHandleW(L"ConsoleLogonHook.dll");
         if (!externalHookModule)
         {
             MessageBox(0, L"HOOK DLL NOT FOUND", L"HOOK DLL NOT FOUND", 0);
@@ -73,6 +73,31 @@ namespace external
         return std::wstring();
     }
 
+    static std::wstring GetProfilePicturePathFromSID(std::wstring sid, bool bHighRes = false)
+    {
+        //void GetProfilePicturePathFromSID(const wchar_t* sid, const wchar_t** outUsername, bool bHighRes);
+        static auto fGetProfilePicturePathFromSID = EXTERNAL(void (*)(const wchar_t* sid, wchar_t* outUsername, bool bHighRes), "GetProfilePicturePathFromSID");
+        if (fGetProfilePicturePathFromSID)
+        {
+            WCHAR* ptr = (WCHAR*)malloc((MAX_PATH + 1) * sizeof(WCHAR));
+            ZeroMemory(ptr,(MAX_PATH + 1) * sizeof(WCHAR));
+            ptr[MAX_PATH] = L'\0';
+            fGetProfilePicturePathFromSID(sid.c_str(), ptr,bHighRes);
+            std::wstring ret = ptr;
+            free(ptr);
+            return ret;
+        }
+
+        return std::wstring();
+    }
+
+    static void GetSIDFromName(const wchar_t* username, wchar_t** sid)
+    {
+        static auto fGetSIDFromName = EXTERNAL(void (*)(const wchar_t* username, wchar_t** sid), "GetSIDFromName");
+        if (fGetSIDFromName)
+            return fGetSIDFromName(username,sid);
+    }
+
     static std::wstring EditControl_GetFieldName(void* actualInstance)
     {
         static auto fEditControl_GetFieldName = EXTERNAL(const wchar_t* (*)(void* actualInstance), "EditControl_GetFieldName");
@@ -98,11 +123,16 @@ namespace external
             fEditControl_SetInputtedText(actualInstance,input.c_str());
     }
 
-    static bool EditControl_IsVisible(void* actualInstance)
+    static bool EditControl_isVisible(void* actualInstance)
     {
-        static auto fEditControl_IsVisible = EXTERNAL(bool(*)(void* actualInstance), "EditControl_IsVisible");
+        static auto fEditControl_IsVisible = EXTERNAL(bool(*)(void* actualInstance), "EditControl_isVisible");
+        //SPDLOG_INFO("fEditControl_IsVisible {}", (void*)fEditControl_IsVisible);
         if (fEditControl_IsVisible)
-            return fEditControl_IsVisible(actualInstance);
+        {
+            bool val = fEditControl_IsVisible(actualInstance);
+            //SPDLOG_INFO("val {}", (int)val);
+            return val;
+        }
 
         return false;
     }
@@ -132,6 +162,14 @@ namespace external
         return false;
     }
 
+    //TODO: FIND BETTER WAY TO HIDE CONSOLEUI AUTOMATICALLY
+    static void HideConsoleUI()
+    {
+        static auto fHideConsoleUI = EXTERNAL(void(*)(), "HideConsoleUI");
+        if (fHideConsoleUI)
+            fHideConsoleUI();
+    }
+
     extern "C" __declspec(dllexport) void MessageView_SetActive();
     extern "C" __declspec(dllexport) void MessageOptionControl_Create(void* actualInsance, int optionflag);
     extern "C" __declspec(dllexport) void MessageView_SetMessage(const wchar_t* message);
@@ -145,7 +183,7 @@ namespace external
     extern "C" __declspec(dllexport) void SecurityControl_SetInactive();
 
     extern "C" __declspec(dllexport) void NotifyWasInSelectedCredentialView();
-    extern "C" __declspec(dllexport) void SelectedCredentialView_SetActive(const wchar_t* accountNameToDisplay);
+    extern "C" __declspec(dllexport) void SelectedCredentialView_SetActive(const wchar_t* accountNameToDisplay, int flag);
     extern "C" __declspec(dllexport) void EditControl_Create(void* actualInstance);
     extern "C" __declspec(dllexport) void EditControl_Destroy(void* actualInstance);
 

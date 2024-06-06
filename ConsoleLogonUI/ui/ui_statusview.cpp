@@ -7,6 +7,7 @@
 
 void external::StatusView_SetActive(const wchar_t* text)
 {
+    HideConsoleUI();
     auto statusview = uiRenderer::Get()->GetWindowOfTypeId<uiStatusView>(4);
     if (statusview)
     {

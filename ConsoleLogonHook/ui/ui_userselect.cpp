@@ -202,6 +202,8 @@ DWORD WINAPI TickThread(LPVOID lparam)
             rec.wVirtualKeyCode = VK_DELETE;
             globals::ConsoleUIView__HandleKeyInput((void*)(__int64(globals::ConsoleUIView) + 8), &rec);
         }
+
+        Sleep(1000/240); //tick at 240hz, we don't want to rape the cpu
     }
 
     return 0;
@@ -231,7 +233,8 @@ void uiUserSelect::InitHooks(uintptr_t baseaddress)
     Hook(globals::ConsoleUIView__Initialize, ConsoleUIView__Initialize_Hook);
     Hook(CredUIViewManager__ShowCredentialView, CredUIViewManager__ShowCredentialView_Hook);
 
-    CreateThread(0,0, TickThread,0,0,0);
+    uiUserSelectThreadHandle = CreateThread(0,0, TickThread,0,0,0);
+    
 }
 
 void external::ConsoleUIView__HandleKeyInputExternal(void* instance, const struct _KEY_EVENT_RECORD* keyrecord)
@@ -252,7 +255,7 @@ const wchar_t* external::SelectableUserOrCredentialControl_GetText(void* actualI
         if (button.actualInstance != actualInstance)
             continue;
 
-        return button.GetText().c_str();
+        return button.GetTextRaw();
     }
     return L"";
 }
@@ -304,6 +307,24 @@ std::wstring SelectableUserOrCredentialControlWrapper::GetText()
 
     fWindowsDeleteString(hstring);
     return text;
+}
+
+const wchar_t* SelectableUserOrCredentialControlWrapper::GetTextRaw()
+{
+    uintptr_t pointer = *(uintptr_t*)(__int64(actualInstance) + 0x58);
+    if (!pointer)
+        pointer = *(uintptr_t*)(__int64(actualInstance) + 0x50);
+
+    HSTRING hstring;
+
+    __int64 result = (*(__int64(__fastcall**)(__int64, HSTRING*))(*(uintptr_t*)pointer + 0x40i64))(pointer, &hstring); //keep this line as is, this is very funky when it comes down to specifics
+    if (result < 0)
+        return L""; //failure
+
+    auto rawtext = ConvertHStringToRawString(hstring);
+
+    fWindowsDeleteString(hstring);
+    return rawtext;
 }
 
 //please dont touch, its messy, needs clean up, but its fragile af, ill fix at a later date

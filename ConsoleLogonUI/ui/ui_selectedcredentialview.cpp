@@ -15,8 +15,9 @@ void external::NotifyWasInSelectedCredentialView()
 	uiRenderer::Get()->GetWindowOfTypeId<uiUserSelect>(5)->wasInSelectedCredentialView = true;
 }
 
-void external::SelectedCredentialView_SetActive(const wchar_t* accountNameToDisplay)
+void external::SelectedCredentialView_SetActive(const wchar_t* accountNameToDisplay, int flag)
 {
+	HideConsoleUI();
 	auto selectedCredentialView = uiRenderer::Get()->GetWindowOfTypeId<uiSelectedCredentialView>(6);
 	if (selectedCredentialView)
 	{
@@ -24,6 +25,7 @@ void external::SelectedCredentialView_SetActive(const wchar_t* accountNameToDisp
 		selectedCredentialView->accountNameToDisplay = accountNameToDisplay;
 		selectedCredentialView->texture = nullptr;
 		selectedCredentialView->textureExists = true;
+		selectedCredentialView->flag = flag;
 		selectedCredentialView->SetActive();
 	}
 }
@@ -38,15 +40,15 @@ void external::EditControl_Create(void* actualInstance)
 	//MessageBox(0, wrapper.GetInputtedText().c_str(), wrapper.GetInputtedText().c_str(),0);
 
 
-	//for (int i = editControls.size() - 1; i >= 0; --i)
-	//{
-	//	auto& control = editControls[i];
-	//	if (control.GetFieldName() == wrapper.GetFieldName())
-	//	{
-	//		editControls.erase(editControls.begin() + i);
-	//		break;
-	//	}
-	//}
+	for (int i = editControls.size() - 1; i >= 0; --i)
+	{
+		auto& control = editControls[i];
+		if (control.GetFieldName() == wrapper.GetFieldName())
+		{
+			editControls.erase(editControls.begin() + i);
+			break;
+		}
+	}
 
 	editControls.push_back(wrapper);
 }
@@ -118,12 +120,30 @@ void uiSelectedCredentialView::Draw()
 
 	if (!texture && textureExists)
 	{
-		auto path = external::GetProfilePicturePathFromUsername(accountNameToDisplay);
-		if (path.size() > 0)
+		const wchar_t* sid = L"";
+		external::GetSIDFromName(accountNameToDisplay.c_str(), const_cast<WCHAR**>(&sid));
+		if (wcslen(sid) <= 0 && editControls.size() > 0)
 		{
-			int w = 0;
-			int h = 0;
-			textureExists = uiRenderer::LoadTextureFromFile(ws2s(path).c_str(), &texture, &w, &h);
+			auto& firstControl = editControls[0];
+			SPDLOG_INFO("Inputted TEXT {}", ws2s(firstControl.GetInputtedText()));
+			external::GetSIDFromName(firstControl.GetInputtedText().c_str(), const_cast<WCHAR**>(&sid));
+			if (wcslen(sid) <= 0)
+				textureExists = false;
+			else
+				goto work;
+		}
+		else if (editControls.size() > 0)
+		{
+		work:
+			SPDLOG_INFO("In work");
+			auto path = external::GetProfilePicturePathFromSID(sid, true);
+			if (path.size() > 0)
+			{
+				SPDLOG_INFO("poath {}",ws2s(path));
+				int w = 0;
+				int h = 0;
+				textureExists = uiRenderer::LoadTextureFromFile(ws2s(path).c_str(), &texture, &w, &h);
+			}
 		}
 	}
 
@@ -137,7 +157,7 @@ void uiSelectedCredentialView::Draw()
 	for (int x = editControls.size() - 1; x >= 0; --x)
 	{
 		auto& control = editControls[x];
-		//if (control.isVisible())
+		if (control.isVisible())
 		{
 			lastIndex = x;
 			break;
@@ -147,7 +167,7 @@ void uiSelectedCredentialView::Draw()
 	for (int i = 0; i < editControls.size(); ++i)
 	{
 		auto& control = editControls[i];
-		//if (control.isVisible())
+		if (control.isVisible())
 		{
 			ImGui::PushID(&control);
 			float width = ImGui::CalcTextSize("a").x * 28;
@@ -181,7 +201,7 @@ void uiSelectedCredentialView::Draw()
 		}
 	}
 
-	std::string& text = bWasInSecurityControl ? cancel : switchUser;
+	std::string& text = (flag == 2) ? cancel : switchUser;
 	ImVec2 size;
 	size = CalcTextButtonSize(text);
 	size.y *= 2;
@@ -213,5 +233,5 @@ void EditControlWrapper::SetInputtedText(std::wstring input)
 
 bool EditControlWrapper::isVisible()
 {
-	return external::EditControl_IsVisible(actualInstance);
+	return external::EditControl_isVisible(actualInstance);
 }
