@@ -176,7 +176,7 @@ namespace external
 
     extern "C" __declspec(dllexport) void ConsoleUIView__HandleKeyInputExternal(void* instance, const struct _KEY_EVENT_RECORD* keyrecord);
     extern "C" __declspec(dllexport) void* GetConsoleUIView();
-    extern "C" __declspec(dllexport) const wchar_t* GetProfilePicturePathFromUsername(const wchar_t* username, bool bHighRes);
+    //extern "C" __declspec(dllexport) const wchar_t* GetProfilePicturePathFromUsername(const wchar_t* username, bool bHighRes);
     extern "C" __declspec(dllexport) void GetProfilePicturePathFromSID(const wchar_t* sid, const wchar_t* outUsername, bool bHighRes);
     extern "C" __declspec(dllexport) void GetSIDFromName(const wchar_t* username, wchar_t** sid);
 

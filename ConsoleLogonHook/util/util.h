@@ -180,12 +180,15 @@ __declspec(noinline) static HRESULT GetSIDStringFromUsername(PCWSTR pcszUserName
     WCHAR* str = 0;
     HRESULT hr = GetSIDStringFromUsername(pcszUserName, &str);
     *ppszSID = str ? str : L"";
+
+    LocalFree(str);
+
     return hr;
 }
 
-static const wchar_t* GetProfilePicturePathFromSID(const wchar_t* sid, bool bHighRes = false)
+static std::wstring GetProfilePicturePathFromSID(const wchar_t* sid, bool bHighRes = false)
 {
-    const wchar_t* finalpath = L"C:\\ProgramData\\Microsoft\\User Account Pictures\\user-48.png";
+    std::wstring finalpath = L"C:\\ProgramData\\Microsoft\\User Account Pictures\\user-48.png";
 
     if (bHighRes)
         finalpath = L"C:\\ProgramData\\Microsoft\\User Account Pictures\\user-192.png";
@@ -197,8 +200,8 @@ static const wchar_t* GetProfilePicturePathFromSID(const wchar_t* sid, bool bHig
     std::wstring subkey = L"SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\AccountPicture\\Users\\" + std::wstring(sid);
     //SPDLOG_INFO("subkey {}", ws2s(subkey));
     BYTE byteArray[MAX_PATH * 2];
-    for (int i = 0; i < MAX_PATH; ++i)
-        reinterpret_cast<WCHAR*>(byteArray)[i] = L'\0';
+    //for (int i = 0; i < MAX_PATH; ++i)
+    //    reinterpret_cast<WCHAR*>(byteArray)[i] = L'\0';
     HKEY result;
     if (RegOpenKeyExW(HKEY_LOCAL_MACHINE, subkey.c_str(), 0, KEY_READ, &result) == S_OK)
     {
@@ -232,10 +235,10 @@ static const wchar_t* GetProfilePicturePathFromSID(const wchar_t* sid, bool bHig
 }
 
 
-static const wchar_t* GetProfilePicturePathFromSID(std::wstring sid, bool bHighRes = false)
-{
-    return GetProfilePicturePathFromSID(sid.c_str(),bHighRes);
-}
+//static const wchar_t* GetProfilePicturePathFromSID(std::wstring sid, bool bHighRes = false)
+//{
+//    return GetProfilePicturePathFromSID(sid.c_str(),bHighRes);
+//}
 
 static void GetProfilePicturePathFromSID(std::wstring sid, const wchar_t* outUsername, bool bHighRes = false)
 {

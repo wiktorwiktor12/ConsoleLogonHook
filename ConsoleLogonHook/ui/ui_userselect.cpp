@@ -114,7 +114,7 @@ __int64 SelectableUserOrCredentialControl__RuntimeClassInitialize_Hook(void* _th
 
         std::wstring sid = L"";
         auto hr = GetSIDStringFromUsername(wrapper.GetText().c_str(), &sid);
-        auto path = GetProfilePicturePathFromSID(sid);
+        auto path = GetProfilePicturePathFromSID(sid.c_str());
             
         external::SelectableUserOrCredentialControl_Create(wrapper.actualInstance, path);
 

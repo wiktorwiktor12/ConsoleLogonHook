@@ -64,15 +64,6 @@ namespace external
         return nullptr;
     }
 
-    static std::wstring GetProfilePicturePathFromUsername(std::wstring username, bool bHighRes = false)
-    {
-        static auto fGetProfilePicturePathFromUsername = EXTERNAL(const wchar_t* (*)(const wchar_t*, bool bHighRes), "GetProfilePicturePathFromUsername");
-        if (fGetProfilePicturePathFromUsername)
-            return fGetProfilePicturePathFromUsername(username.c_str(), bHighRes);
-
-        return std::wstring();
-    }
-
     static std::wstring GetProfilePicturePathFromSID(std::wstring sid, bool bHighRes = false)
     {
         //void GetProfilePicturePathFromSID(const wchar_t* sid, const wchar_t** outUsername, bool bHighRes);
@@ -91,11 +82,33 @@ namespace external
         return std::wstring();
     }
 
-    static void GetSIDFromName(const wchar_t* username, wchar_t** sid)
+    __declspec(noinline) static void GetSIDFromName(const wchar_t* username, std::wstring* sid)
     {
+        //void GetSIDFromName(const wchar_t* username, wchar_t** sid);
         static auto fGetSIDFromName = EXTERNAL(void (*)(const wchar_t* username, wchar_t** sid), "GetSIDFromName");
         if (fGetSIDFromName)
-            return fGetSIDFromName(username,sid);
+        {
+            WCHAR* str = 0;
+            fGetSIDFromName(username, &str);
+            *sid = str ? str : L"";
+
+            LocalFree(str);
+            //const WCHAR* psid = L"";
+            //fGetSIDFromName(username,&psid);
+            //*sid = psid;
+            //LocalFree(psid);
+        }
+    }
+
+    static std::wstring GetProfilePicturePathFromUsername(std::wstring username, bool bHighRes = false)
+    {
+        std::wstring sid;
+        GetSIDFromName(username.c_str(),&sid);
+        auto res = GetProfilePicturePathFromSID(sid,bHighRes);
+        return sid;
+        /*static auto fGetProfilePicturePathFromUsername = EXTERNAL(const wchar_t* (*)(const wchar_t*, bool bHighRes), "GetProfilePicturePathFromUsername");
+        if (fGetProfilePicturePathFromUsername)
+            return fGetProfilePicturePathFromUsername(username.c_str(), bHighRes);*/
     }
 
     static std::wstring EditControl_GetFieldName(void* actualInstance)

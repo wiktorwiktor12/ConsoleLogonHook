@@ -120,14 +120,15 @@ void uiSelectedCredentialView::Draw()
 
 	if (!texture && textureExists)
 	{
-		const wchar_t* sid = L"";
-		external::GetSIDFromName(accountNameToDisplay.c_str(), const_cast<WCHAR**>(&sid));
-		if (wcslen(sid) <= 0 && editControls.size() > 0)
+		std::wstring sid = L"";
+		external::GetSIDFromName(accountNameToDisplay.c_str(), &sid);
+		if (sid.size() <= 0 && editControls.size() > 0)
 		{
 			auto& firstControl = editControls[0];
 			SPDLOG_INFO("Inputted TEXT {}", ws2s(firstControl.GetInputtedText()));
-			external::GetSIDFromName(firstControl.GetInputtedText().c_str(), const_cast<WCHAR**>(&sid));
-			if (wcslen(sid) <= 0)
+			sid = L"";
+			external::GetSIDFromName(firstControl.GetInputtedText().c_str(), &sid);
+			if (sid.size() <= 0)
 				textureExists = false;
 			else
 				goto work;
