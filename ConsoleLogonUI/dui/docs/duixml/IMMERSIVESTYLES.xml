@@ -1,0 +1,1129 @@
+﻿<duixml>
+	<stylesheets>
+		<style resid="ImmersiveBase">
+			<element contentalign="topleft" background="20575" />
+			<richtext contentalign="topleft" background="20575" />
+			<TouchCarouselScrollBar width="17rp" layoutpos="nineright" accessible="true" accrole="scrollbar" background="20754" edgehighlightcolor="20577" edgehighlightthickness="rect(1rp,1rp,1rp,1rp)" />
+			<TouchScrollBar accessible="true" accrole="scrollbar" background="20754" edgehighlightcolor="20577" edgehighlightthickness="rect(1rp,1rp,1rp,1rp)" />
+			<if vertical="true">
+				<TouchScrollBar width="17rp" layoutpos="nineright" />
+			</if>
+			<if vertical="false">
+				<TouchScrollBar height="17rp" layoutpos="ninebottom" />
+			</if>
+			<if class="Line">
+				<TouchRepeatButton accessible="true" accrole="pushbutton" background="20755" edgehighlightthickness="rect(1rp,1rp,1rp,1rp)" edgehighlightcolor="20577" foreground="20758" font="resstr(130, library(dui70.dll))" />
+				<if mousewithin="true">
+					<TouchRepeatButton background="20756" foreground="20759" />
+				</if>
+				<if pressed="true">
+					<TouchRepeatButton background="20757" foreground="20760" />
+				</if>
+				<if id="atom(LineUp)">
+					<TouchRepeatButton layoutpos="top" height="33rp" />
+				</if>
+				<if id="atom(LineDown)">
+					<TouchRepeatButton layoutpos="bottom" height="33rp" />
+				</if>
+				<if id="atom(LineLeft)">
+					<TouchRepeatButton layoutpos="left" width="33rp" />
+				</if>
+				<if id="atom(LineRight)">
+					<TouchRepeatButton layoutpos="right" width="33rp" />
+				</if>
+			</if>
+			<if class="Line_Arrow">
+				<InternalRichText background="20575" constrainlayout="narrow" direction="LTR" overhang="true" />
+				<if id="atom(LineUp_Arrow)">
+					<InternalRichText content="resstr(131, library(dui70.dll))" contentalign="bottomcenter" linespacing="33rp" baseline="27rp" />
+				</if>
+				<if id="atom(LineDown_Arrow)">
+					<InternalRichText content="resstr(132, library(dui70.dll))" contentalign="topcenter" linespacing="33rp" baseline="17rp" />
+				</if>
+				<if id="atom(LineLeft_Arrow)">
+					<InternalRichText content="resstr(133, library(dui70.dll))" contentalign="middleright" linespacing="17rp" baseline="14rp" padding="rect(0,0,7rp,0)" />
+				</if>
+				<if id="atom(LineRight_Arrow)">
+					<InternalRichText content="resstr(134, library(dui70.dll))" contentalign="middleleft" linespacing="17rp" baseline="14rp" padding="rect(7rp,0,0,0)" />
+				</if>
+			</if>
+			<if id="atom(TouchScrollBar_Track)">
+				<element layoutpos="client" background="20575" />
+			</if>
+			<if class="Page">
+				<TouchRepeatButton accessible="true" accrole="pushbutton" background="20575" />
+				<if id="atom(PageUp)">
+					<TouchRepeatButton width="17rp" />
+				</if>
+				<if id="atom(PageDown)">
+					<TouchRepeatButton width="17rp" />
+				</if>
+				<if id="atom(PageLeft)">
+					<TouchRepeatButton height="17rp" />
+				</if>
+				<if id="atom(PageRight)">
+					<TouchRepeatButton height="17rp" />
+				</if>
+			</if>
+			<if class="Thumb_Mouse">
+				<Thumb accessible="true" accrole="indicator" background="20764" bordercolor="20767" borderthickness="rect(1rp,1rp,1rp,1rp)" />
+				<if mousewithin="true">
+					<Thumb background="20765" bordercolor="20768" />
+				</if>
+				<if captured="true">
+					<Thumb background="20766" bordercolor="20769" />
+				</if>
+				<if id="atom(Thumb)">
+					<Thumb width="17rp" minsize="size(0,17rp)" />
+				</if>
+				<if id="atom(HThumb)">
+					<Thumb height="17rp" minsize="size(17rp,0)" />
+				</if>
+			</if>
+			<if class="Thumb_Pan">
+				<Thumb accessible="true" accrole="indicator" background="20752" bordercolor="20753" borderthickness="rect(1rp,1rp,1rp,1rp)" />
+				<if id="atom(Thumb)">
+					<Thumb width="4rp" minsize="size(0,17rp)" margin="rect(9rp,0,0,0)" />
+				</if>
+				<if id="atom(HThumb)">
+					<Thumb height="4rp" minsize="size(17rp,0)" margin="rect(0,9rp,0,0)" />
+				</if>
+			</if>
+		</style>
+		<style resid="Light" base="ImmersiveBase">
+			<TouchButton handleenter="true" padding="rect(12rp,0rp,12rp,0rp)" borderthickness="rect(2rp,2rp,2rp,2rp)" contentalign="middlecenter|endellipsis" constrainlayout="NarrowClip" accessible="true" accrole="pushbutton" accdefaction="resstr(104, library(dui70.dll))" />
+			<if keyfocused="true">
+				<TouchButton contentalign="middlecenter|endellipsis|focusrect" />
+			</if>
+			<unless class="commandrow">
+				<TouchButton height="32rp" minsize="size(90rp,0rp)" font="resstr(112, library(dui70.dll))" />
+				<TouchButton background="20662" foreground="20670" bordercolor="20666" />
+				<if mousewithin="true">
+					<TouchButton background="20663" foreground="20671" bordercolor="20667" />
+				</if>
+				<if captured="true">
+					<TouchButton background="20662" foreground="20670" bordercolor="20666" />
+				</if>
+				<if pressed="true">
+					<TouchButton background="20664" foreground="20672" bordercolor="20668" />
+				</if>
+				<if enabled="false">
+					<TouchButton background="20665" foreground="20673" bordercolor="20669" />
+				</if>
+			</unless>
+			<if class="default">
+				<TouchButton background="20102" foreground="20688" bordercolor="20104" />
+				<if mousewithin="true">
+					<TouchButton background="20103" foreground="20689" bordercolor="20105" />
+				</if>
+				<if captured="true">
+					<TouchButton background="20102" foreground="20688" bordercolor="20104" />
+				</if>
+				<if pressed="true">
+					<TouchButton background="20684" foreground="20690" bordercolor="20686" />
+				</if>
+				<if enabled="false">
+					<TouchButton background="20685" foreground="20691" bordercolor="20687" />
+				</if>
+			</if>
+			<if class="appcolorlight">
+				<TouchButton background="20948" foreground="20944" bordercolor="20952" />
+				<if mousewithin="true">
+					<TouchButton background="20949" foreground="20945" bordercolor="20953" />
+				</if>
+				<if captured="true">
+					<TouchButton background="20948" foreground="20944" bordercolor="20952" />
+				</if>
+				<if pressed="true">
+					<TouchButton background="20950" foreground="20946" bordercolor="20954" />
+				</if>
+				<if enabled="false">
+					<TouchButton background="20951" foreground="20947" bordercolor="20955" />
+				</if>
+			</if>
+			<if class="appcolordark">
+				<TouchButton background="20936" foreground="20932" bordercolor="20940" />
+				<if mousewithin="true">
+					<TouchButton background="20937" foreground="20933" bordercolor="20941" />
+				</if>
+				<if captured="true">
+					<TouchButton background="20936" foreground="20932" bordercolor="20940" />
+				</if>
+				<if pressed="true">
+					<TouchButton background="20938" foreground="20934" bordercolor="20942" />
+				</if>
+				<if enabled="false">
+					<TouchButton background="20939" foreground="20935" bordercolor="20943" />
+				</if>
+			</if>
+			<TouchCheckBox contentalign="endellipsis" background="20575" foreground="20642" accessible="true" accrole="checkbutton" font="resstr(113, library(dui70.dll))" minsize="size(100rp,50rp)" padding="rect(0rp,12rp,0rp,0rp)" />
+			<if checkedstate="unchecked">
+				<TouchCheckBox accdefaction="resstr(105, library(dui70.dll))" />
+			</if>
+			<if checkedstate="checked">
+				<TouchCheckBox accdefaction="resstr(106, library(dui70.dll))" />
+			</if>
+			<if enabled="false">
+				<TouchCheckBox foreground="20645" />
+			</if>
+			<if id="atom(TCB_Glyph)">
+				<TouchCheckBoxGlyph contentalign="middlecenter" height="21rp" width="21rp" background="20634" foreground="20646" borderthickness="rect(2rp,2rp,2rp,2rp)" bordercolor="20638" constrainlayout="NarrowClip" font="resstr(114, library(dui70.dll))" />
+				<if keyfocused="true">
+					<TouchCheckBoxGlyph contentalign="middlecenter|focusrect" />
+				</if>
+				<if mousefocused="true">
+					<TouchCheckBoxGlyph background="20635" foreground="20647" bordercolor="20639" />
+				</if>
+				<if captured="true">
+					<TouchCheckBoxGlyph background="20634" foreground="20646" bordercolor="20638" />
+				</if>
+				<if pressed="true">
+					<TouchCheckBoxGlyph background="20636" foreground="20648" bordercolor="20640" />
+				</if>
+				<if enabled="false">
+					<TouchCheckBoxGlyph background="20637" foreground="20649" bordercolor="20641" />
+				</if>
+				<if checkedstate="checked">
+					<TouchCheckBoxGlyph content="resstr(115, library(dui70.dll))" />
+				</if>
+			</if>
+			<if id="atom(TCB_Label)">
+				<richtext contentalign="wrapleft|endellipsis" padding="rect(8rp,0,8rp,0)" background="20575" constrainlayout="narrow" />
+			</if>
+			<TouchHyperlink handleenter="true" background="20575" foreground="20089" contentalign="endellipsis" accessible="true" accrole="link" font="resstr(160, library(dui70.dll))" />
+			<if keyfocused="true">
+				<TouchHyperlink contentalign="endellipsis|focusrect" />
+			</if>
+			<if visited="true">
+				<TouchHyperlink foreground="20090" />
+			</if>
+			<if mousewithin="true">
+				<TouchHyperlink foreground="20091" />
+			</if>
+			<if captured="true">
+				<TouchHyperlink foreground="20089" />
+			</if>
+			<if pressed="true">
+				<TouchHyperlink foreground="20092" />
+			</if>
+			<if enabled="false">
+				<TouchHyperlink foreground="20590" />
+			</if>
+			<TouchCommandButton handleenter="true" padding="rect(12rp,3rp,12rp,5rp)" borderthickness="rect(2rp,2rp,2rp,2rp)" minsize="size(250rp,32rp)" margin="rect(0rp,18rp,0rp,18rp)" accessible="true" accrole="pushbutton" accdefaction="resstr(104, library(dui70.dll))" />
+			<if keyfocused="true">
+				<TouchCommandButton contentalign="focusrect" />
+			</if>
+			<TouchCommandButton background="20662" foreground="20670" bordercolor="20666" />
+			<if mousewithin="true">
+				<TouchCommandButton background="20663" foreground="20671" bordercolor="20667" />
+			</if>
+			<if captured="true">
+				<TouchCommandButton background="20662" foreground="20670" bordercolor="20666" />
+			</if>
+			<if pressed="true">
+				<TouchCommandButton background="20664" foreground="20672" bordercolor="20668" />
+			</if>
+			<if enabled="false">
+				<TouchCommandButton background="20665" foreground="20673" bordercolor="20669" />
+			</if>
+			<if class="default">
+				<TouchCommandButton background="20102" foreground="20688" bordercolor="20104" />
+				<if mousewithin="true">
+					<TouchCommandButton background="20103" foreground="20689" bordercolor="20105" />
+				</if>
+				<if captured="true">
+					<TouchCommandButton background="20102" foreground="20688" bordercolor="20104" />
+				</if>
+				<if pressed="true">
+					<TouchCommandButton background="20684" foreground="20690" bordercolor="20686" />
+				</if>
+				<if enabled="false">
+					<TouchCommandButton background="20685" foreground="20691" bordercolor="20687" />
+				</if>
+			</if>
+			<if id="atom(TouchCommandButton_Content)">
+				<richtext layoutpos="top" background="20575" font="resstr(170, library(dui70.dll))" contentalign="wrapleft" constrainlayout="narrow" />
+			</if>
+			<if id="atom(TouchCommandButton_SubContent)">
+				<richtext layoutpos="top" background="20575" font="resstr(171, library(dui70.dll))" contentalign="wrapleft" constrainlayout="narrow" />
+			</if>
+			<TouchHWNDElement WindowAccessGradientColor="ImmersiveLightBackground" />
+			<TouchEdit2 innerborderthickness="rect(2rp,2rp,2rp,2rp)" bordercolor="20827" background="20822" foreground="20832" accessible="true" minsize="size(64rp,0rp)" font="resstr(107, library(dui70.dll))" selectionforegroundcolor="20836" selectionbackgroundcolor="20113" showclearbuttonminwidth="119rp" />
+			<if multiline="false">
+				<TouchEdit2 height="32rp" />
+			</if>
+			<if mousewithin="true">
+				<TouchEdit2 background="20823" foreground="20833" bordercolor="20828" />
+			</if>
+			<if keywithin="true">
+				<TouchEdit2 background="20824" foreground="20834" bordercolor="20829" />
+			</if>
+			<if enabled="false">
+				<TouchEdit2 background="20826" foreground="20835" bordercolor="20831" />
+			</if>
+			<unless passwordCharacter="0">
+				<TouchEdit2 IgnoredKeyCombos="Copy|Cut" />
+			</unless>
+			<if id="atom(TouchEdit_TextContainer)">
+				<element background="20575" />
+			</if>
+			<if class="appcolorlight">
+				<TouchEdit2 bordercolor="argb(255,0,0,0)" selectionbackgroundcolor="argb(255,0,0,0)" />
+			</if>
+			<if class="appcolordark">
+				<TouchEdit2 selectionbackgroundcolor="argb(255,0,0,0)" />
+			</if>
+			<if id="atom(TouchEdit_PromptText)">
+				<richtext background="20575" padding="rect(10rp,0rp,10rp,0rp)" contentalign="middleleft|endellipsis" foreground="20838" constrainlayout="NarrowClip" />
+				<if keyfocused="true">
+					<richtext foreground="20839" />
+				</if>
+				<if enabled="false">
+					<richtext foreground="20840" />
+				</if>
+			</if>
+			<TouchEditInner background="20575" padding="rect(10rp,0rp,10rp,0rp)" accessible="true" accrole="text" />
+			<if multiline="true">
+				<TouchEditInner padding="rect(4rp,4rp,4rp,9rp)" />
+				<if enabled="false">
+					<TouchEditInner padding="rect(2rp,2rp,2rp,7rp)" />
+				</if>
+			</if>
+			<if class="TouchEdit_Button">
+				<TouchButton padding="rect(0rp,0rp,0rp,0rp)" margin="rect(0rp,0rp,0rp,0rp)" width="32rp" background="20575" font="resstr(108, library(dui70.dll))" foreground="20844" contentalign="middlecenter" layoutpos="none" borderthickness="rect(2rp,2rp,2rp,2rp)" bordercolor="20577" minsize="size(0rp,0rp)" />
+				<if keyfocused="true">
+					<TouchButton background="20841" foreground="20844" bordercolor="20577" />
+				</if>
+				<if mousefocused="true">
+					<TouchButton background="20842" foreground="20845" bordercolor="20577" />
+				</if>
+				<if captured="true">
+					<TouchButton background="20575" foreground="20844" bordercolor="20577" />
+				</if>
+				<if pressed="true">
+					<TouchButton background="20843" foreground="20846" bordercolor="20577" />
+				</if>
+				<if id="atom(TouchEdit_Button_Clear)">
+					<TouchButton content="resstr(109, library(dui70.dll))" accname="resstr(150, library(dui70.dll))" />
+				</if>
+				<if id="atom(TouchEdit_Button_PasswordReveal)">
+					<TouchButton content="resstr(110, library(dui70.dll))" accname="resstr(151, library(dui70.dll))" />
+				</if>
+			</if>
+			<TouchSelect accessible="true" accrole="combobox" background="20575" />
+			<unless class="commandrow">
+				<TouchSelect minsize="size(64rp,32rp)" itemheightinpopup="40rp" />
+			</unless>
+			<if id="atom(TouchSelect_Label)">
+				<TouchButton accessible="false" layoutpos="client" contentalign="middleleft|endellipsis" constrainlayout="NarrowClip" minsize="size(0rp,0rp)" borderthickness="rect(2rp,2rp,0rp,2rp)" padding="rect(8rp,0rp,10rp,0rp)" margin="rect(0rp,0rp,0rp,0rp)" />
+				<unless class="commandrow">
+					<TouchButton height="32rp" font="resstr(116, library(dui70.dll))" background="20724" foreground="20732" bordercolor="20728" />
+					<if showkeyfocus="true">
+						<TouchButton background="20109" foreground="20748" bordercolor="20730" />
+					</if>
+				</unless>
+				<if class="appcolorlight">
+					<if showkeyfocus="true">
+						<TouchButton background="argb(255,0,0,0)" />
+					</if>
+					<if showkeyfocus="false">
+						<TouchButton bordercolor="argb(255,0,0,0)" />
+					</if>
+				</if>
+				<if class="appcolordark" showkeyfocus="true">
+					<TouchButton background="argb(255,0,0,0)" />
+				</if>
+				<unless class="commandrow">
+					<if mousefocused="true">
+						<TouchButton background="20725" foreground="20733" bordercolor="20729" />
+					</if>
+					<if captured="true">
+						<TouchButton background="20724" foreground="20732" bordercolor="20728" />
+					</if>
+					<if pressed="true">
+						<TouchButton background="20726" foreground="20734" bordercolor="20730" />
+					</if>
+					<if mousefocused="true" showkeyfocus="true" pressed="false" captured="false">
+						<TouchButton background="20110" foreground="20748" />
+					</if>
+					<if enabled="false">
+						<TouchButton background="20727" foreground="20735" bordercolor="20731" />
+					</if>
+				</unless>
+			</if>
+			<if id="atom(TouchSelect_Arrow)">
+				<TouchButton accessible="false" layoutpos="right" contentalign="middlecenter" constrainlayout="NarrowClip" borderthickness="rect(0rp,2rp,2rp,2rp)" padding="rect(2rp,0rp,0rp,0rp)" margin="rect(0rp,0rp,0rp,0rp)" minsize="size(0rp,0rp)" />
+				<unless class="commandrow">
+					<TouchButton width="32rp" font="resstr(117, library(dui70.dll))" content="resstr(118, library(dui70.dll))" background="20724" foreground="20732" bordercolor="20728" />
+					<if showkeyfocus="true">
+						<TouchButton background="20726" foreground="20734" bordercolor="20730" />
+					</if>
+				</unless>
+				<if class="appcolorlight" showkeyfocus="false">
+					<TouchButton bordercolor="argb(255,0,0,0)" />
+				</if>
+				<unless class="commandrow">
+					<if mousefocused="true">
+						<TouchButton background="20725" foreground="20733" bordercolor="20729" />
+					</if>
+					<if captured="true">
+						<TouchButton background="20724" foreground="20732" bordercolor="20728" />
+					</if>
+					<if pressed="true">
+						<TouchButton background="20726" foreground="20734" bordercolor="20730" />
+					</if>
+					<if enabled="false">
+						<TouchButton background="20727" foreground="20735" bordercolor="20731" />
+					</if>
+				</unless>
+			</if>
+			<TouchSelectPopup visible="true" accessible="true" background="20742" borderthickness="rect(2rp,2rp,2rp,2rp)" bordercolor="20741" />
+			<if id="atom(TouchSelect_ScrollViewer)">
+				<TouchScrollViewer accessible="true" accrole="pane" background="20575" />
+			</if>
+			<if id="atom(TouchSelect_ItemList)">
+				<WrappingList accessible="true" accrole="list" background="20742" />
+			</if>
+			<TouchSelectItem accessible="true" accrole="listitem" contentalign="middleleft|endellipsis" constrainlayout="NarrowClip" handleenter="true" background="20742" foreground="20740" padding="rect(8rp,0rp,8rp,0rp)" />
+			<unless class="commandrow">
+				<TouchSelectItem font="resstr(116, library(dui70.dll))" />
+			</unless>
+			<if selected="true">
+				<TouchSelectItem background="20111" foreground="20746" />
+			</if>
+			<if mousewithin="true">
+				<TouchSelectItem background="20738" foreground="20744" />
+			</if>
+			<if pressed="true">
+				<TouchSelectItem background="20743" foreground="20745" />
+			</if>
+			<if mousewithin="true" selected="true" pressed="false">
+				<TouchSelectItem background="20110" foreground="20748" />
+			</if>
+			<if enabled="false">
+				<TouchSelectItem background="20739" foreground="20747" />
+			</if>
+			<if class="appcolordark">
+				<if selected="true">
+					<TouchSelectItem background="argb(255,0,0,0)" foreground="20746" />
+				</if>
+				<if mousewithin="true">
+					<TouchSelectItem background="20738" foreground="20744" />
+				</if>
+				<if pressed="true">
+					<TouchSelectItem background="20743" foreground="20745" />
+				</if>
+				<if enabled="false">
+					<TouchSelectItem background="20739" foreground="20747" />
+				</if>
+			</if>
+			<if class="appcolorlight">
+				<if selected="true">
+					<TouchSelectItem background="argb(255,0,0,0)" foreground="20746" />
+				</if>
+				<if mousewithin="true">
+					<TouchSelectItem background="20738" foreground="20744" />
+				</if>
+				<if pressed="true">
+					<TouchSelectItem background="20743" foreground="20745" />
+				</if>
+				<if enabled="false">
+					<TouchSelectItem background="20739" foreground="20747" />
+				</if>
+			</if>
+			<if class="ScrollViewer">
+				<Viewer layoutpos="nineclient" />
+			</if>
+			<TouchSwitch background="20575" accessible="true" accname="resstr(122, library(dui70.dll))" />
+			<if id="atom(TouchSwitch_TouchSlider)">
+				<TouchSlider IsContinuous="false" IsVertical="false" IsShowOnOffFeedback="true" width="76rp" height="40rp" padding="rect(13rp,5rp,13rp,16rp)" accname="resstr(140, library(dui70.dll))" />
+			</if>
+			<if id="atom(TouchSwitch_TitleText)">
+				<richtext font="resstr(120, library(dui70.dll))" foreground="20905" margin="rect(0rp,0rp,0rp,1rp)" contentalign="wrapleft" accessible="true" />
+			</if>
+			<if id="atom(TouchSwitch_SignalText)">
+				<richtext font="resstr(121, library(dui70.dll))" width="106rp" contentalign="wrapleft" padding="rect(0rp,5rp,0rp,15rp)" foreground="20858" accessible="true" />
+			</if>
+			<if id="atom(TouchSwitch_ContentElement)">
+				<element contentalign="middlecenter" layoutpos="left" width="183rp" />
+			</if>
+			<if id="atom(TouchSwitch_Track)">
+				<element height="19rp" contentalign="middlecenter" background="20912" borderthickness="rect(2rp,2rp,2rp,2rp)" bordercolor="20909" />
+			</if>
+			<if id="atom(TouchSwitch_TrackChild)">
+				<element contentalign="middlecenter" background="20908" />
+			</if>
+			<if id="atom(TouchSwitch_Thumb)">
+				<Button width="12rp" height="19rp" contentalign="middlecenter" background="20907" accname="resstr(125, library(dui70.dll))" />
+			</if>
+			<if id="atom(TouchSwitch_FillPart)">
+				<element contentalign="middlecenter" background="20132" />
+			</if>
+			<if keyfocused="true">
+				<TouchSlider contentalign="focusrect" />
+			</if>
+			<if enabled="false">
+				<if id="atom(TouchSwitch_Track)">
+					<element bordercolor="20861" background="20864" />
+				</if>
+				<if id="atom(TouchSwitch_TrackChild)">
+					<element background="20860" />
+				</if>
+				<if id="atom(TouchSwitch_Thumb)">
+					<Button background="20859" />
+				</if>
+				<if id="atom(TouchSwitch_TitleText)">
+					<richtext foreground="20855" />
+				</if>
+				<if id="atom(TouchSwitch_SignalText)">
+					<richtext foreground="20857" />
+				</if>
+				<if id="atom(TouchSwitch_FillPart)">
+					<element background="20893" />
+				</if>
+			</if>
+			<if enabled="true">
+				<if custom="Hover">
+					<if id="atom(TouchSwitch_TrackChild)">
+						<element background="20913" />
+					</if>
+					<if id="atom(TouchSwitch_Thumb)">
+						<Button background="20870" bordercolor="20897" />
+					</if>
+					<if id="atom(TouchSwitch_FillPart)">
+						<element background="20133" />
+					</if>
+				</if>
+				<if custom="Pressed">
+					<if id="atom(TouchSwitch_Thumb)">
+						<element background="20871" bordercolor="20898" />
+					</if>
+					<if id="atom(TouchSwitch_TrackChild)">
+						<element background="20915" />
+					</if>
+					<if id="atom(TouchSwitch_FillPart)">
+						<element background="20135" />
+					</if>
+				</if>
+			</if>
+			<unless id="atom(TouchSwitch_TouchSlider)">
+				<TouchSlider background="20575" foreground="rgb(255,255,255)" accname="resstr(123, library(dui70.dll))" accessible="true" />
+				<if IsVertical="true">
+					<TouchSlider width="51rp" padding="rect(19rp,16rp,19rp,0rp)" />
+				</if>
+				<if IsVertical="false">
+					<TouchSlider height="60rp" padding="rect(0rp,16rp,0rp,31rp)" />
+				</if>
+			</unless>
+			<if id="atom(TouchSlider_Track)">
+				<element width="13rp" height="13rp" borderthickness="rect(1rp,1rp,1rp,1rp)" bordercolor="20854" contentalign="middlecenter" background="20883" />
+			</if>
+			<if id="atom(TouchSlider_Thumb)">
+				<Button width="11rp" height="11rp" contentalign="middlecenter" background="20872" bordercolor="20899" borderthickness="rect(1rp, 1rp, 1rp, 1rp)" accname="resstr(125, library(dui70.dll))" accessible="true" />
+			</if>
+			<if id="atom(TouchSlider_FillPart)">
+				<element contentalign="middlecenter" background="20128" />
+			</if>
+			<if id="atom(TouchSlider_Buffering)">
+				<element contentalign="middlecenter" background="20891" accessible="true" accname="resstr(124, library(dui70.dll))" />
+			</if>
+			<if id="atom(TouchSlider_Tick)">
+				<element contentalign="middlecenter" background="20875" />
+			</if>
+			<if keyfocused="true">
+				<TouchSlider contentalign="focusrect" />
+			</if>
+			<if enabled="true">
+				<if custom="Hover">
+					<if id="atom(TouchSlider_Track)">
+						<element background="20881" />
+					</if>
+					<if id="atom(TouchSlider_Thumb)">
+						<Button background="20870" bordercolor="20897" />
+					</if>
+					<if id="atom(TouchSlider_Buffering)">
+						<element background="20889" />
+					</if>
+					<if id="atom(TouchSlider_FillPart)">
+						<element background="20126" />
+					</if>
+				</if>
+				<if custom="Pressed">
+					<if id="atom(TouchSlider_Thumb)">
+						<element background="20871" bordercolor="20898" />
+					</if>
+					<if id="atom(TouchSlider_Track)">
+						<element background="20882" />
+					</if>
+					<if id="atom(TouchSlider_FillPart)">
+						<element background="20127" />
+					</if>
+				</if>
+			</if>
+			<if enabled="false">
+				<if id="atom(TouchSlider_Track)">
+					<element background="20880" />
+				</if>
+				<if id="atom(TouchSlider_Thumb)">
+					<Button background="20869" bordercolor="20896" />
+				</if>
+				<if id="atom(TouchSlider_Buffering)">
+					<element background="20888" />
+				</if>
+				<if id="atom(TouchSlider_FillPart)">
+					<element background="20893" />
+				</if>
+			</if>
+			<ModernProgressRing background="20575" foreground="20115" />
+			<ModernProgressBar foreground="20115" background="20853" edgehighlightthickness="rect(1rp,1rp,1rp,1rp)" edgehighlightcolor="20854" />
+		</style>
+		<style resid="Dark" base="ImmersiveBase">
+			<TouchButton handleenter="true" padding="rect(12rp,0rp,12rp,0rp)" borderthickness="rect(2rp,2rp,2rp,2rp)" contentalign="middlecenter|endellipsis" constrainlayout="NarrowClip" accessible="true" accrole="pushbutton" accdefaction="resstr(104, library(dui70.dll))" />
+			<if keyfocused="true">
+				<TouchButton contentalign="middlecenter|endellipsis|focusrect" />
+			</if>
+			<if class="commandrow">
+				<TouchButton height="47rp" minsize="size(0rp,0rp)" background="20575" borderthickness="rect(0,0,0,0)" foreground="20024" contentalign="middleleft|endellipsis" font="resstr(135, library(dui70.dll))" />
+				<if keyfocused="true">
+					<TouchButton contentalign="middleleft|endellipsis|focusrect" />
+				</if>
+				<if selected="true">
+					<TouchButton foreground="20234" bordercolor="20577" />
+				</if>
+				<if mousewithin="true">
+					<TouchButton foreground="20025" />
+				</if>
+				<if captured="true">
+					<TouchButton foreground="20024" />
+				</if>
+				<if pressed="true">
+					<TouchButton foreground="20026" />
+				</if>
+				<if enabled="false">
+					<TouchButton foreground="20027" />
+				</if>
+			</if>
+			<unless class="commandrow">
+				<TouchButton height="32rp" minsize="size(90rp,0rp)" font="resstr(112, library(dui70.dll))" />
+				<TouchButton background="20650" foreground="20658" bordercolor="20654" />
+				<if mousewithin="true">
+					<TouchButton background="20651" foreground="20659" bordercolor="20655" />
+				</if>
+				<if captured="true">
+					<TouchButton background="20650" foreground="20658" bordercolor="20654" />
+				</if>
+				<if pressed="true">
+					<TouchButton background="20652" foreground="20660" bordercolor="20656" />
+				</if>
+				<if enabled="false">
+					<TouchButton background="20653" foreground="20661" bordercolor="20657" />
+				</if>
+			</unless>
+			<if class="default">
+				<TouchButton background="20100" foreground="20680" bordercolor="20676" />
+				<if mousewithin="true">
+					<TouchButton background="20101" foreground="20681" bordercolor="20677" />
+				</if>
+				<if captured="true">
+					<TouchButton background="20100" foreground="20680" bordercolor="20676" />
+				</if>
+				<if pressed="true">
+					<TouchButton background="20674" foreground="20682" bordercolor="20678" />
+				</if>
+				<if enabled="false">
+					<TouchButton background="20675" foreground="20683" bordercolor="20679" />
+				</if>
+			</if>
+			<if class="appcolorlight">
+				<TouchButton background="20948" foreground="20944" bordercolor="20952" />
+				<if mousewithin="true">
+					<TouchButton background="20949" foreground="20945" bordercolor="20953" />
+				</if>
+				<if captured="true">
+					<TouchButton background="20948" foreground="20944" bordercolor="20952" />
+				</if>
+				<if pressed="true">
+					<TouchButton background="20950" foreground="20946" bordercolor="20954" />
+				</if>
+				<if enabled="false">
+					<TouchButton background="20951" foreground="20947" bordercolor="20955" />
+				</if>
+			</if>
+			<if class="appcolordark">
+				<TouchButton background="20936" foreground="20932" bordercolor="20940" />
+				<if mousewithin="true">
+					<TouchButton background="20937" foreground="20933" bordercolor="20941" />
+				</if>
+				<if captured="true">
+					<TouchButton background="20936" foreground="20932" bordercolor="20940" />
+				</if>
+				<if pressed="true">
+					<TouchButton background="20938" foreground="20934" bordercolor="20942" />
+				</if>
+				<if enabled="false">
+					<TouchButton background="20939" foreground="20935" bordercolor="20943" />
+				</if>
+			</if>
+			<TouchCheckBox contentalign="endellipsis" background="20575" foreground="20626" accessible="true" accrole="checkbutton" font="resstr(113, library(dui70.dll))" minsize="size(100rp,50rp)" padding="rect(0rp,12rp,0rp,0rp)" />
+			<if checkedstate="unchecked">
+				<TouchCheckBox accdefaction="resstr(105, library(dui70.dll))" />
+			</if>
+			<if checkedstate="checked">
+				<TouchCheckBox accdefaction="resstr(106, library(dui70.dll))" />
+			</if>
+			<if enabled="false">
+				<TouchCheckBox foreground="20629" />
+			</if>
+			<if id="atom(TCB_Glyph)">
+				<TouchCheckBoxGlyph contentalign="middlecenter" height="21rp" width="21rp" background="20618" foreground="20630" borderthickness="rect(2rp,2rp,2rp,2rp)" bordercolor="20622" constrainlayout="NarrowClip" font="resstr(114, library(dui70.dll))" />
+				<if keyfocused="true">
+					<TouchCheckBoxGlyph contentalign="middlecenter|focusrect" />
+				</if>
+				<if mousefocused="true">
+					<TouchCheckBoxGlyph background="20619" foreground="20631" bordercolor="20623" />
+				</if>
+				<if captured="true">
+					<TouchCheckBoxGlyph background="20618" foreground="20630" bordercolor="20622" />
+				</if>
+				<if pressed="true">
+					<TouchCheckBoxGlyph background="20620" foreground="20632" bordercolor="20624" />
+				</if>
+				<if enabled="false">
+					<TouchCheckBoxGlyph background="20621" foreground="20633" bordercolor="20625" />
+				</if>
+				<if checkedstate="checked">
+					<TouchCheckBoxGlyph content="resstr(115, library(dui70.dll))" />
+				</if>
+			</if>
+			<if id="atom(TCB_Label)">
+				<richtext contentalign="wrapleft|endellipsis" padding="rect(8rp,0,8rp,0)" background="20575" constrainlayout="narrow" />
+			</if>
+			<TouchHyperlink handleenter="true" background="20575" foreground="20085" contentalign="endellipsis" accessible="true" accrole="link" font="resstr(160, library(dui70.dll))" />
+			<if keyfocused="true">
+				<TouchHyperlink contentalign="endellipsis|focusrect" />
+			</if>
+			<if visited="true">
+				<TouchHyperlink foreground="20086" />
+			</if>
+			<if mousewithin="true">
+				<TouchHyperlink foreground="20087" />
+			</if>
+			<if captured="true">
+				<TouchHyperlink foreground="20085" />
+			</if>
+			<if pressed="true">
+				<TouchHyperlink foreground="20088" />
+			</if>
+			<if enabled="false">
+				<TouchHyperlink foreground="20589" />
+			</if>
+			<TouchCommandButton handleenter="true" padding="rect(12rp,3rp,12rp,5rp)" borderthickness="rect(2rp,2rp,2rp,2rp)" minsize="size(250rp,32rp)" margin="rect(0rp,18rp,0rp,18rp)" accessible="true" accrole="pushbutton" accdefaction="resstr(104, library(dui70.dll))" />
+			<if keyfocused="true">
+				<TouchCommandButton contentalign="focusrect" />
+			</if>
+			<TouchCommandButton background="20650" foreground="20658" bordercolor="20654" />
+			<if mousewithin="true">
+				<TouchCommandButton background="20651" foreground="20659" bordercolor="20655" />
+			</if>
+			<if captured="true">
+				<TouchCommandButton background="20650" foreground="20658" bordercolor="20654" />
+			</if>
+			<if pressed="true">
+				<TouchCommandButton background="20652" foreground="20660" bordercolor="20656" />
+			</if>
+			<if enabled="false">
+				<TouchCommandButton background="20653" foreground="20661" bordercolor="20657" />
+			</if>
+			<if class="default">
+				<TouchCommandButton background="20100" foreground="20680" bordercolor="20676" />
+				<if mousewithin="true">
+					<TouchCommandButton background="20101" foreground="20681" bordercolor="20677" />
+				</if>
+				<if captured="true">
+					<TouchCommandButton background="20100" foreground="20680" bordercolor="20676" />
+				</if>
+				<if pressed="true">
+					<TouchCommandButton background="20674" foreground="20682" bordercolor="20678" />
+				</if>
+				<if enabled="false">
+					<TouchCommandButton background="20675" foreground="20683" bordercolor="20679" />
+				</if>
+			</if>
+			<if id="atom(TouchCommandButton_Content)">
+				<richtext layoutpos="top" background="20575" font="resstr(170, library(dui70.dll))" contentalign="wrapleft" constrainlayout="narrow" />
+			</if>
+			<if id="atom(TouchCommandButton_SubContent)">
+				<richtext layoutpos="top" background="20575" font="resstr(171, library(dui70.dll))" contentalign="wrapleft" constrainlayout="narrow" />
+			</if>
+			<TouchHWNDElement WindowAccessGradientColor="ImmersiveStartBackground" />
+			<TouchEdit2 innerborderthickness="rect(2rp,2rp,2rp,2rp)" bordercolor="20798" background="20793" foreground="20803" accessible="true" minsize="size(64rp,0rp)" font="resstr(107, library(dui70.dll))" selectionforegroundcolor="20807" selectionbackgroundcolor="20112" showclearbuttonminwidth="119rp" />
+			<if multiline="false">
+				<TouchEdit2 height="32rp" />
+			</if>
+			<if mousewithin="true">
+				<TouchEdit2 background="20794" foreground="20804" bordercolor="20799" />
+			</if>
+			<if keywithin="true">
+				<TouchEdit2 background="20795" foreground="20805" bordercolor="20800" />
+			</if>
+			<if enabled="false">
+				<TouchEdit2 background="20797" foreground="20806" bordercolor="20802" />
+			</if>
+			<unless passwordCharacter="0">
+				<TouchEdit2 IgnoredKeyCombos="Copy|Cut" />
+			</unless>
+			<if id="atom(TouchEdit_TextContainer)">
+				<element background="20575" />
+			</if>
+			<if class="appcolorlight">
+				<TouchEdit2 bordercolor="argb(255,0,0,0)" selectionbackgroundcolor="argb(255,0,0,0)" />
+			</if>
+			<if class="appcolordark">
+				<TouchEdit2 selectionbackgroundcolor="argb(255,0,0,0)" />
+			</if>
+			<if id="atom(TouchEdit_PromptText)">
+				<richtext background="20575" padding="rect(10rp,0rp,10rp,0rp)" contentalign="middleleft|endellipsis" foreground="20809" constrainlayout="NarrowClip" />
+				<if keyfocused="true">
+					<richtext foreground="20810" />
+				</if>
+				<if enabled="false">
+					<richtext foreground="20811" />
+				</if>
+			</if>
+			<TouchEditInner background="20575" padding="rect(10rp,0rp,10rp,0rp)" accessible="true" accrole="text" />
+			<if multiline="true">
+				<TouchEditInner padding="rect(4rp,4rp,4rp,9rp)" />
+				<if enabled="false">
+					<TouchEditInner padding="rect(2rp,2rp,2rp,7rp)" />
+				</if>
+			</if>
+			<if class="TouchEdit_Button">
+				<TouchButton padding="rect(0rp,0rp,0rp,0rp)" margin="rect(0rp,0rp,0rp,0rp)" width="32rp" background="20575" font="resstr(108, library(dui70.dll))" foreground="20815" contentalign="middlecenter" layoutpos="none" borderthickness="rect(2rp,2rp,2rp,2rp)" bordercolor="20577" minsize="size(0rp,0rp)" />
+				<if keyfocused="true">
+					<TouchButton background="20812" foreground="20815" bordercolor="20577" />
+				</if>
+				<if mousefocused="true">
+					<TouchButton background="20813" foreground="20816" bordercolor="20577" />
+				</if>
+				<if captured="true">
+					<TouchButton background="20575" foreground="20815" bordercolor="20577" />
+				</if>
+				<if pressed="true">
+					<TouchButton background="20814" foreground="20817" bordercolor="20577" />
+				</if>
+				<if id="atom(TouchEdit_Button_Clear)">
+					<TouchButton content="resstr(109, library(dui70.dll))" accname="resstr(150, library(dui70.dll))" />
+				</if>
+				<if id="atom(TouchEdit_Button_PasswordReveal)">
+					<TouchButton content="resstr(110, library(dui70.dll))" accname="resstr(151, library(dui70.dll))" />
+				</if>
+			</if>
+			<TouchSelect accessible="true" accrole="combobox" background="20575" />
+			<if class="commandrow">
+				<TouchSelect minsize="size(94rp,47rp)" itemheightinpopup="55rp" />
+				<if keywithin="true">
+					<TouchSelect contentalign="focusrect" />
+				</if>
+			</if>
+			<unless class="commandrow">
+				<TouchSelect minsize="size(64rp,32rp)" itemheightinpopup="40rp" />
+			</unless>
+			<if id="atom(TouchSelect_Label)">
+				<TouchButton accessible="false" layoutpos="client" contentalign="middleleft|endellipsis" constrainlayout="NarrowClip" minsize="size(0rp,0rp)" borderthickness="rect(2rp,2rp,0rp,2rp)" padding="rect(8rp,0rp,10rp,0rp)" margin="rect(0rp,0rp,0rp,0rp)" />
+				<if class="commandrow">
+					<TouchButton height="47rp" font="resstr(136, library(dui70.dll))" padding="rect(10rp,0rp,12rp,0rp)" background="20575" bordercolor="20575" foreground="20024" />
+					<if mousefocused="true">
+						<TouchButton foreground="20025" />
+					</if>
+					<if captured="true">
+						<TouchButton foreground="20024" />
+					</if>
+					<if pressed="true">
+						<TouchButton foreground="20026" />
+					</if>
+					<if enabled="false">
+						<TouchButton foreground="20027" />
+					</if>
+				</if>
+				<unless class="commandrow">
+					<TouchButton height="32rp" font="resstr(116, library(dui70.dll))" background="20692" foreground="20700" bordercolor="20696" />
+					<if showkeyfocus="true">
+						<TouchButton background="20106" foreground="20720" bordercolor="20698" />
+					</if>
+				</unless>
+				<if class="appcolorlight">
+					<if showkeyfocus="true">
+						<TouchButton background="argb(255,0,0,0)" />
+					</if>
+					<if showkeyfocus="false">
+						<TouchButton bordercolor="argb(255,0,0,0)" />
+					</if>
+				</if>
+				<if class="appcolordark" showkeyfocus="true">
+					<TouchButton background="argb(255,0,0,0)" />
+				</if>
+				<unless class="commandrow">
+					<if mousefocused="true">
+						<TouchButton background="20693" foreground="20701" bordercolor="20697" />
+					</if>
+					<if captured="true">
+						<TouchButton background="20692" foreground="20700" bordercolor="20696" />
+					</if>
+					<if pressed="true">
+						<TouchButton background="20694" foreground="20702" bordercolor="20698" />
+					</if>
+					<if mousefocused="true" showkeyfocus="true" pressed="false" captured="false">
+						<TouchButton background="20107" foreground="20720" />
+					</if>
+					<if enabled="false">
+						<TouchButton background="20695" foreground="20703" bordercolor="20699" />
+					</if>
+				</unless>
+			</if>
+			<if id="atom(TouchSelect_Arrow)">
+				<TouchButton accessible="false" layoutpos="right" contentalign="middlecenter" constrainlayout="NarrowClip" borderthickness="rect(0rp,2rp,2rp,2rp)" padding="rect(2rp,0rp,0rp,0rp)" margin="rect(0rp,0rp,0rp,0rp)" minsize="size(0rp,0rp)" />
+				<if class="commandrow">
+					<TouchButton contentalign="middleleft" padding="rect(0rp,0rp,10rp,0rp)" constrainlayout="NarrowClip" font="resstr(137, library(dui70.dll))" content="resstr(138, library(dui70.dll))" background="20575" bordercolor="20575" foreground="20024" />
+					<if mousefocused="true">
+						<TouchButton foreground="20025" />
+					</if>
+					<if captured="true">
+						<TouchButton foreground="20024" />
+					</if>
+					<if pressed="true">
+						<TouchButton foreground="20026" />
+					</if>
+					<if enabled="false">
+						<TouchButton foreground="20027" />
+					</if>
+				</if>
+				<unless class="commandrow">
+					<TouchButton width="32rp" font="resstr(117, library(dui70.dll))" content="resstr(118, library(dui70.dll))" background="20692" foreground="20700" bordercolor="20696" />
+					<if showkeyfocus="true">
+						<TouchButton background="20694" foreground="20702" bordercolor="20698" />
+					</if>
+				</unless>
+				<if class="appcolorlight" showkeyfocus="false">
+					<TouchButton bordercolor="argb(255,0,0,0)" />
+				</if>
+				<unless class="commandrow">
+					<if mousefocused="true">
+						<TouchButton background="20693" foreground="20701" bordercolor="20697" />
+					</if>
+					<if captured="true">
+						<TouchButton background="20692" foreground="20700" bordercolor="20696" />
+					</if>
+					<if pressed="true">
+						<TouchButton background="20694" foreground="20702" bordercolor="20698" />
+					</if>
+					<if enabled="false">
+						<TouchButton background="20695" foreground="20703" bordercolor="20699" />
+					</if>
+				</unless>
+			</if>
+			<TouchSelectPopup visible="true" accessible="true" background="20710" borderthickness="rect(2rp,2rp,2rp,2rp)" bordercolor="20714" />
+			<if id="atom(TouchSelect_ScrollViewer)">
+				<TouchScrollViewer accessible="true" accrole="pane" background="20575" />
+			</if>
+			<if id="atom(TouchSelect_ItemList)">
+				<WrappingList accessible="true" accrole="list" background="20710" />
+			</if>
+			<TouchSelectItem accessible="true" accrole="listitem" contentalign="middleleft|endellipsis" constrainlayout="NarrowClip" handleenter="true" background="20710" foreground="20715" padding="rect(8rp,0rp,8rp,0rp)" />
+			<if class="commandrow">
+				<TouchSelectItem padding="rect(10rp,0rp,10rp,0rp)" font="resstr(136, library(dui70.dll))" />
+			</if>
+			<unless class="commandrow">
+				<TouchSelectItem font="resstr(116, library(dui70.dll))" />
+			</unless>
+			<if selected="true">
+				<TouchSelectItem background="20108" foreground="20717" />
+			</if>
+			<if mousewithin="true">
+				<TouchSelectItem background="20711" foreground="20716" />
+			</if>
+			<if pressed="true">
+				<TouchSelectItem background="20712" foreground="20718" />
+			</if>
+			<if mousewithin="true" selected="true" pressed="false">
+				<TouchSelectItem background="20107" foreground="20720" />
+			</if>
+			<if enabled="false">
+				<TouchSelectItem background="20713" foreground="20719" />
+			</if>
+			<if class="appcolordark">
+				<if selected="true">
+					<TouchSelectItem background="argb(255,0,0,0)" foreground="20717" />
+				</if>
+				<if mousewithin="true">
+					<TouchSelectItem background="20711" foreground="20716" />
+				</if>
+				<if pressed="true">
+					<TouchSelectItem background="20712" foreground="20718" />
+				</if>
+				<if enabled="false">
+					<TouchSelectItem background="20713" foreground="20719" />
+				</if>
+			</if>
+			<if class="appcolorlight">
+				<if selected="true">
+					<TouchSelectItem background="argb(255,0,0,0)" foreground="20717" />
+				</if>
+				<if mousewithin="true">
+					<TouchSelectItem background="20711" foreground="20716" />
+				</if>
+				<if pressed="true">
+					<TouchSelectItem background="20712" foreground="20718" />
+				</if>
+				<if enabled="false">
+					<TouchSelectItem background="20713" foreground="20719" />
+				</if>
+			</if>
+			<if class="ScrollViewer">
+				<Viewer layoutpos="nineclient" />
+			</if>
+			<TouchSwitch background="20575" accessible="true" accname="resstr(122, library(dui70.dll))" />
+			<if id="atom(TouchSwitch_TouchSlider)">
+				<TouchSlider IsContinuous="false" IsVertical="false" IsShowOnOffFeedback="true" width="76rp" height="40rp" padding="rect(13rp,5rp,13rp,16rp)" accname="resstr(140, library(dui70.dll))" />
+			</if>
+			<if id="atom(TouchSwitch_TitleText)">
+				<richtext font="resstr(120, library(dui70.dll))" foreground="20904" margin="rect(0rp,0rp,0rp,1rp)" contentalign="wrapleft" accessible="true" />
+			</if>
+			<if id="atom(TouchSwitch_SignalText)">
+				<richtext font="resstr(121, library(dui70.dll))" width="106rp" contentalign="wrapleft" padding="rect(0rp,5rp,0rp,15rp)" foreground="20856" accessible="true" />
+			</if>
+			<if id="atom(TouchSwitch_ContentElement)">
+				<element contentalign="middlecenter" layoutpos="left" width="183rp" />
+			</if>
+			<if id="atom(TouchSwitch_Track)">
+				<element height="19rp" contentalign="middlecenter" background="20911" borderthickness="rect(2rp,2rp,2rp,2rp)" bordercolor="20130" />
+			</if>
+			<if id="atom(TouchSwitch_TrackChild)">
+				<element contentalign="middlecenter" background="20129" />
+			</if>
+			<if id="atom(TouchSwitch_Thumb)">
+				<Button width="12rp" height="19rp" contentalign="middlecenter" background="20906" accname="resstr(125, library(dui70.dll))" />
+			</if>
+			<if id="atom(TouchSwitch_FillPart)">
+				<element contentalign="middlecenter" background="20131" />
+			</if>
+			<if keyfocused="true">
+				<TouchSlider contentalign="focusrect" />
+			</if>
+			<if enabled="false">
+				<if id="atom(TouchSwitch_Track)">
+					<element bordercolor="20120" background="20863" />
+				</if>
+				<if id="atom(TouchSwitch_TrackChild)">
+					<element background="20119" />
+				</if>
+				<if id="atom(TouchSwitch_Thumb)">
+					<Button background="20118" />
+				</if>
+				<if id="atom(TouchSwitch_TitleText)">
+					<richtext foreground="20116" />
+				</if>
+				<if id="atom(TouchSwitch_SignalText)">
+					<richtext foreground="20117" />
+				</if>
+				<if id="atom(TouchSwitch_FillPart)">
+					<element background="20892" />
+				</if>
+			</if>
+			<if enabled="true">
+				<if custom="Hover">
+					<if id="atom(TouchSwitch_TrackChild)">
+						<element background="20916" />
+					</if>
+					<if id="atom(TouchSwitch_Thumb)">
+						<Button background="20866" bordercolor="20901" />
+					</if>
+					<if id="atom(TouchSwitch_FillPart)">
+						<element background="20136" />
+					</if>
+				</if>
+				<if custom="Pressed">
+					<if id="atom(TouchSwitch_Thumb)">
+						<element background="20867" bordercolor="20902" />
+					</if>
+					<if id="atom(TouchSwitch_TrackChild)">
+						<element background="20918" />
+					</if>
+					<if id="atom(TouchSwitch_FillPart)">
+						<element background="20138" />
+					</if>
+				</if>
+			</if>
+			<unless id="atom(TouchSwitch_TouchSlider)">
+				<TouchSlider background="20575" foreground="rgb(255,255,255)" accname="resstr(123, library(dui70.dll))" accessible="true" />
+				<if IsVertical="true">
+					<TouchSlider width="51rp" padding="rect(19rp,16rp,19rp,0rp)" />
+				</if>
+				<if IsVertical="false">
+					<TouchSlider height="60rp" padding="rect(0rp,16rp,0rp,31rp)" />
+				</if>
+			</unless>
+			<if id="atom(TouchSlider_Track)">
+				<element width="13rp" height="13rp" borderthickness="rect(1rp,1rp,1rp,1rp)" bordercolor="20854" contentalign="middlecenter" background="20879" />
+			</if>
+			<if id="atom(TouchSlider_Thumb)">
+				<Button width="11rp" height="11rp" contentalign="middlecenter" background="20868" bordercolor="20903" borderthickness="rect(1rp, 1rp, 1rp, 1rp)" accname="resstr(125, library(dui70.dll))" accessible="true" />
+			</if>
+			<if id="atom(TouchSlider_FillPart)">
+				<element contentalign="middlecenter" background="20125" />
+			</if>
+			<if id="atom(TouchSlider_Buffering)">
+				<element contentalign="middlecenter" background="20887" accessible="true" accname="resstr(124, library(dui70.dll))" />
+			</if>
+			<if id="atom(TouchSlider_Tick)">
+				<element contentalign="middlecenter" background="20874" />
+			</if>
+			<if keyfocused="true">
+				<TouchSlider contentalign="focusrect" />
+			</if>
+			<if enabled="true">
+				<if custom="Hover">
+					<if id="atom(TouchSlider_Track)">
+						<element background="20877" />
+					</if>
+					<if id="atom(TouchSlider_Thumb)">
+						<Button background="20866" bordercolor="20901" />
+					</if>
+					<if id="atom(TouchSlider_Buffering)">
+						<element background="20885" />
+					</if>
+					<if id="atom(TouchSlider_FillPart)">
+						<element background="20123" />
+					</if>
+				</if>
+				<if custom="Pressed">
+					<if id="atom(TouchSlider_Thumb)">
+						<element background="20867" bordercolor="20902" />
+					</if>
+					<if id="atom(TouchSlider_Track)">
+						<element background="20878" />
+					</if>
+					<if id="atom(TouchSlider_FillPart)">
+						<element background="20124" />
+					</if>
+				</if>
+			</if>
+			<if enabled="false">
+				<if id="atom(TouchSlider_Track)">
+					<element background="20876" />
+				</if>
+				<if id="atom(TouchSlider_Thumb)">
+					<Button background="20865" bordercolor="20900" />
+				</if>
+				<if id="atom(TouchSlider_Buffering)">
+					<element background="20884" />
+				</if>
+				<if id="atom(TouchSlider_FillPart)">
+					<element background="20892" />
+				</if>
+			</if>
+			<ModernProgressRing background="20575" foreground="20114" />
+			<ModernProgressBar foreground="20114" background="20852" edgehighlightthickness="rect(1rp,1rp,1rp,1rp)" edgehighlightcolor="20854" />
+		</style>
+		<style resid="Default" base="Light" />
+	</stylesheets>
+</duixml>

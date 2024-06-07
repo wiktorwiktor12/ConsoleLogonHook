@@ -163,6 +163,8 @@
     <ClCompile Include="ui\ui_userselect.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="dui\dui_includes.h" />
+    <ClInclude Include="dui\templates.h" />
     <ClInclude Include="imgui\imconfig.h" />
     <ClInclude Include="imgui\imgui.h" />
     <ClInclude Include="imgui\imgui_impl_dx11.h" />
@@ -172,6 +174,8 @@
     <ClInclude Include="imgui\imstb_textedit.h" />
     <ClInclude Include="imgui\imstb_truetype.h" />
     <ClInclude Include="imgui\stb_image.h" />
+    <ClInclude Include="resource.h" />
+    <ClInclude Include="resources\resource.h" />
     <ClInclude Include="spdlog\async.h" />
     <ClInclude Include="spdlog\async_logger-inl.h" />
     <ClInclude Include="spdlog\async_logger.h" />
@@ -289,6 +293,17 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="spdlog\fmt\bundled\fmt.license.rst" />
+  </ItemGroup>
+  <ItemGroup>
+    <ResourceCompile Include="resources\ConsoleLogonUI.rc" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="dui\DirectUI\DirectUI.vcxproj">
+      <Project>{0B7DE49A-33C6-41B1-A9CE-D353031F8454}</Project>
+    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <Xml Include="resources\Main.xml" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

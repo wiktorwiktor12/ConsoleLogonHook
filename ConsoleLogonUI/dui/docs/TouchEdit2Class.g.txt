@@ -1,0 +1,30 @@
+ClassInfo: <TouchEdit2>
+  Base Class: <TouchEditBase>
+  Properties:
+    [PromptText]: String
+    [PromptWithCaret]: Bool
+    [SuppressClearButton]: Bool
+    [ShowClearButtonMinWidth]: Int
+    [PasswordRevealMode]: Int
+      Enum values:
+        Normal : 0x0 (0)
+        Disabled : 0x1 (1)
+    [InnerBorderThickness]: Rect
+    [PasswordCharacter]: Int
+    [IgnoredKeyCombos]: Int
+      Enum values:
+        None : 0x0 (0)
+        Copy : 0x11 (17)
+        Paste : 0xa (10)
+        Cut : 0x24 (36)
+        Default : 0x1 (1)
+        Left : 0x1 (1)
+        Center : 0x2 (2)
+        Right : 0x4 (4)
+    [KeyboardNavigationCapture]: Int
+      Enum values:
+        Default : 0x0 (0)
+        None : 0x1 (1)
+        VisualState : 0x6 (6)
+         : 0x0 (0)
+        

@@ -1,0 +1,281 @@
+﻿<duixml>
+	<stylesheets>
+		<style resid="common">
+			<if id="atom(title)">
+				<element font="gtf(TEXTSTYLE, 1, 0)" foreground="gtc(TEXTSTYLE, 1, 0, 3803)" margin="rect(0,40rp,0,10rp)" layoutpos="top" />
+			</if>
+			<if class="para">
+				<element contentalign="wrapleft" margin="rect(0,10rp,0,10rp)" />
+			</if>
+			<if class="step">
+				<element contentalign="wrapleft" margin="rect(0,5rp,0,5rp)" />
+			</if>
+			<edit themedborder="true" height="23rp" margin="rect(4rp,4rp,4rp,4rp)" />
+			<if class="option">
+				<element margin="rect(0,10rp,0,10rp)" />
+			</if>
+			<if class="task">
+				<element font="gtf(TEXTSTYLE, 1, 0)" />
+			</if>
+			<if id="atom(wizardroot)">
+				<element background="themeable(dtb(AeroWizard, 3, 0), threedface)" font="gtf(AeroWizardStyle, 3, 0)" />
+			</if>
+			<if id="atom(wiztitle)">
+				<element layoutpos="none" />
+			</if>
+			<if id="atom(wizsubtitle)">
+				<element layoutpos="none" />
+			</if>
+			<if id="atom(taskdialogroot)">
+				<element background="themeable(dtb(TaskDialog, 1, 0), threedface)" />
+			</if>
+			<if id="atom(instructions)">
+				<element padding="themeable(gtmar(TaskDialog, 1, 0, 3602), rect(10rp,10rp,10rp,10rp))" font="gtf(TaskDialogStyle, 2, 0)" background="themeable(dtb(TaskDialog, 1, 0), threedface)" foreground="gtc(TaskDialogStyle, 2, 0, 3803)" />
+			</if>
+			<if id="atom(buttonzone)">
+				<element background="themeable(dtb(TaskDialog, 8, 0), threedface)" foreground="gtc(TaskDialogStyle, 4, 0, 3803)" font="gtf(TaskDialogStyle, 10, 0)" borderthickness="rect(3rp,5rp,3rp,0rp)" />
+			</if>
+			<if id="atom(buttonpane)">
+				<element padding="rect(20rp,10rp,20rp,10rp)" />
+			</if>
+			<pushbutton background="dtb(button, 1, 1)" foreground="buttontext" contentalign="middlecenter" padding="rect(20rp,5rp,20rp,5rp)" margin="rect(10rp, 10rp, 10rp, 10rp)" />
+			<if keyfocused="true">
+				<pushbutton contentalign="middlecenter | focusrect" />
+			</if>
+			<if selected="true">
+				<pushbutton background="dtb(button, 1, 5)" />
+			</if>
+			<if mousefocused="true">
+				<pushbutton background="dtb(button, 1, 2)" />
+			</if>
+			<if pressed="true">
+				<pushbutton background="dtb(button, 1, 3)" padding="rect(21rp,6rp,19rp,4rp)" />
+			</if>
+			<if enabled="false">
+				<pushbutton background="dtb(button, 1, 4)" foreground="graytext" />
+			</if>
+			<if id="atom(CheckBox)">
+				<button minsize="themeable(gtps(button, 3, 1), size(sysmetric(71), sysmetric(72)))" background="dtb(button, 3, 1)" accessible="true" accrole="checkbutton" />
+				<if mousefocused="true">
+					<button background="dtb(button, 3, 2)" />
+				</if>
+				<if pressed="true">
+					<button background="dtb(button, 3, 3)" />
+				</if>
+				<if enabled="false">
+					<button background="dtb(button, 3, 4)" />
+				</if>
+				<if selected="true">
+					<button background="dtb(button, 3, 5)" />
+					<if mousefocused="true">
+						<button background="dtb(button, 3, 6)" />
+					</if>
+					<if pressed="true">
+						<button background="dtb(button, 3, 7)" />
+					</if>
+					<if enabled="false">
+						<button background="dtb(button, 3, 8)" />
+					</if>
+				</if>
+				<if class="mixed">
+					<button background="dtb(button, 3, 9)" />
+					<if mousefocused="true">
+						<button background="dtb(button, 3, 10)" />
+					</if>
+					<if pressed="true">
+						<button background="dtb(button, 3, 11)" />
+					</if>
+					<if enabled="false">
+						<button background="dtb(button, 3, 12)" />
+					</if>
+				</if>
+			</if>
+			<if class="CheckBox">
+				<button minsize="themeable(gtps(button, 3, 1), size(sysmetric(71), sysmetric(72)))" background="dtb(button, 3, 1)" accessible="true" accrole="checkbutton" />
+				<if mousefocused="true">
+					<button background="dtb(button, 3, 2)" />
+				</if>
+				<if pressed="true">
+					<button background="dtb(button, 3, 3)" />
+				</if>
+				<if enabled="false">
+					<button background="dtb(button, 3, 4)" />
+				</if>
+				<if selected="true">
+					<button background="dtb(button, 3, 5)" />
+					<if mousefocused="true">
+						<button background="dtb(button, 3, 6)" />
+					</if>
+					<if pressed="true">
+						<button background="dtb(button, 3, 7)" />
+					</if>
+					<if enabled="false">
+						<button background="dtb(button, 3, 8)" />
+					</if>
+				</if>
+			</if>
+			<if class="RadioButton">
+				<button width="sysmetric(71)" height="sysmetric(72)" background="dtb(button, 2, 1)" accessible="true" accrole="radiobutton" />
+				<if mousefocused="true">
+					<button background="dtb(button, 2, 2)" />
+				</if>
+				<if pressed="true">
+					<button background="dtb(button, 2, 3)" />
+				</if>
+				<if enabled="false">
+					<button background="dtb(button, 2, 4)" />
+				</if>
+				<if selected="true">
+					<button background="dtb(button, 2, 5)" />
+					<if mousefocused="true">
+						<button background="dtb(button, 2, 6)" />
+					</if>
+					<if pressed="true">
+						<button background="dtb(button, 2, 7)" />
+					</if>
+					<if enabled="false">
+						<button background="dtb(button, 2, 8)" />
+					</if>
+				</if>
+			</if>
+			<if class="link">
+				<accessiblebutton foreground="gtc(CONTROLPANELSTYLE,10,1,3803)" font="gtf(CONTROLPANELSTYLE,10,1)" overhang="false" />
+				<element accessible="true" accrole="link" accdefaction="click" foreground="gtc(CONTROLPANELSTYLE,10,1,3803)" font="gtf(CONTROLPANELSTYLE,10,1)" overhang="false" />
+				<if keyfocused="true">
+					<accessiblebutton contentalign="wrapleft | focusrect" />
+					<element contentalign="wrapleft | focusrect" />
+				</if>
+				<if enabled="false">
+					<accessiblebutton foreground="gtc(CONTROLPANELSTYLE,10,4,3803)" font="gtf(CONTROLPANELSTYLE,10,4)" />
+					<element foreground="gtc(CONTROLPANELSTYLE,10,4,3803)" font="gtf(CONTROLPANELSTYLE,10,4)" />
+				</if>
+				<if mousefocused="true">
+					<accessiblebutton cursor="hand" foreground="gtc(CONTROLPANELSTYLE,10,2,3803)" font="gtf(CONTROLPANELSTYLE,10,2)" />
+					<element cursor="hand" foreground="gtc(CONTROLPANELSTYLE,10,2,3803)" font="gtf(CONTROLPANELSTYLE,10,2)" />
+				</if>
+			</if>
+			<if id="atom(clipped)">
+				<element animation="rectanglev | s | fast" />
+			</if>
+			<if id="atom(arrow)">
+				<button width="sysmetric(2)" height="sysmetric(20)" />
+				<if selected="false">
+					<button background="dtb(scrollbar, 1, 5)" />
+					<if mousefocused="true">
+						<button background="dtb(scrollbar, 1, 6)" />
+					</if>
+					<if pressed="true">
+						<button background="dtb(scrollbar, 1, 7)" />
+					</if>
+				</if>
+				<if selected="true">
+					<button background="dtb(scrollbar, 1, 1)" />
+					<if mousefocused="true">
+						<button background="dtb(scrollbar, 1, 2)" />
+					</if>
+					<if pressed="true">
+						<button background="dtb(scrollbar, 1, 3)" />
+					</if>
+				</if>
+			</if>
+			<if id="atom(Thumb)">
+				<thumb background="dtb(scrollbar, 3, 1)" content="dtb(scrollbar, 9, 1)" contentalign="middlecenter" />
+				<if mousefocused="true">
+					<thumb background="dtb(scrollbar, 3, 2)" content="dtb(scrollbar, 9, 2)" />
+				</if>
+				<if captured="true">
+					<thumb background="dtb(scrollbar, 3, 3)" content="dtb(scrollbar, 9, 3)" />
+				</if>
+			</if>
+			<if id="atom(HThumb)">
+				<thumb background="dtb(scrollbar, 2, 1)" content="dtb(scrollbar, 8, 1)" contentalign="middlecenter" />
+				<if mousefocused="true">
+					<thumb background="dtb(scrollbar, 2, 2)" content="dtb(scrollbar, 8, 2)" />
+				</if>
+				<if captured="true">
+					<thumb background="dtb(scrollbar, 2, 3)" content="dtb(scrollbar, 8, 3)" />
+				</if>
+			</if>
+			<if class="Line">
+				<repeatbutton width="sysmetric(2)" height="sysmetric(20)" />
+			</if>
+			<if id="atom(lineup)">
+				<repeatbutton background="dtb(scrollbar, 1, 1)" />
+				<if mousefocused="true">
+					<repeatbutton background="dtb(scrollbar, 1, 2)" />
+				</if>
+				<if pressed="true">
+					<repeatbutton background="dtb(scrollbar, 1, 3)" />
+				</if>
+			</if>
+			<if id="atom(linedown)">
+				<repeatbutton background="dtb(scrollbar, 1, 5)" />
+				<if mousefocused="true">
+					<repeatbutton background="dtb(scrollbar, 1, 6)" />
+				</if>
+				<if pressed="true">
+					<repeatbutton background="dtb(scrollbar, 1, 7)" />
+				</if>
+			</if>
+			<if id="atom(lineleft)">
+				<repeatbutton background="dtb(scrollbar, 1, 9)" />
+				<if mousefocused="true">
+					<repeatbutton background="dtb(scrollbar, 1, 10)" />
+				</if>
+				<if pressed="true">
+					<repeatbutton background="dtb(scrollbar, 1, 11)" />
+				</if>
+			</if>
+			<if id="atom(lineright)">
+				<repeatbutton background="dtb(scrollbar, 1, 13)" />
+				<if mousefocused="true">
+					<repeatbutton background="dtb(scrollbar, 1, 14)" />
+				</if>
+				<if pressed="true">
+					<repeatbutton background="dtb(scrollbar, 1, 15)" />
+				</if>
+			</if>
+			<if id="atom(pageup)">
+				<repeatbutton background="dtb(scrollbar, 7, 1)" />
+				<if mousefocused="true">
+					<repeatbutton background="dtb(scrollbar, 7, 2)" />
+				</if>
+				<if pressed="true">
+					<repeatbutton background="dtb(scrollbar, 7, 3)" />
+				</if>
+			</if>
+			<if id="atom(pagedown)">
+				<repeatbutton background="dtb(scrollbar, 6, 1)" />
+				<if mousefocused="true">
+					<repeatbutton background="dtb(scrollbar, 6, 2)" />
+				</if>
+				<if pressed="true">
+					<repeatbutton background="dtb(scrollbar, 6, 3)" />
+				</if>
+			</if>
+			<if id="atom(pageleft)">
+				<repeatbutton background="dtb(scrollbar, 5, 1)" />
+				<if mousefocused="true">
+					<repeatbutton background="dtb(scrollbar, 5, 2)" />
+				</if>
+				<if pressed="true">
+					<repeatbutton background="dtb(scrollbar, 5, 3)" />
+				</if>
+			</if>
+			<if id="atom(pageright)">
+				<repeatbutton background="dtb(scrollbar, 4, 1)" />
+				<if mousefocused="true">
+					<repeatbutton background="dtb(scrollbar, 4, 2)" />
+				</if>
+				<if pressed="true">
+					<repeatbutton background="dtb(scrollbar, 4, 3)" />
+				</if>
+			</if>
+			<if class="ScrollViewer">
+				<CCHScrollBar layoutpos="ninebottom" accessible="true" accdesc="resstr(1101)" accname="resstr(1102)" />
+				<CCVScrollBar layoutpos="nineright" accessible="true" accdesc="resstr(1100)" accname="resstr(1103)" />
+				<viewer layoutpos="nineclient" />
+			</if>
+		</style>
+	</stylesheets>
+</duixml>

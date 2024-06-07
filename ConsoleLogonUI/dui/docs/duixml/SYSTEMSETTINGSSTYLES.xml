@@ -1,0 +1,72 @@
+﻿<duixml>
+	<stylesheets>
+		<style resid="moset" base="ressheet(ImmersiveStyles, Light)">
+			<element background="20575" />
+			<RichText ConstrainLayout="Narrow" background="20575" />
+			<TouchHyperlink ConstrainLayout="Narrow" />
+			<if class="moset_control_description">
+				<RichText font="resstr(300, library(dui70.dll))" foreground="20348" contentalign="topleft | wrapleft | endellipsis" margin="rect(0rp, 0rp, 0rp, 6rp)" accessible="true" accrole="statictext" />
+			</if>
+			<if class="moset_subsection_header">
+				<RichText font="resstr(306, library(dui70.dll))" foreground="20348" contentalign="topleft | wrapleft | endellipsis" margin="rect(0rp, 0rp, 0rp, 6rp)" accessible="true" accrole="statictext" />
+			</if>
+			<if class="moset_section_description">
+				<RichText font="resstr(301, library(dui70.dll))" foreground="20348" contentalign="topleft | wrapleft | endellipsis" margin="rect(0rp, 0rp, 0rp, 6rp)" accessible="true" accrole="statictext" />
+			</if>
+			<if class="moset_section_header">
+				<RichText font="resstr(302, library(dui70.dll))" foreground="20069" contentalign="topleft | wrapleft | endellipsis" margin="rect(0rp, 0rp, 0rp, 17rp)" accessible="true" accrole="statictext" />
+			</if>
+			<if class="moset_section">
+				<element margin="rect(0rp, 0rp, 0rp, 39rp)" />
+			</if>
+			<if class="moset_toggle_section">
+				<element margin="rect(0rp, 0rp, 0rp, 23rp)" />
+			</if>
+			<if class="moset_subsection">
+				<element margin="rect(0rp, 0rp, 0rp, 25rp)" />
+			</if>
+			<if class="moset_toggle_subsection">
+				<element margin="rect(0rp, 0rp, 0rp, 11rp)" />
+			</if>
+			<if class="moset_paragraph">
+				<RichText font="resstr(303, library(dui70.dll))" foreground="20348" contentalign="topleft | wrapleft | endellipsis" margin="rect(0rp, 0rp, 0rp, 25rp)" accessible="true" accrole="statictext" />
+			</if>
+			<if class="moset_feedback_description">
+				<RichText font="resstr(304, library(dui70.dll))" foreground="20348" contentalign="middleleft | wrapleft" accessible="true" accrole="statictext" />
+			</if>
+			<if class="moset_error_page">
+				<RichText font="resstr(305, library(dui70.dll))" foreground="20076" contentalign="topleft | wrapleft | endellipsis" padding="rect(0rp, 13rp, 0rp, 27rp)" accessible="true" accrole="statictext" />
+			</if>
+			<if class="moset_error_description">
+				<RichText font="resstr(305, library(dui70.dll))" foreground="20076" contentalign="topleft | wrapleft | endellipsis" margin="rect(0rp, 0rp, 0rp, 7rp)" accessible="true" accrole="statictext" />
+			</if>
+			<if class="moset_button">
+				<TouchButton minsize="size(76rp, 23rp)" padding="rect(5rp,2rp,5rp,2rp)" contentalign="middlecenter | endellipsis" margin="rect(0rp, 0rp, 20rp, 25rp)" />
+				<if keyfocused="true">
+					<TouchButton contentalign="middlecenter | endellipsis | focusrect" />
+				</if>
+			</if>
+			<if class="moset_link">
+				<TouchHyperlink contentalign="topleft | wrapleft | endellipsis" accdefaction="click" margin="rect(0rp, 0rp, 20rp, 19rp)" />
+				<if keyfocused="true">
+					<TouchHyperlink contentalign="topleft | wrapleft | endellipsis | focusrect" />
+				</if>
+			</if>
+			<if class="moset_progress_ring">
+				<ModernProgressRing width="20rp" height="20rp" margin="rect(20rp, 0rp, 5rp, 25rp)" />
+			</if>
+			<if class="moset_progress_bar">
+				<ModernProgressBar margin="rect(0rp, 0rp, 0rp, 25rp)" />
+			</if>
+			<if class="moset_toggle_switch">
+				<TouchSwitch margin="rect(0rp, 0rp, 0rp, 11rp)" width="550rp" />
+			</if>
+			<if class="moset_select_control">
+				<TouchSelect margin="rect(0rp, 0rp, 20rp, 25rp)" />
+			</if>
+			<if class="moset_text_input_box">
+				<TouchEdit2 margin="rect(0rp, 0rp, 20rp, 25rp)" />
+			</if>
+		</style>
+	</stylesheets>
+</duixml>

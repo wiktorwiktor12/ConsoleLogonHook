@@ -7,6 +7,7 @@
 #include "d3d11.h"
 #include <vector>
 #include <memory>
+#include "dui/dui_includes.h"
 
 inline HWND gWindowHandle;
 
@@ -107,4 +108,26 @@ public:
 
 
     virtual void Draw() override;
+};
+
+class duiBackgroundWindow : public DirectUI::Element
+{
+public:
+    duiBackgroundWindow();
+    virtual ~duiBackgroundWindow() override;
+
+    static DirectUI::IClassInfo* Class;
+    static HRESULT CreateInstance(DirectUI::Element* rootElement, unsigned long* debugVariable, DirectUI::Element** newElement);
+
+    //Element
+    virtual DirectUI::IClassInfo* GetClassInfoW() override;
+
+    // Element overrides
+    virtual void OnEvent(DirectUI::Event* iev) override;
+    virtual void OnDestroy() override;
+
+    static inline DirectUI::IClassInfo* GetClassInfoPtr() { return Class; }
+    static inline DirectUI::UCString DoGetClassName() { return (DirectUI::UCString)L"duiBackgroundWindow"; }
+
+    virtual void Begin();
 };

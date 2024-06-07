@@ -1,0 +1,21 @@
+<duixml>
+<element resid="main" accessible="true" layout="filllayout()">
+<ModernProgressRing id="atom(progress)" height="60rp" width="60rp" foreground="activeborder"/>
+<element id="atom(ConsentBar)" layout="borderlayout()" visible="false">
+<element id="atom(ConsentPane)" layoutpos="client" layout="borderlayout()" active="pointer">
+<RichText layoutpos="left" content="resstr(1002)" sheet="consentpage_description"/>
+</element>
+<element layoutpos="bottom" layout="borderlayout()" padding="rect(0rp,0rp,5rp,20rp)">
+<element layoutpos="right" layout="flowlayout()">
+<TouchButton id="atom(SaveCreds)" layoutpos="left" content="resstr(1005, library(AuthBrokerUI.dll))" active="mouse|keyboard|pointer" margin="rect(20rp,0rp,20rp,0rp)" accessible="true" background="ImmersiveSaturatedBackground" foreground="ImmersiveSaturatedPrimaryText"/>
+<TouchButton id="atom(DontSaveCreds)" layoutpos="left" content="resstr(1006, library(AuthBrokerUI.dll))" active="mouse|keyboard|pointer" margin="rect(20rp,0rp,20rp,0rp)" accessible="true"/>
+</element>
+</element>
+</element>
+</element>
+<stylesheets>
+<style resid="consentpage_description" base="ressheet(ImmersiveStyles, library(dui70.dll), Dark)">
+<RichText font="resstr(1004, library(AuthBrokerUI.dll))" padding="rect(37rp, 15rp, 0rp, 0rp)" contentalign="topleft | wrapleft" accessible="true" accRole="statictext"/>
+</style>
+</stylesheets>
+</duixml>

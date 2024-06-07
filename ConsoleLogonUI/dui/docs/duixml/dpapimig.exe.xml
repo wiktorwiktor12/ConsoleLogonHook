@@ -1,0 +1,48 @@
+<duixml>
+<stylesheets>
+<style resid="local">
+<if class="para">
+<element foreground="themeable(gtc(AeroWizard, 3, 0, 3803), windowtext)" contentalign="wrapleft" margin="rect(0,10rp,0,10rp)"/>
+</if>
+<ccsyslink accessible="true" accrole="link" shortcut="auto" class="wizbtn" contentalign="wrapleft" overhang="false" foreground="themeable(gtc(AeroWizard, 3, 0, 3803), windowtext)"/>
+<edit foreground="themeable(gtc(AeroWizard, 3, 0, 3803), windowtext)"/>
+<cclistview foreground="themeable(gtc(AeroWizard, 3, 0, 3803), windowtext)"/>
+<if enabled="false">
+<edit background="buttonface"/>
+</if>
+</style>
+</stylesheets>
+<element resid="errorBoxMacro" layout="borderlayout()">
+<element layoutpos="left" width="120rp"/>
+<element layout="borderlayout()" layoutpos="client" padding="rect(0rp,5rp,5rp,5rp)">
+<element layoutpos="left" layout="borderlayout()" padding="rect(0rp,0rp,5rp,0rp)">
+<element id="atom(warnstatusicon)" accessible="true" accrole="graphic" accname="resstr(1601)" accDesc="resstr(1614)" content="icon(101,sysmetric(49),sysmetric(50),library(user32.dll))" layoutpos="client" visible="false"/>
+<element id="atom(infostatusicon)" accessible="true" accrole="graphic" accname="resstr(1600)" accDesc="resstr(1615)" content="icon(102,sysmetric(49),sysmetric(50),library(user32.dll))" layoutpos="none"/>
+<element id="atom(errorstatusicon)" accessible="true" accrole="graphic" accname="resstr(1602)" accDesc="resstr(1616)" content="icon(103,sysmetric(49),sysmetric(50),library(user32.dll))" layoutpos="none"/>
+</element>
+<element id="atom(statustext)" accessible="true" accrole="statictext" class="para" sheet="local" layoutpos="client" visible="false" content="resstr(1603)"/>
+</element>
+</element>
+<element resid="page1" id="atom(wizardroot)" sheet="common" layout="borderlayout()" width="563rp" height="300rp">
+<element id="atom(wiztitle)" content="resstr(1604)" accrole="statictext" accessible="true"/>
+<element class="para" layoutpos="top" content="resstr(1605)" accrole="statictext" accessible="true"/>
+<element layoutpos="top" layout="borderlayout()" padding="rect(0rp,35rp,0rp,0rp)">
+<element id="atom(computerNameText)" content="resstr(1606)" contentalign="wrapleft" accrole="statictext" accessible="true" padding="rect(0rp,0rp,10rp,0rp)" width="120rp" layoutpos="left"/>
+<element id="atom(machineName)" padding="rect(0rp,0rp,10rp,0rp)" content="resstr(1607)" contentalign="wrapleft" accrole="statictext" accessible="true" layoutpos="client"/>
+</element>
+<element layoutpos="top" layout="borderlayout()" padding="rect(0rp,15rp,0rp,0rp)">
+<element id="atom(usernameText)" content="resstr(1608)" contentalign="wrapleft" accrole="statictext" accessible="true" padding="rect(0rp,0rp,10rp,0rp)" width="120rp" layoutpos="left"/>
+<element id="atom(userName)" padding="rect(0rp,0rp,10rp,0rp)" content="resstr(1609)" contentalign="wrapleft" accrole="statictext" accessible="true" layoutpos="client"/>
+</element>
+<element layoutpos="top" layout="borderlayout()" padding="rect(0rp,15rp,0rp,0rp)">
+<element id="atom(passwordText)" content="resstr(1610)" contentalign="wrapleft" accrole="statictext" accessible="true" padding="rect(0rp,0rp,10rp,0rp)" width="120rp" layoutpos="left"/>
+<element layout="borderlayout()" padding="rect(0rp,0rp,10rp,0rp)" layoutpos="client">
+<edit id="atom(password)" themedborder="true" accessible="true" accname="Password" accDesc="Password edit field" class="wizedit" sheet="local" layoutpos="left" shortcut="auto" active="mouse|keyboard" passwordcharacter="9679" width="200rp"/>
+</element>
+</element>
+<macro id="atom(PageError)" expand="errorBoxMacro" layoutpos="top" layout="borderlayout()"/>
+<element layoutpos="top" layout="borderlayout()" padding="rect(0rp,15rp,0rp,0rp)">
+<CCCommandLink id="atom(recover)" accessible="true" accrole="pushbutton" class="commandLink" sheet="local" layoutpos="top" transparent="true" content="resstr(1611)"/>
+</element>
+</element>
+</duixml>

@@ -1,0 +1,277 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" ToolsVersion="14.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup Label="ProjectConfigurations">
+    <ProjectConfiguration Include="Debug|Win32">
+      <Configuration>Debug</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Release|Win32">
+      <Configuration>Release</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Debug|x64">
+      <Configuration>Debug</Configuration>
+      <Platform>x64</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Release|x64">
+      <Configuration>Release</Configuration>
+      <Platform>x64</Platform>
+    </ProjectConfiguration>
+  </ItemGroup>
+  <PropertyGroup Label="Globals">
+    <CodePage>936</CodePage>
+    <ProjectGuid>{0B7DE49A-33C6-41B1-A9CE-D353031F8454}</ProjectGuid>
+    <Keyword>Win32Proj</Keyword>
+    <RootNamespace>DirectUI</RootNamespace>
+    <WindowsTargetPlatformVersion>10.0</WindowsTargetPlatformVersion>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
+    <ConfigurationType>DynamicLibrary</ConfigurationType>
+    <UseDebugLibraries>true</UseDebugLibraries>
+    <PlatformToolset>v143</PlatformToolset>
+    <CharacterSet>Unicode</CharacterSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">
+    <ConfigurationType>DynamicLibrary</ConfigurationType>
+    <UseDebugLibraries>false</UseDebugLibraries>
+    <PlatformToolset>v143</PlatformToolset>
+    <WholeProgramOptimization>true</WholeProgramOptimization>
+    <CharacterSet>Unicode</CharacterSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'" Label="Configuration">
+    <ConfigurationType>DynamicLibrary</ConfigurationType>
+    <UseDebugLibraries>true</UseDebugLibraries>
+    <PlatformToolset>v143</PlatformToolset>
+    <CharacterSet>Unicode</CharacterSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'" Label="Configuration">
+    <ConfigurationType>DynamicLibrary</ConfigurationType>
+    <UseDebugLibraries>false</UseDebugLibraries>
+    <PlatformToolset>v143</PlatformToolset>
+    <WholeProgramOptimization>true</WholeProgramOptimization>
+    <CharacterSet>Unicode</CharacterSet>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
+  <ImportGroup Label="ExtensionSettings">
+  </ImportGroup>
+  <ImportGroup Label="Shared">
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <PropertyGroup Label="UserMacros" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <LinkIncremental>true</LinkIncremental>
+    <TargetName>dui70</TargetName>
+    <OutDir>$(SolutionDir)$(Platform)\$(Configuration)\Dui\</OutDir>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+    <LinkIncremental>true</LinkIncremental>
+    <TargetName>dui70</TargetName>
+    <OutDir>$(SolutionDir)$(Platform)\$(Configuration)\Dui\</OutDir>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <LinkIncremental>false</LinkIncremental>
+    <OutDir>$(SolutionDir)$(Platform)\$(Configuration)\Dui\</OutDir>
+    <TargetName>dui70</TargetName>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+    <LinkIncremental>false</LinkIncremental>
+    <OutDir>$(SolutionDir)$(Platform)\$(Configuration)\Dui\</OutDir>
+    <TargetName>dui70</TargetName>
+  </PropertyGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <ClCompile>
+      <PrecompiledHeader>
+      </PrecompiledHeader>
+      <WarningLevel>Level3</WarningLevel>
+      <Optimization>Disabled</Optimization>
+      <PreprocessorDefinitions>WIN32;_DEBUG;_WINDOWS;_USRDLL;DIRECTUI_EXPORTS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <TreatWChar_tAsBuiltInType>false</TreatWChar_tAsBuiltInType>
+    </ClCompile>
+    <Link>
+      <SubSystem>Windows</SubSystem>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+      <ModuleDefinitionFile>DirectUI.def</ModuleDefinitionFile>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+    <ClCompile>
+      <PrecompiledHeader>
+      </PrecompiledHeader>
+      <WarningLevel>Level3</WarningLevel>
+      <Optimization>Disabled</Optimization>
+      <PreprocessorDefinitions>_DEBUG;_WINDOWS;_USRDLL;DIRECTUI_EXPORTS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <TreatWChar_tAsBuiltInType>false</TreatWChar_tAsBuiltInType>
+    </ClCompile>
+    <Link>
+      <SubSystem>Windows</SubSystem>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+      <ModuleDefinitionFile>DirectUI.def</ModuleDefinitionFile>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <ClCompile>
+      <WarningLevel>Level3</WarningLevel>
+      <PrecompiledHeader>
+      </PrecompiledHeader>
+      <Optimization>MaxSpeed</Optimization>
+      <FunctionLevelLinking>true</FunctionLevelLinking>
+      <IntrinsicFunctions>true</IntrinsicFunctions>
+      <PreprocessorDefinitions>WIN32;NDEBUG;_WINDOWS;_USRDLL;DIRECTUI_EXPORTS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+    </ClCompile>
+    <Link>
+      <SubSystem>Windows</SubSystem>
+      <EnableCOMDATFolding>true</EnableCOMDATFolding>
+      <OptimizeReferences>true</OptimizeReferences>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+      <ModuleDefinitionFile>DirectUI.def</ModuleDefinitionFile>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+    <ClCompile>
+      <WarningLevel>Level3</WarningLevel>
+      <PrecompiledHeader>
+      </PrecompiledHeader>
+      <Optimization>MaxSpeed</Optimization>
+      <FunctionLevelLinking>true</FunctionLevelLinking>
+      <IntrinsicFunctions>true</IntrinsicFunctions>
+      <PreprocessorDefinitions>NDEBUG;_WINDOWS;_USRDLL;DIRECTUI_EXPORTS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+    </ClCompile>
+    <Link>
+      <SubSystem>Windows</SubSystem>
+      <EnableCOMDATFolding>true</EnableCOMDATFolding>
+      <OptimizeReferences>true</OptimizeReferences>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+      <ModuleDefinitionFile>DirectUI.def</ModuleDefinitionFile>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemGroup>
+    <ClInclude Include="accessibility.h" />
+    <ClInclude Include="AccessibleButton.h" />
+    <ClInclude Include="AnimationStrip.h" />
+    <ClInclude Include="AutoButton.h" />
+    <ClInclude Include="AutoLock.h" />
+    <ClInclude Include="AutoVariant.h" />
+    <ClInclude Include="AutoThread.h" />
+    <ClInclude Include="base.h" />
+    <ClInclude Include="Bind.h" />
+    <ClInclude Include="BorderLayout.h" />
+    <ClInclude Include="Browser.h" />
+    <ClInclude Include="BrowserSelection.h" />
+    <ClInclude Include="Button.h" />
+    <ClInclude Include="CallstackTracker.h" />
+    <ClInclude Include="CAVI.h" />
+    <ClInclude Include="CBase.h" />
+    <ClInclude Include="CBaseCheckRadioButton.h" />
+    <ClInclude Include="CBaseScrollBar.h" />
+    <ClInclude Include="CCheckBox.h" />
+    <ClInclude Include="CClassFactory.h" />
+    <ClInclude Include="CCSysLink.h" />
+    <ClInclude Include="CheckBoxGlyph.h" />
+    <ClInclude Include="Clipper.h" />
+    <ClInclude Include="CListView.h" />
+    <ClInclude Include="CCommandLink.h" />
+    <ClInclude Include="CHScrollBar.h" />
+    <ClInclude Include="CListBox.h" />
+    <ClInclude Include="Combobox.h" />
+    <ClInclude Include="CProgressBar.h" />
+    <ClInclude Include="CPushButton.h" />
+    <ClInclude Include="CRadioButton.h" />
+    <ClInclude Include="CTrackBar.h" />
+    <ClInclude Include="CTreeView.h" />
+    <ClInclude Include="CVScrollBar.h" />
+    <ClInclude Include="DialogElement.h" />
+    <ClInclude Include="DirectUI.h" />
+    <ClInclude Include="DuiNavigate.h" />
+    <ClInclude Include="Edit.h" />
+    <ClInclude Include="Element.h" />
+    <ClInclude Include="ElementWithHWND.h" />
+    <ClInclude Include="event.h" />
+    <ClInclude Include="EventManager.h" />
+    <ClInclude Include="Expandable.h" />
+    <ClInclude Include="ExpandCollapse.h" />
+    <ClInclude Include="Expando.h" />
+    <ClInclude Include="ExpandoButtonGlyph.h" />
+    <ClInclude Include="FontCache.h" />
+    <ClInclude Include="FontCheckOut.h" />
+    <ClInclude Include="GridItem.h" />
+    <ClInclude Include="Grid.h" />
+    <ClInclude Include="host.h" />
+    <ClInclude Include="HWNDElement.h" />
+    <ClInclude Include="HWNDHost.h" />
+    <ClInclude Include="Interfaces.h" />
+    <ClInclude Include="InvokeHelper.h" />
+    <ClInclude Include="layout.h" />
+    <ClInclude Include="LinkedList.h" />
+    <ClInclude Include="Macro.h" />
+    <ClInclude Include="misc.h" />
+    <ClInclude Include="Movie.h" />
+    <ClInclude Include="NativeHWNDHost.h" />
+    <ClInclude Include="Navigator.h" />
+    <ClInclude Include="NavScoring.h" />
+    <ClInclude Include="Page.h" />
+    <ClInclude Include="parser.h" />
+    <ClInclude Include="Primitives.h" />
+    <ClInclude Include="Progress.h" />
+    <ClInclude Include="provider.h" />
+    <ClInclude Include="PText.h" />
+    <ClInclude Include="PushButton.h" />
+    <ClInclude Include="RadioButtonGlyph.h" />
+    <ClInclude Include="RangeValue.h" />
+    <ClInclude Include="RefPointElement.h" />
+    <ClInclude Include="RepeatButton.h" />
+    <ClInclude Include="Repeater.h" />
+    <ClInclude Include="RichText.h" />
+    <ClInclude Include="Scroll.h" />
+    <ClInclude Include="ScrollBar.h" />
+    <ClInclude Include="ScrollItem.h" />
+    <ClInclude Include="ScrollViewer.h" />
+    <ClInclude Include="Selection.h" />
+    <ClInclude Include="SelectionItem.h" />
+    <ClInclude Include="Selector.h" />
+    <ClInclude Include="SelectorNoDefault.h" />
+    <ClInclude Include="SelectorSelection.h" />
+    <ClInclude Include="SelectorSelectionItem.h" />
+    <ClInclude Include="StyledScrollViewer.h" />
+    <ClInclude Include="Table.h" />
+    <ClInclude Include="TableItem.h" />
+    <ClInclude Include="TaskPage.h" />
+    <ClInclude Include="TextGraphic.h" />
+    <ClInclude Include="Thumb.h" />
+    <ClInclude Include="Toggle.h" />
+    <ClInclude Include="TouchButton.h" />
+    <ClInclude Include="TouchCheckBox.h" />
+    <ClInclude Include="types.h" />
+    <ClInclude Include="UnknownElement.h" />
+    <ClInclude Include="Value.h" />
+    <ClInclude Include="Viewer.h" />
+    <ClInclude Include="XBaby.h" />
+    <ClInclude Include="XElement.h" />
+    <ClInclude Include="XProvider.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="DirectUI.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="..\README.md" />
+    <None Include="DirectUI.def" />
+  </ItemGroup>
+  <ItemGroup>
+    <Text Include="msdef.txt" />
+    <Text Include="msdef64.txt" />
+  </ItemGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
+  <ImportGroup Label="ExtensionTargets">
+  </ImportGroup>
+</Project>

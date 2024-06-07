@@ -7,7 +7,9 @@
 #include "../imgui/imgui_internal.h"
 #include "ui_helper.h"
 #include "stb_image.h"
+#include "resources/resource.h"
 #include <util/interop.h>
+#include <dui/templates.h>
 
 static ID3D11Device* d3dDevice = nullptr;
 static ID3D11DeviceContext* d3dDeviceContext = nullptr;
@@ -225,9 +227,119 @@ uiRenderer::uiRenderer()
     backgroundWindowInstance = std::shared_ptr<::backgroundWindow>(new backgroundWindow());
 }
 
+#define err(msg) MessageBoxW(NULL, L ## msg, L"CLHUI", MB_ICONERROR)
+
+DWORD WINAPI DuiInitThread(LPVOID lparam)
+{
+    HINSTANCE hInstance = GetModuleHandle(L"ConsoleLogonUI.dll");
+    DWORD dwDefer;
+
+    CoInitializeEx(NULL, 0);
+
+    // Try to initialise for the current version.
+    // Since we can just depend on it failing during the prologue and not
+    // doing any work, we can simply keep trying versions until we find one
+    // that works.
+    for (int i = 8; i < 100; i++)
+        if (!DirectUI::InitProcessPriv(i, NULL, 0, true))
+            break;
+
+    DirectUI::InitThread(2);
+    DirectUI::RegisterAllControls();
+
+    DirectUI::ClassInfo<duiBackgroundWindow, DirectUI::Element>::Register(hInstance);
+
+    HRESULT hr;
+    DirectUI::DUIXmlParser* pParser = NULL;
+    hr = DirectUI::DUIXmlParser::Create(&pParser, NULL, NULL, NULL, NULL);
+    if (SUCCEEDED(hr))
+    {
+        hr = pParser->SetXMLFromResource(
+            (DirectUI::UCString)MAKEINTRESOURCEW(IDUIF_MAIN),
+            hInstance,
+            hInstance
+        );
+        if (SUCCEEDED(hr))
+        {
+            int w = GetSystemMetrics(SM_CXSCREEN);
+            int h = GetSystemMetrics(SM_CYSCREEN);
+            DirectUI::NativeHWNDHost* pWndHost = NULL;
+            hr = DirectUI::NativeHWNDHost::Create(
+                (DirectUI::UCString)L"Fucking around.",
+                NULL,
+                NULL,
+                0, 0,
+                w, h,
+                NULL,
+                WS_POPUP,
+                0,
+                &pWndHost
+            );
+
+            if (SUCCEEDED(hr))
+            {
+                DirectUI::HWNDElement* pWndElement;
+                hr = DirectUI::HWNDElement::Create(
+                    pWndHost->GetHWND(),
+                    true,
+                    0,
+                    NULL,
+                    &dwDefer,
+                    (DirectUI::Element**)&pWndElement
+                );
+
+                if (SUCCEEDED(hr))
+                {
+                    DirectUI::Element* pUIElement = NULL;
+                    hr = pParser->CreateElement(
+                        (DirectUI::UCString)L"main",
+                        pWndElement,
+                        NULL,
+                        NULL,
+                        &pUIElement
+                    );
+                    if (SUCCEEDED(hr))
+                    {
+                        pUIElement->SetVisible(true);
+                        pUIElement->EndDefer(dwDefer);
+
+                        pWndHost->Host(pUIElement);
+                        pWndHost->ShowWindow(SW_SHOW);
+
+                        DirectUI::StartMessagePump();
+                    }
+                    else
+                    {
+                        err("DirectUI::DuiXmlParser::CreateElement failed.");
+                    }
+                }
+                else
+                {
+                    err("DirectUI::HWNDElement::Create failed.");
+                }
+            }
+            else
+            {
+                err("DirectUI::NativeHWNDHost::Create failed.");
+            }
+        }
+        else
+        {
+            err("DirectUI::DuiXMLParser::SetXMLFromResource failed.");
+        }
+    }
+    else
+    {
+        err("DirectUI::DuiXMLParser::Create failed.");
+    }
+
+    return 0;
+}
+
 void uiRenderer::SetupUI()
 {
-    CreateThread(0,0,ImGUIThread,0,0,0);
+    CreateThread(0,0, DuiInitThread,0,0,0);
+    
 }
 
 void uiRenderer::AddWindow(std::shared_ptr<uiWindow> newWindow, bool ShouldPushToFront)
@@ -488,4 +600,75 @@ void backgroundWindow::Draw()
     ImGui::PopStyleVar(ImGuiStyleVar_PopupBorderSize);
     ImGui::PopStyleVar(ImGuiStyleVar_WindowPadding);
     ImGui::PopStyleVar(ImGuiStyleVar_WindowBorderSize);
+}
+
+DirectUI::IClassInfo* duiBackgroundWindow::Class = NULL;
+
+duiBackgroundWindow::duiBackgroundWindow()
+{
+}
+
+duiBackgroundWindow::~duiBackgroundWindow()
+{
+}
+
+HRESULT duiBackgroundWindow::CreateInstance(DirectUI::Element* rootElement, unsigned long* debugVariable, DirectUI::Element** newElement)
+{
+    int hr = E_OUTOFMEMORY;
+
+    // Using HeapAlloc instead of new() is required as DirectUI::Element::_DisplayNodeCallback calls HeapFree() with the element
+    duiBackgroundWindow* instance = (duiBackgroundWindow*)HeapAlloc(GetProcessHeap(), HEAP_ZERO_MEMORY, sizeof(duiBackgroundWindow));
+
+    if (instance != NULL)
+    {
+        new (instance) duiBackgroundWindow();
+        hr = instance->Initialize(0, rootElement, debugVariable);
+        if (SUCCEEDED(hr))
+        {
+            *newElement = instance;
+        }
+        else
+        {
+            if (instance != NULL)
+            {
+                instance->Destroy(TRUE);
+                instance = NULL;
+            }
+        }
+    }
+
+    return hr;
+}
+
+DirectUI::IClassInfo* duiBackgroundWindow::GetClassInfoW()
+{
+    return duiBackgroundWindow::Class;
+}
+
+void duiBackgroundWindow::OnEvent(DirectUI::Event* iev)
+{
+    if (iev->flag != DirectUI::GMF_BUBBLED)
+        return;
+    if (!iev->handled)
+        DirectUI::Element::OnEvent(iev);
+
+    if (iev->target->GetID() == DirectUI::StrToID((DirectUI::UCString)L"buttonShutdown"))
+    {
+        if (iev->type == DirectUI::Button::Click)
+        {
+            MessageBox(0,L"buttonShutdown Button Pressed!",L"",0);
+
+        }
+    }
+}
+
+void duiBackgroundWindow::OnDestroy()
+{
+
+    DirectUI::Element::OnDestroy();
+}
+
+void duiBackgroundWindow::Begin()
+{
+
 }

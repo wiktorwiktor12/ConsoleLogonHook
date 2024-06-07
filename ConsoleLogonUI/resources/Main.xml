@@ -1,0 +1,84 @@
+<duixml>
+    <stylesheets>
+        <style resid="LogonStyle">
+            <if class="status">
+                <element background="argb(0,0,0,0)" foreground="argb(255,255,255,255)" shadowintensity="75" fontsize="18pt" fontstyle="Shadow" padding="rect(24rp,0,0,100rp)"/>
+            </if>
+            <if class="branding">
+                <element background="resbmp(120,7,-1,0,0,1,1,library(7brand.dll))" width="350rp" height="50rp" accessible="false" active="NoSyncFocus"/>
+            </if>
+            <if class="userpfp">
+                <element background="resbmp(1001,4,-1,0,0,0,0,library(au7hui.dll))" width="128rp" height="128rp"/>
+            </if>
+            <if class="usertile">
+                <element background="resbmp(12223,7,-1,0,0,1,1,library(au7hui.dll))" width="190rp" height="190rp"/>
+            </if>
+            <if class="passwordBox">
+                <edit width="225rp" height="25rp" font="resstr(11800)" shadowintensity="75" margin = "rect(0rp, 3rp, 0rp, 3rp)" padding="rect(0rp, 1rp, 0rp, 0rp)" borderthickness = "rect(4, 4, 4, 4)"
+				bordercolor="gray" accessible="true" accrole="42" background="resbmp(11003, 7,-1,0,0,1,1,library(au7hui.dll))" passwordcharacter="9679"/>
+            </if>
+            <if class="button">
+                <button background="resbmp(12282,7,-1,0,0,1,1,library(au7hui.dll))" width="30rp" height="30rp"/>
+                <if mousefocused="true">
+                    <button background="resbmp(12286,7,-1,0,0,1,1,library(au7hui.dll))"/>
+                </if>
+                <if pressed="true">
+                    <button background="resbmp(12287,7,-1,0,0,1,1,library(au7hui.dll))"/>
+                </if>
+            </if>
+            <if class="EaseOfAccessButton">
+                <button background="graphic(12263,7,-1,0,0,0,0,library(au7hui.dll))" borderthickness="rect(4rp,2rp,4rp,2rp)"/>
+                <if mousefocused="true">
+                    <button background="graphic(12260,7,-1,0,0,0,0,library(au7hui.dll))" borderthickness="rect(4rp,2rp,4rp,2rp)"/>
+                </if>
+                <if pressed="true">
+                    <button background="graphic(12262,7,-1,0,0,0,0,library(au7hui.dll))" borderthickness="rect(4rp,2rp,4rp,2rp)"/>
+                </if>
+            </if>
+            <if class="ShutdownButton">
+                <button background="graphic(12294,7,-1,0,0,0,0,library(au7hui.dll))" borderthickness="rect(4rp,2rp,4rp,2rp)"/>
+                <if mousefocused="true">
+                    <button background="graphic(12296,7,-1,0,0,0,0,library(au7hui.dll))" borderthickness="rect(4rp,2rp,4rp,2rp)"/>
+                </if>
+                <if pressed="true">
+                    <button background="graphic(12295,7,-1,0,0,0,0,library(au7hui.dll))" borderthickness="rect(4rp,2rp,4rp,2rp)"/>
+                </if>
+            </if>
+            <if class="PowerOptionsButton">
+                <button background="graphic(12300,7,-1,0,0,0,0,library(au7hui.dll))" borderthickness="rect(4rp,2rp,4rp,2rp)"/>
+                <if mousefocused="true">
+                    <button background="graphic(12302,7,-1,0,0,0,0,library(au7hui.dll))" borderthickness="rect(4rp,2rp,4rp,2rp)"/>
+                </if>
+                <if pressed="true">
+                    <button background="graphic(12301,7,-1,0,0,0,0,library(au7hui.dll))" borderthickness="rect(4rp,2rp,4rp,2rp)"/>
+                </if>
+            </if>
+        </style>
+    </stylesheets>
+    <HWNDElement resid="main" class="background" accessible="true" layout="filllayout()" accrole="window" sheet="LogonStyle">
+        <duiBackgroundWindow background="resbmp(1000,4,-1,0,0,0,0,library(au7hui.dll))" layout="filllayout()">
+
+            <element background="argb(0,0,0,0)" padding="rect(0,0,0,23rp)" layout="flowlayout(0,1,2,0)" layoutpos="client">
+                <element class="branding"/>
+            </element>
+
+
+            <element background="argb(0,0,0,0)" padding="rect(34rp,0,0,34rp)" layout="flowlayout(0,1,4,0)" layoutpos="client">
+                <button class="EaseOfAccessButton" layout="flowlayout(0,2,2,0)" width="38rp" height="28rp" id="atom(buttonEaseOfAccess)">
+                    <element width="24rp" height="24rp" background="graphic(12213,7,-1,0,0,1,1,library(au7hui.dll))"/>
+                </button>
+            </element>
+            
+
+            <element background="argb(0,0,0,0)" padding="rect(0,0,34rp,34rp)" layout="flowlayout(0,1,1,0)" layoutpos="client">
+                <button class="ShutdownButton" layout="flowlayout(0,2,2,0)" width="38rp" height="28rp" id="atom(buttonShutdown)">
+                    <element width="24rp" height="24rp" background="graphic(12215,7,-1,0,0,1,1,library(au7hui.dll))"/>
+                </button>
+                <button class="PowerOptionsButton" layout="flowlayout(0,2,2,0)" width="20rp" height="28rp" id="atom(buttonPowerOptions)">
+                    <element width="9rp" height="6rp" background="graphic(12217,7,-1,0,0,1,1,library(au7hui.dll))"/>
+                </button>
+            </element>
+            
+        </duiBackgroundWindow>
+    </HWNDElement>
+</duixml>

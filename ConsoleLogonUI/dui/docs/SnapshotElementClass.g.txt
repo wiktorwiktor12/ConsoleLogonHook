@@ -1,0 +1,248 @@
+ClassInfo: <SnapshotElement>
+  Base Class: <Element>
+  Properties:
+    [Parent]: Element
+    [PosInLayout]: Point
+    [SizeInLayout]: Size
+    [DesiredSize]: Size
+    [LastDSConst]: Int
+    [Location]: Point
+    [Extent]: Size
+    [LayoutPos]: Int
+    [Active]: Int
+      Enum values:
+        Inactive : 0x0 (0)
+        Mouse : 0x1 (1)
+        Keyboard : 0x2 (2)
+        MouseAndKeyboard : 0x3 (3)
+        NoSyncFocus : 0x4 (4)
+        Pointer : 0x8 (8)
+    [Children]: Ellist
+    [Layout]: Layout
+    [BorderThickness]: Rect
+    [Padding]: Rect
+    [Margin]: Rect
+    [Visible]: Bool
+    [X]: Int
+    [Y]: Int
+    [ContentAlign]: Int
+      Enum values:
+        TopLeft : 0x0 (0)
+        TopCenter : 0x1 (1)
+        TopRight : 0x2 (2)
+        MiddleLeft : 0x4 (4)
+        MiddleCenter : 0x5 (5)
+        MiddleRight : 0x6 (6)
+        BottomLeft : 0x8 (8)
+        BottomCenter : 0x9 (9)
+        BottomRight : 0xa (10)
+        WrapLeft : 0xc (12)
+        WrapCenter : 0xd (13)
+        WrapRight : 0xe (14)
+        EndEllipsis : 0x10 (16)
+        FocusRect : 0x20 (32)
+        PathEllipsis : 0x40 (64)
+        NoPrefix : 0x80 (128)
+        WordEllipsis : 0x100 (256)
+        EditControl : 0x200 (512)
+        StartEllipsis : 0x400 (1024)
+    [KeyFocused]: Bool
+    [KeyWithin]: Bool
+    [MouseFocused]: Bool
+    [MouseWithin]: Bool
+    [Content]: String
+    [Sheet]: Sheet
+    [Width]: Int
+      Enum values:
+        Auto : 0xffffffff (-1)
+    [Height]: Int
+      Enum values:
+        Auto : 0xffffffff (-1)
+    [BorderStyle]: Int
+      Enum values:
+        Solid : 0x0 (0)
+        Raised : 0x1 (1)
+        Sunken : 0x2 (2)
+        Rounded : 0x3 (3)
+    [BorderColor]: Int
+    [Foreground]: Int
+    [Background]: Int
+    [FontFace]: String
+    [FontSize]: Int
+    [FontWeight]: Int
+      Enum values:
+        DontCare : 0x0 (0)
+        Thin : 0x64 (100)
+        ExtraLight : 0xc8 (200)
+        Light : 0x12c (300)
+        SemiLight : 0x15e (350)
+        Normal : 0x190 (400)
+        Medium : 0x1f4 (500)
+        SemiBold : 0x258 (600)
+        Bold : 0x2bc (700)
+        ExtraBold : 0x320 (800)
+        Heavy : 0x384 (900)
+    [FontStyle]: Int
+      Enum values:
+        None : 0x0 (0)
+        Italic : 0x1 (1)
+        Underline : 0x2 (2)
+        StrikeOut : 0x4 (4)
+        Shadow : 0x8 (8)
+    [FontQuality]: Int
+      Enum values:
+        Default : 0x0 (0)
+        NonAntialiased : 0x3 (3)
+        Antialiased : 0x4 (4)
+        ClearType : 0x5 (5)
+        ClearType-Natural : 0x6 (6)
+    [Class]: String
+    [ID]: Atom
+    [Selected]: Bool
+    [Alpha]: Int
+    [Animation]: Int
+      Enum values:
+        None : 0x0 (0)
+        Linear : 0x1 (1)
+        Log : 0x2 (2)
+        Exp : 0x3 (3)
+        S : 0x4 (4)
+        DelayShort : 0x10 (16)
+        DelayMedium : 0x20 (32)
+        DelayLong : 0x30 (48)
+        Alpha : 0x100 (256)
+        Position : 0x1000 (4096)
+        Size : 0x2000 (8192)
+        SizeH : 0x3000 (12288)
+        SizeV : 0x4000 (16384)
+        Rectangle : 0x5000 (20480)
+        RectangleH : 0x6000 (24576)
+        RectangleV : 0x7000 (28672)
+        Reverse : 0x1000000 (16777216)
+        Scale : 0x10000 (65536)
+        VeryFast : 0x10000000 (268435456)
+        Fast : 0x20000000 (536870912)
+        MediumFast : 0x30000000 (805306368)
+        MediumSlow : 0x50000000 (1342177280)
+        Medium : 0x40000000 (1073741824)
+        MediumSlow : 0x50000000 (1342177280)
+        Slow : 0x60000000 (1610612736)
+        VerySlow : 0x70000000 (1879048192)
+    [Cursor]: Int
+      Enum values:
+        Arrow : 0x0 (0)
+        Hand : 0x1 (1)
+        Help : 0x2 (2)
+        No : 0x3 (3)
+        Wait : 0x4 (4)
+        SizeAll : 0x5 (5)
+        SizeNESW : 0x6 (6)
+        SizeNS : 0x7 (7)
+        SizeNWSE : 0x8 (8)
+        SizeWE : 0x9 (9)
+        IBeam : 0xa (10)
+    [Direction]: Int
+      Enum values:
+        LTR : 0x0 (0)
+        RTL : 0x1 (1)
+    [Accessible]: Bool
+    [AccRole]: Int
+      Enum values:
+        TitleBar : 0x1 (1)
+        MenuBar : 0x2 (2)
+        ScrollBar : 0x3 (3)
+        Grip : 0x4 (4)
+        Sound : 0x5 (5)
+        Cursor : 0x6 (6)
+        Caret : 0x7 (7)
+        Alert : 0x8 (8)
+        Window : 0x9 (9)
+        Client : 0xa (10)
+        MenuPopup : 0xb (11)
+        MenuItem : 0xc (12)
+        Tooltip : 0xd (13)
+        Application : 0xe (14)
+        Document : 0xf (15)
+        Pane : 0x10 (16)
+        Chart : 0x11 (17)
+        Dialog : 0x12 (18)
+        Border : 0x13 (19)
+        Grouping : 0x14 (20)
+        Separator : 0x15 (21)
+        Toolbar : 0x16 (22)
+        Statusbar : 0x17 (23)
+        Table : 0x18 (24)
+        ColumnHeader : 0x19 (25)
+        RowHeader : 0x1a (26)
+        Column : 0x1b (27)
+        Row : 0x1c (28)
+        Cell : 0x1d (29)
+        Link : 0x1e (30)
+        HelpBalloon : 0x1f (31)
+        Character : 0x20 (32)
+        List : 0x21 (33)
+        ListItem : 0x22 (34)
+        Outline : 0x23 (35)
+        OutlineItem : 0x24 (36)
+        PageTab : 0x25 (37)
+        PropertyPage : 0x26 (38)
+        Indicator : 0x27 (39)
+        Graphic : 0x28 (40)
+        StaticText : 0x29 (41)
+        Text : 0x2a (42)
+        PushButton : 0x2b (43)
+        CheckButton : 0x2c (44)
+        RadioButton : 0x2d (45)
+        ComboBox : 0x2e (46)
+        DropList : 0x2f (47)
+        ProgressBar : 0x30 (48)
+        Dial : 0x31 (49)
+        HotKeyField : 0x32 (50)
+        Slider : 0x33 (51)
+        SpinButton : 0x34 (52)
+        Diagram : 0x35 (53)
+        Animation : 0x36 (54)
+        Equation : 0x37 (55)
+        ButtonDropDown : 0x38 (56)
+        ButtonMenu : 0x39 (57)
+        ButtonDropDownGrid : 0x3a (58)
+        Whitespace : 0x3b (59)
+        PageTabList : 0x3c (60)
+        Clock : 0x3d (61)
+        SplitButton : 0x3e (62)
+        IpAddress : 0x3f (63)
+        OutlineButton : 0x40 (64)
+    [AccState]: Int
+    [AccName]: String
+    [AccDesc]: String
+    [AccValue]: String
+    [AccDefAction]: String
+    [AccHelp]: String
+    [AccItemType]: String
+    [AccItemStatus]: String
+    [Shortcut]: Int
+      Enum values:
+        Auto : 0xffffffff (-1)
+        None : 0x0 (0)
+    [Enabled]: Bool
+    [MinSize]: Size
+    [Overhang]: Bool
+    [Tooltip]: Bool
+    [TooltipMaxWidth]: Int
+    [Font]: String
+    [WindowActive]: Bool
+    [AbsorbsShortcut]: Bool
+    [CompositedText]: Bool
+    [TextGlowSize]: Int
+    [HighDPI]: Bool
+    [DPI]: Int
+    [Custom]: Bool
+    [ShadowIntensity]: Int
+    [EdgeHighlightThickness]: Rect
+    [EdgeHighlightColor]: Int
+    [ScaleFactor]: Int
+      Enum values:
+        Scale_100 : 0x64 (100)
+        Scale_140 : 0x8c (140)
+        Scale_180 : 0xb4 (180)
+    [UsesDesktopPerMonitorScaling]: Bool

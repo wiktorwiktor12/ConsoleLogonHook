@@ -1,0 +1,178 @@
+.rdata:000000018011BB00 array_layout_name
+
+aBorderlayout ; "borderlayout"
+DirectUI__BorderLayout__Create
+aFilllayout   ; "filllayout"
+DirectUI__FillLayout__Create
+aFlowlayout   ; "flowlayout"
+DirectUI__FlowLayout__Create
+aGridlayout   ; "gridlayout"
+DirectUI::GridLayout::Create(int,int *,DirectUI::Value * *)
+aNinegridlayout ; "ninegridlayout"
+DirectUI::NineGridLayout::Create(int,int *,DirectUI::Value * *)
+aRowlayout    ; "rowlayout"
+DirectUI__RowLayout__Create
+aShellborderlay ; "shellborderlayout"
+DirectUI::ShellBorderLayout::Create(int,int *,DirectUI::Value * *)
+aVerticalflowla ; "verticalflowlayout"
+DirectUI__VerticalFlowLayout__Create
+aTablelayout  ; "tablelayout"
+
+
+==============================
+
+.rdata:000000018011BB90                                         ; "auto"
+.rdata:000000018011BB98                 db 0FFh
+.rdata:000000018011BB99                 db 0FFh
+.rdata:000000018011BB9A                 db 0FFh
+.rdata:000000018011BB9B                 db 0FFh
+.rdata:000000018011BB9C                 db    0
+.rdata:000000018011BB9D                 db    0
+.rdata:000000018011BB9E                 db    0
+.rdata:000000018011BB9F                 db    0
+.rdata:000000018011BBA0                 dq offset aAbsolute     ; "absolute"
+.rdata:000000018011BBA8                 db 0FEh
+.rdata:000000018011BBA9                 db 0FFh
+.rdata:000000018011BBAA                 db 0FFh
+.rdata:000000018011BBAB                 db 0FFh
+.rdata:000000018011BBAC                 db    0
+.rdata:000000018011BBAD                 db    0
+.rdata:000000018011BBAE                 db    0
+.rdata:000000018011BBAF                 db    0
+.rdata:000000018011BBB0                 dq offset aNone         ; "none"
+.rdata:000000018011BBB8                 db 0FDh
+.rdata:000000018011BBB9                 db 0FFh
+.rdata:000000018011BBBA                 db 0FFh
+.rdata:000000018011BBBB                 db 0FFh
+.rdata:000000018011BBBC                 db    0
+.rdata:000000018011BBBD                 db    0
+.rdata:000000018011BBBE                 db    0
+.rdata:000000018011BBBF                 db    0
+.rdata:000000018011BBC0                 dq offset aLeft         ; "left"
+.rdata:000000018011BBC8                 align 10h
+.rdata:000000018011BBD0                 dq offset aTop          ; "top"
+.rdata:000000018011BBD8                 db    1
+.rdata:000000018011BBD9                 db    0
+.rdata:000000018011BBDA                 db    0
+.rdata:000000018011BBDB                 db    0
+.rdata:000000018011BBDC                 db    0
+.rdata:000000018011BBDD                 db    0
+.rdata:000000018011BBDE                 db    0
+.rdata:000000018011BBDF                 db    0
+.rdata:000000018011BBE0                 dq offset aRight        ; "right"
+.rdata:000000018011BBE8                 db    2
+.rdata:000000018011BBE9                 db    0
+.rdata:000000018011BBEA                 db    0
+.rdata:000000018011BBEB                 db    0
+.rdata:000000018011BBEC                 db    0
+.rdata:000000018011BBED                 db    0
+.rdata:000000018011BBEE                 db    0
+.rdata:000000018011BBEF                 db    0
+.rdata:000000018011BBF0                 dq offset aBottom       ; "bottom"
+.rdata:000000018011BBF8                 db    3
+.rdata:000000018011BBF9                 db    0
+.rdata:000000018011BBFA                 db    0
+.rdata:000000018011BBFB                 db    0
+.rdata:000000018011BBFC                 db    0
+.rdata:000000018011BBFD                 db    0
+.rdata:000000018011BBFE                 db    0
+.rdata:000000018011BBFF                 db    0
+.rdata:000000018011BC00                 dq offset aClient       ; "client"
+.rdata:000000018011BC08                 db    4
+.rdata:000000018011BC09                 db    0
+.rdata:000000018011BC0A                 db    0
+.rdata:000000018011BC0B                 db    0
+.rdata:000000018011BC0C                 db    0
+.rdata:000000018011BC0D                 db    0
+.rdata:000000018011BC0E                 db    0
+.rdata:000000018011BC0F                 db    0
+.rdata:000000018011BC10                 dq offset aNinetopleft  ; "ninetopleft"
+.rdata:000000018011BC18                 db    0
+.rdata:000000018011BC19                 db    0
+.rdata:000000018011BC1A                 db    0
+.rdata:000000018011BC1B                 db    0
+.rdata:000000018011BC1C                 db    0
+.rdata:000000018011BC1D                 db    0
+.rdata:000000018011BC1E                 db    0
+.rdata:000000018011BC1F                 db    0
+.rdata:000000018011BC20                 dq offset aNinetop      ; "ninetop"
+.rdata:000000018011BC28                 db    1
+.rdata:000000018011BC29                 db    0
+.rdata:000000018011BC2A                 db    0
+.rdata:000000018011BC2B                 db    0
+.rdata:000000018011BC2C                 db    0
+.rdata:000000018011BC2D                 db    0
+.rdata:000000018011BC2E                 db    0
+.rdata:000000018011BC2F                 db    0
+.rdata:000000018011BC30                 dq offset aNinetopright ; "ninetopright"
+.rdata:000000018011BC38                 db    2
+.rdata:000000018011BC39                 db    0
+.rdata:000000018011BC3A                 db    0
+.rdata:000000018011BC3B                 db    0
+.rdata:000000018011BC3C                 db    0
+.rdata:000000018011BC3D                 db    0
+.rdata:000000018011BC3E                 db    0
+.rdata:000000018011BC3F                 db    0
+.rdata:000000018011BC40                 dq offset aNineleft     ; "nineleft"
+.rdata:000000018011BC48                 db    3
+.rdata:000000018011BC49                 db    0
+.rdata:000000018011BC4A                 db    0
+.rdata:000000018011BC4B                 db    0
+.rdata:000000018011BC4C                 db    0
+.rdata:000000018011BC4D                 db    0
+.rdata:000000018011BC4E                 db    0
+.rdata:000000018011BC4F                 db    0
+.rdata:000000018011BC50                 dq offset aNineclient   ; "nineclient"
+.rdata:000000018011BC58                 db    4
+.rdata:000000018011BC59                 db    0
+.rdata:000000018011BC5A                 db    0
+.rdata:000000018011BC5B                 db    0
+.rdata:000000018011BC5C                 db    0
+.rdata:000000018011BC5D                 db    0
+.rdata:000000018011BC5E                 db    0
+.rdata:000000018011BC5F                 db    0
+.rdata:000000018011BC60                 dq offset aNineright    ; "nineright"
+.rdata:000000018011BC68                 db    5
+.rdata:000000018011BC69                 db    0
+.rdata:000000018011BC6A                 db    0
+.rdata:000000018011BC6B                 db    0
+.rdata:000000018011BC6C                 db    0
+.rdata:000000018011BC6D                 db    0
+.rdata:000000018011BC6E                 db    0
+.rdata:000000018011BC6F                 db    0
+.rdata:000000018011BC70                 dq offset aNinebottomleft ; "ninebottomleft"
+.rdata:000000018011BC78                 db    6
+.rdata:000000018011BC79                 db    0
+.rdata:000000018011BC7A                 db    0
+.rdata:000000018011BC7B                 db    0
+.rdata:000000018011BC7C                 db    0
+.rdata:000000018011BC7D                 db    0
+.rdata:000000018011BC7E                 db    0
+.rdata:000000018011BC7F                 db    0
+.rdata:000000018011BC80                 dq offset aNinebottom   ; "ninebottom"
+.rdata:000000018011BC88                 db    7
+.rdata:000000018011BC89                 db    0
+.rdata:000000018011BC8A                 db    0
+.rdata:000000018011BC8B                 db    0
+.rdata:000000018011BC8C                 db    0
+.rdata:000000018011BC8D                 db    0
+.rdata:000000018011BC8E                 db    0
+.rdata:000000018011BC8F                 db    0
+.rdata:000000018011BC90                 dq offset aNinebottomrigh ; "ninebottomright"
+.rdata:000000018011BC98                 db    8
+.rdata:000000018011BC99                 db    0
+.rdata:000000018011BC9A                 db    0
+.rdata:000000018011BC9B                 db    0
+.rdata:000000018011BC9C                 db    0
+.rdata:000000018011BC9D                 db    0
+.rdata:000000018011BC9E                 db    0
+.rdata:000000018011BC9F                 db    0
+.rdata:000000018011BCA0                 dq offset aNinefill     ; "ninefill"
+.rdata:000000018011BCA8                 db    9
+.rdata:000000018011BCA9                 db    0
+.rdata:000000018011BCAA                 db    0
+.rdata:000000018011BCAB                 db    0
+.rdata:000000018011BCAC                 db    0
+.rdata:000000018011BCAD                 db    0
+.rdata:000000018011BCAE                 db    0
+.rdata:000000018011BCAF                 db    0

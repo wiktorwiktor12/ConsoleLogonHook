@@ -74,6 +74,7 @@ BOOL APIENTRY DllMain( HMODULE hModule,
         uiRenderer::Get()->inactiveWindows.clear();
         uiRenderer::Get()->logWindowInstance.reset();
         uiRenderer::Get()->backgroundWindowInstance.reset();
+
         break;
     }
     return TRUE;
