@@ -155,12 +155,12 @@
     <ClCompile Include="imgui\imgui_impl_win32.cpp" />
     <ClCompile Include="imgui\imgui_tables.cpp" />
     <ClCompile Include="imgui\imgui_widgets.cpp" />
-    <ClCompile Include="ui\ui_main.cpp" />
-    <ClCompile Include="ui\ui_messageview.cpp" />
-    <ClCompile Include="ui\ui_securitycontrol.cpp" />
-    <ClCompile Include="ui\ui_selectedcredentialview.cpp" />
-    <ClCompile Include="ui\ui_statusview.cpp" />
-    <ClCompile Include="ui\ui_userselect.cpp" />
+    <ClCompile Include="ui\dui_manager.cpp" />
+    <ClCompile Include="ui\dui_messageview.cpp" />
+    <ClCompile Include="ui\dui_securitycontrol.cpp" />
+    <ClCompile Include="ui\dui_selectedcredentialview.cpp" />
+    <ClCompile Include="ui\dui_statusview.cpp" />
+    <ClCompile Include="ui\dui_userselect.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="dui\dui_includes.h" />
@@ -281,13 +281,13 @@
     <ClInclude Include="spdlog\tweakme.h" />
     <ClInclude Include="spdlog\version.h" />
     <ClInclude Include="ui\ui_helper.h" />
-    <ClInclude Include="ui\ui_main.h" />
-    <ClInclude Include="ui\ui_messageview.h" />
-    <ClInclude Include="ui\ui_securitycontrol.h" />
-    <ClInclude Include="ui\ui_selectedcredentialview.h" />
+    <ClInclude Include="ui\dui_manager.h" />
+    <ClInclude Include="ui\dui_messageview.h" />
+    <ClInclude Include="ui\dui_securitycontrol.h" />
+    <ClInclude Include="ui\dui_selectedcredentialview.h" />
     <ClInclude Include="ui\ui_sink.h" />
-    <ClInclude Include="ui\ui_statusview.h" />
-    <ClInclude Include="ui\ui_userselect.h" />
+    <ClInclude Include="ui\dui_statusview.h" />
+    <ClInclude Include="ui\dui_userselect.h" />
     <ClInclude Include="util\interop.h" />
     <ClInclude Include="util\util.h" />
   </ItemGroup>
@@ -304,6 +304,7 @@
   </ItemGroup>
   <ItemGroup>
     <Xml Include="resources\Main.xml" />
+    <Xml Include="resources\test.xml" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

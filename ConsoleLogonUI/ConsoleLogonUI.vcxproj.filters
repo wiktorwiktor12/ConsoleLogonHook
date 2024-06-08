@@ -39,22 +39,22 @@
     <ClCompile Include="imgui\imgui_widgets.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="ui\ui_messageview.cpp">
+    <ClCompile Include="ui\dui_messageview.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="ui\ui_securitycontrol.cpp">
+    <ClCompile Include="ui\dui_securitycontrol.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="ui\ui_selectedcredentialview.cpp">
+    <ClCompile Include="ui\dui_selectedcredentialview.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="ui\ui_statusview.cpp">
+    <ClCompile Include="ui\dui_statusview.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="ui\ui_userselect.cpp">
+    <ClCompile Include="ui\dui_userselect.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="ui\ui_main.cpp">
+    <ClCompile Include="ui\dui_manager.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
@@ -401,22 +401,22 @@
     <ClInclude Include="ui\ui_helper.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="ui\ui_messageview.h">
+    <ClInclude Include="ui\dui_messageview.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="ui\ui_securitycontrol.h">
+    <ClInclude Include="ui\dui_securitycontrol.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="ui\ui_selectedcredentialview.h">
+    <ClInclude Include="ui\dui_selectedcredentialview.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="ui\ui_sink.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="ui\ui_statusview.h">
+    <ClInclude Include="ui\dui_statusview.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="ui\ui_userselect.h">
+    <ClInclude Include="ui\dui_userselect.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="util\util.h">
@@ -425,7 +425,7 @@
     <ClInclude Include="util\interop.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="ui\ui_main.h">
+    <ClInclude Include="ui\dui_manager.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="dui\dui_includes.h">
@@ -451,5 +451,6 @@
   </ItemGroup>
   <ItemGroup>
     <Xml Include="resources\Main.xml" />
+    <Xml Include="resources\test.xml" />
   </ItemGroup>
 </Project>

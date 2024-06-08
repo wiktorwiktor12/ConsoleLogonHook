@@ -1,5 +1,5 @@
 #pragma once
-#include "ui_main.h"
+#include "dui_manager.h"
 #include <functional>
 #include <string>
 
@@ -17,16 +17,15 @@ struct SecurityOptionControlWrapper
     void Press();
 };
 
-class uiSecurityControl : public uiWindow
+class duiSecurityControl : public duiBaseElement
 {
 public:
 
+    duiSecurityControl();
+    virtual ~duiSecurityControl() override;
+
+    DEFINE_DUIELEMENTCLASS(L"duiSecurityControl");
+
     std::vector<std::function<void()>> wasInSecurityControlNotifies;
 
-    uiSecurityControl()
-    {
-        windowTypeId = 2;
-    }
-
-    void Draw() override;
 };

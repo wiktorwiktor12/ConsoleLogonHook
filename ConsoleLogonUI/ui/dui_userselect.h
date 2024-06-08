@@ -1,5 +1,5 @@
 #pragma once
-#include "ui_main.h"
+#include "dui_manager.h"
 #include <string>
 
 struct SelectableUserOrCredentialControlWrapper
@@ -16,17 +16,16 @@ public:
     bool isCredentialControl();
 };
 
-class uiUserSelect : public uiWindow
+class duiUserSelect : public duiBaseElement
 {
 public:
 
+    duiUserSelect();
+    virtual ~duiUserSelect() override;
+
+    DEFINE_DUIELEMENTCLASS(L"duiUserSelect");
+
 	bool wasInSelectedCredentialView = false;
 
-    uiUserSelect()
-    {
-        windowTypeId = 5;
-    }
 
-    void Tick() override;
-    void Draw() override;
 };

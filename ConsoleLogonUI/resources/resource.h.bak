@@ -1,5 +1,2 @@
-//{{NO_DEPENDENCIES}}
-// Microsoft Visual C++ generated include file.
-// Used by ConsoleLogonUI.rc
-//
-#define IDUIF_MAIN                      100
+#define IDUIF_MAIN  100
+#define IDUIF_TEST  101

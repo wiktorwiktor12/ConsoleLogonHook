@@ -1,5 +1,5 @@
 #pragma once
-#include "ui_main.h"
+#include "dui_manager.h"
 #include <string>
 
 struct EditControlWrapper
@@ -14,13 +14,17 @@ struct EditControlWrapper
     bool isVisible();
 };
 
-class uiSelectedCredentialView : public uiWindow
+class duiSelectedCredentialView : public duiBaseElement
 {
 public:
+    duiSelectedCredentialView();
+    virtual ~duiSelectedCredentialView() override;
+
+    DEFINE_DUIELEMENTCLASS(L"duiSelectedCredentialView");
 
     //TODO: LOAD THESE FROM A MUI, SO WE HAVE TRANSLATIONS
-    std::string switchUser = "Switch User";
-    std::string cancel = "Cancel";
+    std::wstring switchUser = L"Switch User";
+    std::wstring cancel = L"Cancel";
     std::wstring accountNameToDisplay;
     ID3D11ShaderResourceView* texture = 0;
     int flag = 0;
@@ -28,12 +32,4 @@ public:
     bool textureExists = true;
     bool hasSetupNotify = false;
 
-    uiSelectedCredentialView()
-    {
-        windowTypeId = 6;
-    }
-
-    void Begin() override;
-    void Tick() override;
-    void Draw() override;
 };
