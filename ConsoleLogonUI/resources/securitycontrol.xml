@@ -6,9 +6,9 @@
             </if>
         </style>
     </stylesheets>
-        
+
     <element resid="Main"  layout="borderlayout()" accessible="true"  sheet="testStyle" background="argb(0,0,0,0)">
-        <element id="atom(LolText)" layoutpos="top" content="TEST TEXT"/>
+        <element id="atom(LolText)" layoutpos="top" content="Security Control"/>
     </element>
-    
+
 </duixml>

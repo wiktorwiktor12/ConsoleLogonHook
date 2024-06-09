@@ -7,6 +7,7 @@
 #include <vector>
 #include "dui_securitycontrol.h"
 #include "util/interop.h"
+#include "resources/resource.h"
 
 std::vector<EditControlWrapper> editControls;
 
@@ -18,6 +19,7 @@ void external::NotifyWasInSelectedCredentialView()
 void external::SelectedCredentialView_SetActive(const wchar_t* accountNameToDisplay, int flag)
 {
 	HideConsoleUI();
+	duiManager::SetPageActive((DirectUI::UCString)MAKEINTRESOURCEW(IDUIF_SELECTEDCREDENTIALVIEW));
 	//auto selectedCredentialView = duiManager::Get()->GetWindowOfTypeId<uiSelectedCredentialView>(6);
 	//if (selectedCredentialView)
 	//{

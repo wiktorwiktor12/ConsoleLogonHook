@@ -4,10 +4,12 @@
 #include <winstring.h>
 #include "ui_helper.h"
 #include "util/interop.h"
+#include "resources/resource.h"
 
 void external::StatusView_SetActive(const wchar_t* text)
 {
     HideConsoleUI();
+    duiManager::SetPageActive((DirectUI::UCString)MAKEINTRESOURCEW(IDUIF_STATUSVIEW));
     //auto statusview = duiManager::Get()->GetWindowOfTypeId<uiStatusView>(4);
     //if (statusview)
     //{

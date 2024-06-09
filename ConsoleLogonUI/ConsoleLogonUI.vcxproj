@@ -143,7 +143,7 @@
       <OptimizeReferences>true</OptimizeReferences>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <EnableUAC>false</EnableUAC>
-      <AdditionalDependencies>d3d11.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>d3d11.lib;comctl32.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
@@ -304,7 +304,12 @@
   </ItemGroup>
   <ItemGroup>
     <Xml Include="resources\Main.xml" />
+    <Xml Include="resources\messageview.xml" />
+    <Xml Include="resources\securitycontrol.xml" />
+    <Xml Include="resources\selectedcredentialview.xml" />
+    <Xml Include="resources\statusview.xml" />
     <Xml Include="resources\test.xml" />
+    <Xml Include="resources\userselect.xml" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

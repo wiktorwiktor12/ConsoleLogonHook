@@ -2,3 +2,8 @@
 
 IDUIF_MAIN  UIFILE  "Main.xml"
 IDUIF_TEST  UIFILE  "test.xml"
+IDUIF_MESSAGEVIEW UIFILE "messageview.xml"
+IDUIF_SECURITYCONTROL UIFILE "securitycontrol.xml"
+IDUIF_SELECTEDCREDENTIALVIEW UIFILE "selectedcredentialview.xml"
+IDUIF_STATUSVIEW UIFILE "statusview.xml"
+IDUIF_USERSELECT UIFILE "userselect.xml"

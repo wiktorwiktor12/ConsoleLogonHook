@@ -134,7 +134,7 @@
                     </element>
                 </element>
             </element>
-            <element id="atom(activePageContainer)" layoutpos="auto" visible="true" enabled="true" layout="filllayout()" background="argb(0,116,184,252)" height="96rp">
+            <element id="atom(activePageContainer)" layoutpos="auto" visible="true" enabled="true" layout="filllayout()" background="argb(50,116,184,252)" height="96rp">
                 <!-- this is where the backend will place in the uifiles for the active page-->>
             </element>
         </duiBackgroundWindow>

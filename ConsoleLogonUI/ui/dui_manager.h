@@ -22,6 +22,25 @@ virtual void Begin() override;
 
 #define ATOMID(id) (DirectUI::StrToID((DirectUI::UCString)id))
 
+class   CBackgroundWindow
+{
+private:
+    CBackgroundWindow(void);
+public:
+    CBackgroundWindow(HINSTANCE hInstance);
+    ~CBackgroundWindow(void);
+
+    HWND                    Create(void);
+private:
+    static  LRESULT     CALLBACK    WndProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam);
+private:
+    HINSTANCE               _hInstance;
+    ATOM                    _atom;
+    HWND                    _hwnd;
+
+    static  const TCHAR             s_szWindowClassName[];
+};
+
 class duiBaseElement : public DirectUI::Element //DO NOT INSTANTIATE
 {
 public:
@@ -43,7 +62,7 @@ class duiManager
 public:
 
     HINSTANCE hInstance;
-    bool bAppIsFocused;
+    bool IsReady;
     int version;
     DirectUI::DUIXmlParser* pParser;
     DirectUI::NativeHWNDHost* pWndHost;
@@ -58,5 +77,5 @@ public:
 
     static void InitDUI();
     static void UnloadDUI();
-    static void SetPageActive(DWORD resourceId);
+    static void SetPageActive(DirectUI::UCString resource);
 };

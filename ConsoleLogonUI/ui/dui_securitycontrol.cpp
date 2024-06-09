@@ -4,6 +4,7 @@
 #include <winstring.h>
 #include "ui_helper.h"
 #include "util/interop.h"
+#include "resources/resource.h"
 
 std::vector<SecurityOptionControlWrapper> buttonsList;
 
@@ -16,6 +17,10 @@ void external::SecurityControl_SetActive()
 {
     HideConsoleUI();
     buttonsList.clear();
+
+    if (!duiManager::Get()->IsReady)
+        MessageBoxW(0,L"not ready",0,0);
+    duiManager::SetPageActive((DirectUI::UCString)MAKEINTRESOURCEW(IDUIF_SECURITYCONTROL));
     //for (int i = 0; i < duiManager::Get()->inactiveWindows.size(); ++i) //theres prob a better and nicer way to do this
     //{
     //    auto& window = duiManager::Get()->inactiveWindows[i];

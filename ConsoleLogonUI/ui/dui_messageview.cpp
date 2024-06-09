@@ -4,12 +4,14 @@
 #include "util/util.h"
 #include "ui_helper.h"
 #include "util/interop.h"
+#include "resources/resource.h"
 
 std::vector<MessageOptionControlWrapper> controls;
 
 void external::MessageView_SetActive()
 {
     HideConsoleUI();
+    duiManager::SetPageActive((DirectUI::UCString)MAKEINTRESOURCEW(IDUIF_MESSAGEVIEW));
     //auto messageView = duiManager::Get()->GetWindowOfTypeId<uiMessageView>(3);
     //if (messageView)
     //    messageView->SetActive();

@@ -1,0 +1,14 @@
+<duixml>
+    <stylesheets>
+        <style resid="userSelectSheet">
+            <if id="atom(LolText5)">
+                <element background="argb(255, 0, 255, 0)"/>
+            </if>
+        </style>
+    </stylesheets>
+
+    <duiUserSelect resid="Main"  layout="borderlayout()" accessible="true"  sheet="userSelectSheet" background="argb(0,0,0,0)">
+        <element id="atom(LolText5)" layoutpos="top" content="USER SELECT"/>
+    </duiUserSelect>
+
+</duixml>

@@ -452,5 +452,10 @@
   <ItemGroup>
     <Xml Include="resources\Main.xml" />
     <Xml Include="resources\test.xml" />
+    <Xml Include="resources\securitycontrol.xml" />
+    <Xml Include="resources\messageview.xml" />
+    <Xml Include="resources\selectedcredentialview.xml" />
+    <Xml Include="resources\statusview.xml" />
+    <Xml Include="resources\userselect.xml" />
   </ItemGroup>
 </Project>

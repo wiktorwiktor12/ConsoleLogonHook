@@ -48,6 +48,18 @@ namespace init
         return EditControl__Repaint(a1);
     }
 
+    void(__stdcall* fOutputDebugStringW)(LPCWSTR lpoutputstring);
+    void __stdcall OutputDebugStringW_Hook(LPCWSTR lpoutputstring)
+    {
+        std::wstring str = lpoutputstring;
+
+        if (str[str.size() - 1] == L'\n')
+            str.pop_back();
+
+        SPDLOG_INFO(ws2s(str));
+        fOutputDebugStringW(lpoutputstring);
+    }
+
     void InitHooks()
     {
         InitSpdlog();
@@ -76,6 +88,8 @@ namespace init
             fWindowsCreateString = decltype(fWindowsCreateString)(GetProcAddress(stringdll, "WindowsCreateString"));
         }
 
+        fOutputDebugStringW = decltype(fOutputDebugStringW)(GetProcAddress(GetModuleHandle(L"api-ms-win-core-debug-l1-1-0.dll"), "OutputDebugStringW"));
+        Hook(fOutputDebugStringW, OutputDebugStringW_Hook);
         EditControl__Repaint = (decltype(EditControl__Repaint))(baseaddress + 0x44528);
         //Hook(EditControl__Repaint, EditControl__Repaint_Hook);
 

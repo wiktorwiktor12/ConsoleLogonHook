@@ -7,6 +7,7 @@
 #include <vector>
 #include <atlbase.h>
 #include "util/interop.h"
+#include "resources/resource.h"
 
 std::vector<SelectableUserOrCredentialControlWrapper> buttons;
 
@@ -14,6 +15,7 @@ void external::UserSelect_SetActive()
 {
     //MessageBoxW(0, L"1", L"1", 0);
     HideConsoleUI();
+    duiManager::SetPageActive((DirectUI::UCString)MAKEINTRESOURCEW(IDUIF_USERSELECT));
     //auto userSelect = duiManager::Get()->GetWindowOfTypeId<uiUserSelect>(5);
     //if (userSelect)
     //{
