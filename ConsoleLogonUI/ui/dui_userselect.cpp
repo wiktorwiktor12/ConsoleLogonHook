@@ -15,7 +15,7 @@ void external::UserSelect_SetActive()
 {
     //MessageBoxW(0, L"1", L"1", 0);
     HideConsoleUI();
-    duiManager::SetPageActive((DirectUI::UCString)MAKEINTRESOURCEW(IDUIF_USERSELECT));
+    duiManager::SetPageActive((DirectUI::UCString)MAKEINTRESOURCEW(IDUIF_USERSELECT), [](DirectUI::Element*) -> void {return; });
     //auto userSelect = duiManager::Get()->GetWindowOfTypeId<uiUserSelect>(5);
     //if (userSelect)
     //{

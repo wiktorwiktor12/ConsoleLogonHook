@@ -19,7 +19,7 @@ void external::NotifyWasInSelectedCredentialView()
 void external::SelectedCredentialView_SetActive(const wchar_t* accountNameToDisplay, int flag)
 {
 	HideConsoleUI();
-	duiManager::SetPageActive((DirectUI::UCString)MAKEINTRESOURCEW(IDUIF_SELECTEDCREDENTIALVIEW));
+	duiManager::SetPageActive((DirectUI::UCString)MAKEINTRESOURCEW(IDUIF_SELECTEDCREDENTIALVIEW), [](DirectUI::Element*) -> void {return; });
 	//auto selectedCredentialView = duiManager::Get()->GetWindowOfTypeId<uiSelectedCredentialView>(6);
 	//if (selectedCredentialView)
 	//{

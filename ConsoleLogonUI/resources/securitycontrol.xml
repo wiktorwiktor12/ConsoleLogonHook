@@ -7,8 +7,8 @@
         </style>
     </stylesheets>
 
-    <element resid="Main"  layout="borderlayout()" accessible="true"  sheet="testStyle" background="argb(0,0,0,0)">
+    <duiSecurityControl resid="Main"  layout="borderlayout()" accessible="true"  sheet="testStyle" background="argb(0,0,0,0)">
         <element id="atom(LolText)" layoutpos="top" content="Security Control"/>
-    </element>
+    </duiSecurityControl>
 
 </duixml>

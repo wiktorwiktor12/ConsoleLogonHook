@@ -6,10 +6,25 @@
 #include "util/interop.h"
 #include "resources/resource.h"
 
+const wchar_t* ptext;
 void external::StatusView_SetActive(const wchar_t* text)
 {
     HideConsoleUI();
-    duiManager::SetPageActive((DirectUI::UCString)MAKEINTRESOURCEW(IDUIF_STATUSVIEW));
+    ptext = text;
+    duiManager::SetPageActive((DirectUI::UCString)MAKEINTRESOURCEW(IDUIF_STATUSVIEW), [](DirectUI::Element* element) -> void { 
+        auto str = element->FindDescendent(ATOMID(L"StatusText"));
+        str->SetContentString((DirectUI::UCString)ptext);
+        });
+    //ptext = 0;
+    //auto statusText = duiManager::Get()->pWndElement->FindDescendent(ATOMID(L"StatusText"));
+    //if (!statusText)
+    //{
+    //    MessageBoxW(0,L"failed to find statustext",0,0);
+    //    return;
+    //}
+    
+    
+
     //auto statusview = duiManager::Get()->GetWindowOfTypeId<uiStatusView>(4);
     //if (statusview)
     //{

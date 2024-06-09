@@ -7,6 +7,7 @@
 #include "d3d11.h"
 #include <vector>
 #include <memory>
+#include <functional>
 #include "dui/dui_includes.h"
 
 inline HWND gWindowHandle;
@@ -22,23 +23,18 @@ virtual void Begin() override;
 
 #define ATOMID(id) (DirectUI::StrToID((DirectUI::UCString)id))
 
-class   CBackgroundWindow
+class hostwindow
 {
-private:
-    CBackgroundWindow(void);
 public:
-    CBackgroundWindow(HINSTANCE hInstance);
-    ~CBackgroundWindow(void);
+    hostwindow(HINSTANCE hInstance);
+    ~hostwindow(void);
 
     HWND                    Create(void);
 private:
     static  LRESULT     CALLBACK    WndProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam);
-private:
-    HINSTANCE               _hInstance;
-    ATOM                    _atom;
-    HWND                    _hwnd;
-
-    static  const TCHAR             s_szWindowClassName[];
+    HINSTANCE               hInstance;
+    ATOM                    atom;
+    HWND                    hwnd;
 };
 
 class duiBaseElement : public DirectUI::Element //DO NOT INSTANTIATE
@@ -77,5 +73,5 @@ public:
 
     static void InitDUI();
     static void UnloadDUI();
-    static void SetPageActive(DirectUI::UCString resource);
+    static void SetPageActive(DirectUI::UCString resource, std::function<void(DirectUI::Element*)> elementReadyCallback);
 };

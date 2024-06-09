@@ -1,14 +1,18 @@
 <duixml>
     <stylesheets>
         <style resid="statusViewSheet">
-            <if id="atom(LolText4)">
-                <element background="argb(255, 0, 255, 0)"/>
+            <if id="atom(StatusText)">
+                <element background="argb(0,0,0,0)" foreground="argb(255,255,255,255)" font="18;normal;shadow;Segoe UI" shadowintensity="130" />
             </if>
         </style>
     </stylesheets>
 
-    <duiStatusView resid="Main"  layout="borderlayout()" accessible="true"  sheet="statusViewSheet" background="argb(0,0,0,0)">
-        <element id="atom(LolText4)" layoutpos="top" content="STATUS VIEW"/>
+    <duiStatusView resid="Main" layout="filllayout()" accessible="true"  sheet="statusViewSheet" background="argb(0,0,0,0)">
+        
+            <element layout="flowlayout(0,2,2,0)">
+                <element content="STATUS VIEW" id="atom(StatusText)" />
+            </element>
+
     </duiStatusView>
 
 </duixml>

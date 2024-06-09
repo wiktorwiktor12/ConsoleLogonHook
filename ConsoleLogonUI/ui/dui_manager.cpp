@@ -52,7 +52,7 @@ DWORD WINAPI DuiInitThread(LPVOID lparam)
 {
     auto pDuiManager = duiManager::Get();
     HINSTANCE hInstance = duiManager::Get()->hInstance;
-    CBackgroundWindow   backgroundWindow(hInstance);
+    hostwindow   backgroundWindow(hInstance);
     //pDuiManager->hInstance = hInstance;
     DWORD dwDefer;
 
@@ -129,7 +129,7 @@ DWORD WINAPI DuiInitThread(LPVOID lparam)
                         pDuiManager->pUIElement->SetVisible(true);
                         pDuiManager->pUIElement->EndDefer(dwDefer);
 
-                        *(uint8_t*)(__int64(pDuiManager->pWndHost) + 0x18 ) = *(uint8_t*)(__int64(pDuiManager->pWndHost) + 0x18) & ~0x40;
+                        //*(uint8_t*)(__int64(pDuiManager->pWndHost) + 0x18 ) = *(uint8_t*)(__int64(pDuiManager->pWndHost) + 0x18) & ~0x40;
 
                         pDuiManager->pWndHost->Host(pDuiManager->pUIElement);
                         
@@ -141,11 +141,6 @@ DWORD WINAPI DuiInitThread(LPVOID lparam)
 
                         pDuiManager->IsReady = true;
 
-                        //CreateThread(0,0,DuiPageWorkerThread,0,0,0);
-                        //while (true)
-                        //{
-                        //    Sleep(1);
-                        //}
                         DirectUI::StartMessagePump();
                     }
                     else
@@ -217,15 +212,16 @@ void duiManager::UnloadDUI()
 
 bool bDirty = false;
 DirectUI::UCString nextString;
+std::function<void(DirectUI::Element*)> nextCallback;
 
-void duiManager::SetPageActive(DirectUI::UCString resource)
+void duiManager::SetPageActive(DirectUI::UCString resource, std::function<void(DirectUI::Element*)> elementReadyCallback)
 {
     //pendingPages.push_back(resource);
     nextString = resource;
+    nextCallback = elementReadyCallback;
     bDirty = true;
     SendMessageW(backgroundHWND,WM_KEYDOWN,0,0);
 }
-
 
 void duiBaseElement::Begin()
 {
@@ -282,19 +278,12 @@ void duiBackgroundWindow::OnEvent(DirectUI::Event* iev)
     if (!iev->handled)
         DirectUI::Element::OnEvent(iev);
 
-    //static bool bOnce = true;
-    //if (bOnce)
-    //{
-    //    CreateThread(0, 0, DuiPageWorkerThread, 0, 0, 0);
-    //    bOnce = false;
-    //}
-
     if (iev->target->GetID() == DirectUI::StrToID((DirectUI::UCString)L"buttonShutdown"))
     {
         if (iev->type == DirectUI::Button::Click)
         {
             //MessageBox(0,L"buttonShutdown Button Pressed!",L"",0);
-            duiManager::SetPageActive((DirectUI::UCString)MAKEINTRESOURCEW(IDUIF_TEST));
+            duiManager::SetPageActive((DirectUI::UCString)MAKEINTRESOURCEW(IDUIF_TEST), [](DirectUI::Element*) -> void { return; });
         }
     }
 }
@@ -309,71 +298,60 @@ void duiBackgroundWindow::Begin()
 {
 
 }
-const TCHAR     CBackgroundWindow::s_szWindowClassName[] = TEXT("LogonUIBackgroundWindowClass");
-CBackgroundWindow::CBackgroundWindow(HINSTANCE hInstance) :
-    _hInstance(hInstance),
-    _hwnd(NULL)
+
+hostwindow::hostwindow(HINSTANCE hInstance) :
+    hInstance(hInstance),
+    hwnd(NULL)
 
 {
     WNDCLASSEX  wndClassEx;
-
     ZeroMemory(&wndClassEx, sizeof(wndClassEx));
+
     wndClassEx.cbSize = sizeof(wndClassEx);
     wndClassEx.lpfnWndProc = WndProc;
     wndClassEx.hInstance = hInstance;
-    wndClassEx.lpszClassName = s_szWindowClassName;
+    wndClassEx.lpszClassName = L"hostWindowClass";
     wndClassEx.hCursor = LoadCursor(NULL, IDC_ARROW);
-    _atom = RegisterClassEx(&wndClassEx);
+    atom = RegisterClassEx(&wndClassEx);
 }
 
-CBackgroundWindow::~CBackgroundWindow(void)
-
+hostwindow::~hostwindow()
 {
-    if (_hwnd != NULL)
+    if (hwnd != NULL)
     {
-        (BOOL)DestroyWindow(_hwnd);
+        (BOOL)DestroyWindow(hwnd);
     }
-    if (_atom != 0)
+    if (atom != 0)
     {
-        (UnregisterClass(MAKEINTRESOURCE(_atom), _hInstance));
+        (UnregisterClass(MAKEINTRESOURCE(atom), hInstance));
     }
 }
 
-HWND    CBackgroundWindow::Create(void)
-
+HWND hostwindow::Create()
 {
-    HWND    hwnd;
-
-#if     DEBUG
-
-    hwnd = NULL;
-
-#else
+    HWND hwnd;
 
     hwnd = CreateWindowEx(0,
-        s_szWindowClassName,
+        L"hostWindowClass",
         NULL,
         WS_POPUP,
         GetSystemMetrics(SM_XVIRTUALSCREEN), GetSystemMetrics(SM_YVIRTUALSCREEN),
         GetSystemMetrics(SM_CXVIRTUALSCREEN), GetSystemMetrics(SM_CYVIRTUALSCREEN),
-        NULL, NULL, _hInstance, this);
+        NULL, NULL, hInstance, this);
     if (hwnd != NULL)
     {
-        (BOOL)ShowWindow(hwnd, SW_SHOW);
-        BOOL(SetForegroundWindow(hwnd));
-        (BOOL)EnableWindow(hwnd, FALSE);
+        ShowWindow(hwnd, SW_SHOW);
+        SetForegroundWindow(hwnd);
+        EnableWindow(hwnd, FALSE);
     }
-
-#endif
 
     return(hwnd);
 }
 
-LRESULT     CALLBACK    CBackgroundWindow::WndProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
-
+LRESULT CALLBACK hostwindow::WndProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 {
-    LRESULT             lResult;
-    CBackgroundWindow* pThis;
+    LRESULT lResult;
+    hostwindow* pThis;
 
     if (bDirty)
     {
@@ -415,30 +393,11 @@ LRESULT     CALLBACK    CBackgroundWindow::WndProc(HWND hwnd, UINT uMsg, WPARAM 
                 err("newelement is null!");
             else
             {
-                //pDuiManager->pUIElement->SetVisible(true);
-
-
-                //newElement->SetVisible(true);
-                //newElement->EndDefer(dwDefer);
-
-
-                //pDuiManager->pWndHost->Host(pDuiManager->pUIElement);
-                //pDuiManager->pWndHost->ShowWindow(SW_SHOW);
-                //pDuiManager->pWndHost->RestoreFocus();
-                //pDuiManager->pWndHost->Host(pDuiManager->pWndElement);
-                //newElement->SetActive(1);
-                //newElement->EnsureVisible();
-                //AllocConsole();
-                //freopen_s();
-
-                //std::ofstream file("C:\\duitreedump.txt");
-
-                //DumpDuiTree(pDuiManager->pageContainerElement,1);
-
-                //std::cout.rdbuf(oldCoutStreamBuf);
-
-
-                //newElement->SetVisible(true);
+                //DirectUI::Value* val;
+                //newElement->GetContentString(&val);
+                //MessageBoxW(0,(const wchar_t*)val->GetString(),0,0);
+                nextCallback(newElement);
+                //MessageBoxW(0,(const wchar_t*)val->GetString(),0,0);
             }
         }
         else
@@ -446,7 +405,7 @@ LRESULT     CALLBACK    CBackgroundWindow::WndProc(HWND hwnd, UINT uMsg, WPARAM 
         pDuiManager->pUIElement->EndDefer(defer);
     }
 
-    pThis = reinterpret_cast<CBackgroundWindow*>(GetWindowLongPtr(hwnd, GWLP_USERDATA));
+    pThis = reinterpret_cast<hostwindow*>(GetWindowLongPtr(hwnd, GWLP_USERDATA));
     switch (uMsg)
     {
     case WM_CREATE:
@@ -454,16 +413,13 @@ LRESULT     CALLBACK    CBackgroundWindow::WndProc(HWND hwnd, UINT uMsg, WPARAM 
         CREATESTRUCT* pCreateStruct;
 
         pCreateStruct = reinterpret_cast<CREATESTRUCT*>(lParam);
-        pThis = reinterpret_cast<CBackgroundWindow*>(pCreateStruct->lpCreateParams);
+        pThis = reinterpret_cast<hostwindow*>(pCreateStruct->lpCreateParams);
         (LONG_PTR)SetWindowLongPtr(hwnd, GWLP_USERDATA, reinterpret_cast<LONG_PTR>(pThis));
         lResult = 0;
         break;
     }
     case WM_PAINT:
     {
-
-
-
         HDC             hdcPaint;
         PAINTSTRUCT     ps;
 
