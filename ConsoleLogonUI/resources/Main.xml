@@ -105,7 +105,7 @@
     </stylesheets>
 
 
-    <HWNDElement resid="Main" layout="flowlayout(1,2,2,2)" sheet="LogonStyle">
+    <element resid="Main" layout="flowlayout(1,2,2,2)" sheet="LogonStyle">
         <duiBackgroundWindow width="2560rp" height="1600rp" id="atom(InsideFrame)" layout="filllayout()">
             <!--This is the footer for the branding and the options buttons such as the shutdown,ease of access and power options-->
             <element layout="borderlayout()" id="atom(Background)">
@@ -138,5 +138,5 @@
                 <!-- this is where the backend will place in the uifiles for the active page-->>
             </element>
         </duiBackgroundWindow>
-    </HWNDElement>
+    </element>
 </duixml>

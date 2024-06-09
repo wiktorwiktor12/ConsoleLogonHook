@@ -52,7 +52,7 @@ DWORD WINAPI DuiInitThread(LPVOID lparam)
 {
     auto pDuiManager = duiManager::Get();
     HINSTANCE hInstance = duiManager::Get()->hInstance;
-    hostwindow   backgroundWindow(hInstance);
+    //hostwindow   backgroundWindow(hInstance);
     //pDuiManager->hInstance = hInstance;
     DWORD dwDefer;
 
@@ -73,6 +73,7 @@ DWORD WINAPI DuiInitThread(LPVOID lparam)
     DirectUI::ClassInfo<duiSelectedCredentialView, DirectUI::Element>::Register(hInstance);
     DirectUI::ClassInfo<duiStatusView, DirectUI::Element>::Register(hInstance);
     DirectUI::ClassInfo<duiUserSelect, DirectUI::Element>::Register(hInstance);
+    //DirectUI::ClassInfoNoCreator<duiWindowListener, DirectUI::HWNDElement>::Register(hInstance);
 
     HRESULT hr;
     pDuiManager->pParser = NULL;
@@ -86,13 +87,13 @@ DWORD WINAPI DuiInitThread(LPVOID lparam)
         );
         if (SUCCEEDED(hr))
         {
-            backgroundHWND = backgroundWindow.Create();
+            //backgroundHWND = backgroundWindow.Create();
             int w = GetSystemMetrics(SM_CXSCREEN);
             int h = GetSystemMetrics(SM_CYSCREEN);
             pDuiManager->pWndHost = NULL;
             hr = DirectUI::NativeHWNDHost::Create(
                 (DirectUI::UCString)L"Fucking around.",
-                backgroundHWND,
+                NULL,
                 NULL,
                 0, 0,
                 w, h,
@@ -105,7 +106,7 @@ DWORD WINAPI DuiInitThread(LPVOID lparam)
             if (SUCCEEDED(hr))
             {
                 pDuiManager->pWndElement = NULL;
-                hr = DirectUI::HWNDElement::Create(
+                hr = duiWindowListener::Create(
                     pDuiManager->pWndHost->GetHWND(),
                     true,
                     0,
@@ -209,23 +210,101 @@ void duiManager::UnloadDUI()
     DirectUI::UnInitProcessPriv(0);
 }
 
+void duiManager::SendWorkToUIThread(std::function<void(void*)> workfunction, void* params)
+{
+    SendMessageW(duiManager::Get()->pWndElement->GetHWND(), WM_USER+69, (WPARAM)&workfunction, (LPARAM)params);
+}
+
 
 bool bDirty = false;
-DirectUI::UCString nextString;
-std::function<void(DirectUI::Element*)> nextCallback;
 
 void duiManager::SetPageActive(DirectUI::UCString resource, std::function<void(DirectUI::Element*)> elementReadyCallback)
 {
-    //pendingPages.push_back(resource);
-    nextString = resource;
-    nextCallback = elementReadyCallback;
-    bDirty = true;
-    SendMessageW(backgroundHWND,WM_KEYDOWN,0,0);
+    struct paramsstruct
+    {
+        DirectUI::UCString nextString;
+        std::function<void(DirectUI::Element*)> nextCallback;
+    } prms;
+    prms.nextString = resource;
+    prms.nextCallback = elementReadyCallback;
+    std::function<void(void* params)> workFunction = [](void* params) -> void
+        {
+            auto prms = reinterpret_cast<paramsstruct*>(params);
+            auto pDuiManager = duiManager::Get();
+
+            DWORD defer;
+            pDuiManager->pWndElement->StartDefer(&defer);
+
+            INITCOMMONCONTROLSEX iccex = { sizeof(INITCOMMONCONTROLSEX), 0x80000000 | ICC_STANDARD_CLASSES | ICC_TREEVIEW_CLASSES };
+            InitCommonControlsEx(&iccex);
+
+            pDuiManager->pageContainerElement->DestroyAll(true);
+            DirectUI::InitThread(2);
+
+            HRESULT hr = pDuiManager->pParser->SetXMLFromResource(
+                prms->nextString,
+                pDuiManager->hInstance,
+                pDuiManager->hInstance
+            );
+
+            if (SUCCEEDED(hr))
+            {
+                DirectUI::Element* newElement = 0;
+                hr = pDuiManager->pParser->CreateElement(
+                    (DirectUI::UCString)L"Main",
+                    pDuiManager->pageContainerElement,
+                    NULL,
+                    NULL,
+                    &newElement
+                );
+                if (!newElement)
+                    err("newelement is null!");
+                else
+                {
+                    prms->nextCallback(newElement);
+                }
+            }
+            else
+                err("setxmlfromresource failed");
+            pDuiManager->pUIElement->EndDefer(defer);
+        };
+    SendWorkToUIThread(workFunction,(void*)&prms);
 }
 
 void duiBaseElement::Begin()
 {
 
+}
+
+static inline void* GetMemberFuncPtr(auto Func) { return reinterpret_cast<void*&>(Func); }
+HRESULT duiWindowListener::Create(HWND hwnd, bool a2, unsigned int a3, DirectUI::Element* rootElement, unsigned long* debugVariable, DirectUI::Element** pOut)
+{
+    auto res = DirectUI::HWNDElement::Create(hwnd,a2,a3,rootElement,debugVariable,pOut);
+
+    DWORD old;
+    auto vtable = *(void***)(__int64(*pOut) + 0x0);
+    VirtualProtect(vtable,0x1D0,PAGE_EXECUTE_READWRITE,&old);
+    vtable[56] = GetMemberFuncPtr(&duiWindowListener::WndProcCustom);
+    VirtualProtect(vtable,0x1D0,old,0);
+    return res;
+}
+
+LRESULT duiWindowListener::WndProcCustom(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
+{
+    auto res = DirectUI::HWNDElement::WndProc(hwnd,uMsg,wParam,lParam);
+    
+    switch (uMsg)
+    {
+    case (WM_USER + 69): //work function on uithread
+        if (!wParam || !lParam)
+            break;
+
+        auto& workFunction = *reinterpret_cast<std::function<void(void*)>*>(wParam);
+        workFunction((void*)lParam);
+        break;
+    }
+
+    return res;
 }
 
 DirectUI::IClassInfo* duiBackgroundWindow::Class = NULL;
@@ -298,141 +377,3 @@ void duiBackgroundWindow::Begin()
 {
 
 }
-
-hostwindow::hostwindow(HINSTANCE hInstance) :
-    hInstance(hInstance),
-    hwnd(NULL)
-
-{
-    WNDCLASSEX  wndClassEx;
-    ZeroMemory(&wndClassEx, sizeof(wndClassEx));
-
-    wndClassEx.cbSize = sizeof(wndClassEx);
-    wndClassEx.lpfnWndProc = WndProc;
-    wndClassEx.hInstance = hInstance;
-    wndClassEx.lpszClassName = L"hostWindowClass";
-    wndClassEx.hCursor = LoadCursor(NULL, IDC_ARROW);
-    atom = RegisterClassEx(&wndClassEx);
-}
-
-hostwindow::~hostwindow()
-{
-    if (hwnd != NULL)
-    {
-        (BOOL)DestroyWindow(hwnd);
-    }
-    if (atom != 0)
-    {
-        (UnregisterClass(MAKEINTRESOURCE(atom), hInstance));
-    }
-}
-
-HWND hostwindow::Create()
-{
-    HWND hwnd;
-
-    hwnd = CreateWindowEx(0,
-        L"hostWindowClass",
-        NULL,
-        WS_POPUP,
-        GetSystemMetrics(SM_XVIRTUALSCREEN), GetSystemMetrics(SM_YVIRTUALSCREEN),
-        GetSystemMetrics(SM_CXVIRTUALSCREEN), GetSystemMetrics(SM_CYVIRTUALSCREEN),
-        NULL, NULL, hInstance, this);
-    if (hwnd != NULL)
-    {
-        ShowWindow(hwnd, SW_SHOW);
-        SetForegroundWindow(hwnd);
-        EnableWindow(hwnd, FALSE);
-    }
-
-    return(hwnd);
-}
-
-LRESULT CALLBACK hostwindow::WndProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
-{
-    LRESULT lResult;
-    hostwindow* pThis;
-
-    if (bDirty)
-    {
-        bDirty = false;
-        auto pDuiManager = duiManager::Get();
-        //if (!pDuiManager) return;
-        //if (!pDuiManager->pageContainerElement) return;
-
-        DWORD defer;
-        pDuiManager->pWndElement->StartDefer(&defer);
-
-        INITCOMMONCONTROLSEX iccex = { sizeof(INITCOMMONCONTROLSEX), 0x80000000 | ICC_STANDARD_CLASSES | ICC_TREEVIEW_CLASSES };
-        InitCommonControlsEx(&iccex);
-
-        pDuiManager->pageContainerElement->DestroyAll(true);
-        //CoInitializeEx(NULL, 0);
-        //DirectUI::InitProcessPriv(14, NULL, 0, true);
-        DirectUI::InitThread(2);
-        //DirectUI::DUIXmlParser* parser = 0;
-        //DirectUI::DUIXmlParser::Create(&parser, 0, 0, 0, 0);
-        //err("wait");
-        HRESULT hr = pDuiManager->pParser->SetXMLFromResource(
-            nextString,
-            pDuiManager->hInstance,
-            pDuiManager->hInstance
-        );
-
-        if (SUCCEEDED(hr))
-        {
-            DirectUI::Element* newElement = 0;
-            hr = pDuiManager->pParser->CreateElement(
-                (DirectUI::UCString)L"Main",
-                pDuiManager->pageContainerElement,
-                NULL,
-                NULL,
-                &newElement
-            );
-            if (!newElement)
-                err("newelement is null!");
-            else
-            {
-                //DirectUI::Value* val;
-                //newElement->GetContentString(&val);
-                //MessageBoxW(0,(const wchar_t*)val->GetString(),0,0);
-                nextCallback(newElement);
-                //MessageBoxW(0,(const wchar_t*)val->GetString(),0,0);
-            }
-        }
-        else
-            err("setxmlfromresource failed");
-        pDuiManager->pUIElement->EndDefer(defer);
-    }
-
-    pThis = reinterpret_cast<hostwindow*>(GetWindowLongPtr(hwnd, GWLP_USERDATA));
-    switch (uMsg)
-    {
-    case WM_CREATE:
-    {
-        CREATESTRUCT* pCreateStruct;
-
-        pCreateStruct = reinterpret_cast<CREATESTRUCT*>(lParam);
-        pThis = reinterpret_cast<hostwindow*>(pCreateStruct->lpCreateParams);
-        (LONG_PTR)SetWindowLongPtr(hwnd, GWLP_USERDATA, reinterpret_cast<LONG_PTR>(pThis));
-        lResult = 0;
-        break;
-    }
-    case WM_PAINT:
-    {
-        HDC             hdcPaint;
-        PAINTSTRUCT     ps;
-
-        hdcPaint = BeginPaint(hwnd, &ps);
-        BOOL(FillRect(ps.hdc, &ps.rcPaint, reinterpret_cast<HBRUSH>(GetStockObject(BLACK_BRUSH))));
-        BOOL(EndPaint(hwnd, &ps));
-        lResult = 0;
-        break;
-    }
-    default:
-        lResult = DefWindowProc(hwnd, uMsg, wParam, lParam);
-        break;
-    }
-    return(lResult);
-}
-
