@@ -17,6 +17,10 @@
 #include "dui_selectedcredentialview.h"
 #include "dui_statusview.h"
 #include "dui_userselect.h"
+#include <Gdiplus.h>
+#include <gdiplusheaders.h>
+#include <gdiplusinit.h>
+#include <atlbase.h>
 
 duiManager* duiManager::Get()
 {
@@ -47,6 +51,23 @@ DWORD WINAPI DuiPageWorkerThread(LPVOID lparam)
     }
     return 0;
 }
+
+HBITMAP GetHBITMAPFromImageFile(WCHAR* pFilePath)
+{
+    Gdiplus::GdiplusStartupInput gpStartupInput;
+    ULONG_PTR gpToken;
+    Gdiplus::GdiplusStartup(&gpToken, &gpStartupInput, NULL);
+    HBITMAP result = NULL;
+    Gdiplus::Bitmap* bitmap = Gdiplus::Bitmap::FromFile(pFilePath, false);
+    if (bitmap)
+    {
+        bitmap->GetHBITMAP(Gdiplus::Color(255, 255, 255), &result);
+        delete bitmap;
+    }
+    Gdiplus::GdiplusShutdown(gpToken);
+    return result;
+}
+
 HWND backgroundHWND;
 DWORD WINAPI DuiInitThread(LPVOID lparam)
 {
@@ -139,6 +160,25 @@ DWORD WINAPI DuiInitThread(LPVOID lparam)
                         pDuiManager->pageContainerElement = pDuiManager->pUIElement->FindDescendent(ATOMID(L"activePageContainer"));
                         if (!pDuiManager->pageContainerElement)
                             err("page container element not found");
+
+                        auto backgroundElement = pDuiManager->pUIElement->FindDescendent(ATOMID(L"Background"));
+                        if (backgroundElement)
+                        {
+                            WCHAR path[] = L"C:\\Windows\\System32\\logonhookimage.jpg";
+                            if (PathFileExistsW(path))
+                            {
+                                HBITMAP bitmap = GetHBITMAPFromImageFile(path);
+                                auto graphic = DirectUI::Value::CreateGraphic(bitmap, (unsigned char)2, (unsigned int)0xFFFFFFFF, (bool)0, 0, 0);
+                                if (graphic)
+                                {
+                                    backgroundElement->SetValue(DirectUI::Element::BackgroundProp, 1, graphic);
+                                    graphic->Release();
+                                }
+                                else
+                                    err("no gfc");
+                            }
+                            
+                        }
 
                         pDuiManager->IsReady = true;
 
