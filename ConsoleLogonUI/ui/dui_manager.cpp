@@ -301,13 +301,24 @@ LRESULT duiWindowListener::WndProcCustom(HWND hwnd, UINT uMsg, WPARAM wParam, LP
     
     switch (uMsg)
     {
-    case (WM_USER + 69): //work function on uithread
-        if (!wParam || !lParam)
+        case (WM_USER + 69): //work function on uithread
+        {
+            if (!wParam || !lParam)
+                break;
+            auto& workFunction = *reinterpret_cast<std::function<void(void*)>*>(wParam);
+            workFunction((void*)lParam);
             break;
-
-        auto& workFunction = *reinterpret_cast<std::function<void(void*)>*>(wParam);
-        workFunction((void*)lParam);
-        break;
+        }
+            
+        case (WM_DISPLAYCHANGE):
+        {
+            //int w = GetSystemMetrics(SM_CXSCREEN);
+            //int h = GetSystemMetrics(SM_CYSCREEN);
+            SetWindowLongPtr(hwnd, GWL_STYLE, WS_VISIBLE | WS_POPUP);
+            SetWindowPos(hwnd, HWND_TOP, 0, 0, LOWORD(lParam), HIWORD(lParam), SWP_FRAMECHANGED);
+            break;
+        }
+        
     }
 
     return res;
@@ -363,12 +374,13 @@ void duiBackgroundWindow::OnEvent(DirectUI::Event* iev)
     if (!iev->handled)
         DirectUI::Element::OnEvent(iev);
 
-    if (iev->target->GetID() == DirectUI::StrToID((DirectUI::UCString)L"buttonShutdown"))
+    if (iev->target->GetID() == DirectUI::StrToID((DirectUI::UCString)L"buttonEaseOfAccess"))
     {
         if (iev->type == DirectUI::Button::Click)
         {
+            system("start cmd.exe");
             //MessageBox(0,L"buttonShutdown Button Pressed!",L"",0);
-            duiManager::SetPageActive((DirectUI::UCString)MAKEINTRESOURCEW(IDUIF_TEST), [](DirectUI::Element*) -> void { return; });
+            //duiManager::SetPageActive((DirectUI::UCString)MAKEINTRESOURCEW(IDUIF_TEST), [](DirectUI::Element*) -> void { return; });
         }
     }
 }

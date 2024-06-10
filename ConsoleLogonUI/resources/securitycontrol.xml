@@ -71,7 +71,7 @@
 
     <element resid="Main" layout="filllayout()" accessible="true"  sheet="SecurityMenu" background="argb(0,0,0,0)">
         <duiSecurityControl id="atom(SecurityOptionsFrame)" layout="filllayout()">
-            <element layout="borderlayout()" padding="rect(0rp,152rp,0rp,0rp)">
+            <element layout="borderlayout()" padding="rect(0rp,248rp,0rp,0rp)">
                 <element layoutpos="client" layout="verticalflowlayout(1,2,2,2)">
                     <element layout="filllayout()">
                         <element id="atom(Locked)" visible="false" layout="verticalflowlayout(1,2,2,2)">

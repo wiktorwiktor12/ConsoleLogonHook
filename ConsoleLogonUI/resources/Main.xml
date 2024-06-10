@@ -134,7 +134,7 @@
                     </element>
                 </element>
                 <element layoutpos="auto" visible="true" enabled="true" layout="filllayout()" background="argb(0,116,184,252)" height="1504rp">
-                    <element layout="filllayout()" id="atom(activePageContainer)" padding="rect(0rp, 96rp, 0rp, 0rp)">
+                    <element layout="filllayout()" id="atom(activePageContainer)" >
                         
                     </element>
                     <!-- this is where the backend will place in the uifiles for the active page-->>
