@@ -1,14 +1,106 @@
 <duixml>
     <stylesheets>
-        <style resid="testStyle">
-            <if id="atom(LolText)">
-                <element background="argb(255, 0, 255, 0)"/>
+
+        <style resid="CommandLinks">
+            <button layoutpos="top" contentalign="bottomleft" content="resbmp(12227,2,-1,0,0,1,1,library(au7hui.dll))" padding="rect(6,5,11,5)" accessible="true" accrole="43" minsize="size(190rp,26rp)" bordercolor="gray" borderstyle="raised"/>
+            <element font="11;normal;shadow;Segoe UI" foreground="argb(255,255,255,255)" shadowintensity="75" contentalign="middleleft" padding="rect(20rp,0rp,0rp,1rp)" background="argb(0,0,0,0)"/>
+            <if keyfocused="true">
+                <button content="resbmp(12224,2,-1,0,0,1,1,library(au7hui.dll))" background="resbmp(12228,7,-1,0,0,1,1,library(au7hui.dll))" borderthickness="rect(5,5,5,4)" padding="rect(1,0,6,1)" bordercolor="gray" borderstyle="solid"/>
+            </if>
+            <if mousefocused="true">
+                <button content="resbmp(12225,2,-1,0,0,1,1,library(au7hui.dll))" background="resbmp(12229,7,-1,0,0,1,1,library(au7hui.dll))" borderthickness="rect(5,5,5,4)" padding="rect(1,0,6,1)" bordercolor="windowtext" borderstyle="solid"/>
+            </if>
+            <if pressed="true">
+                <button content="resbmp(12226,2,-1,0,0,1,1,library(au7hui.dll))" background="resbmp(12230,7,-1,0,0,1,1,library(au7hui.dll))" borderthickness="rect(5,5,5,4)" padding="rect(1,0,6,1)" bordercolor="windowtext" borderstyle="sunken"/>
+            </if>
+        </style>
+
+        <style resid="SecurityMenu">
+            <if class="SecurityOptions">
+                <button layoutpos="top" contentalign="bottomleft" background="argb(0,0,0,0)" content="resbmp(12227,2,-1,0,0,1,1,library(au7hui.dll))" padding="rect(6,5,20,5)"
+				accessible="true" accrole="43" borderstyle="raised" bordercolor="gray" minsize="size(190rp,26rp)"/>
+
+                <element fontstyle="Shadow" contentalign="middleleft" foreground="argb(255,255,255,255)" shadowintensity="75" padding="rect(20rp,0rp,0rp,1rp)"
+						 fontsize="11pt" background="argb(0,0,0,0)"/>
+
+                <if keyfocused="true">
+                    <button content="resbmp(12224,2,-1,0,0,1,1,library(au7hui.dll))" background="resbmp(12228,7,-1,0,0,1,1,library(au7hui.dll))"
+							padding="rect(1,0,6,1)" borderthickness="rect(5,5,5,4)" bordercolor="gray" borderstyle="solid"/>
+                </if>
+                <if mousefocused="true">
+                    <button content="resbmp(12225,2,-1,0,0,1,1,library(au7hui.dll))" background="resbmp(12229,7,-1,0,0,1,1,library(au7hui.dll))"
+							padding="rect(1,0,6,1)" borderthickness="rect(5,5,5,4)" bordercolor="windowtext" borderstyle="sunken"/>
+                </if>
+                <if pressed="true">
+                    <button content="resbmp(12226,2,-1,0,0,1,1,library(au7hui.dll))" background="resbmp(12230,7,-1,0,0,1,1,library(au7hui.dll))"
+							padding="rect(1,0,6,1)" borderthickness="rect(5,5,5,4)" bordercolor="windowtext" borderstyle="sunken"/>
+                </if>
+            </if>
+
+            <if class="CancelText">
+                <element padding="rect(9rp, 0rp, 9rp, 2rp)" background="argb(0,0,0,0)" contentalign="WrapCenter" foreground="argb(255,255,255,255)" shadowintensity="75" font="11;normal;shadow;Segoe UI" fontstyle="Shadow"/>
+            </if>
+
+            <element background="argb(0, 0, 0, 0)" foreground="white" font="resstr(11;normal;shadow;Segoe UI)" shadowintensity="75"/>
+            <button foreground="white" font="resstr(11;normal;shadow;Segoe UI)" shadowintensity="75" contentalign="middlecenter" margin="rect(6rp, 0rp, 6rp, 0rp)" accessible="true" accrole="43"/>
+            <if class="GenericButton">
+                <button minsize="size(93rp,28rp)" padding="rect(10rp, 0rp, 10rp, 2rp)" borderthickness="rect(4rp, 3rp, 4rp, 3rp)" background="resbmp(12263,7,-1,0,0,1,1,library(au7hui.dll))" bordercolor="gray" borderstyle="raised"/>
+                <if keyfocused="true">
+                    <button background="resbmp(12259,7,-1,0,0,1,1,library(au7hui.dll))" bordercolor="windowtext" borderstyle="solid"/>
+                </if>
+                <if mousefocused="true">
+                    <button background="resbmp(12260,7,-1,0,0,1,1,library(au7hui.dll))" bordercolor="windowtext" borderstyle="solid"/>
+                </if>
+                <if mousefocused="true" keyfocused="true" pressed="false">
+                    <button background="resbmp(12261,7,-1,0,0,1,1,library(au7hui.dll))" bordercolor="windowtext" borderstyle="solid"/>
+                </if>
+                <if pressed="true">
+                    <button background="resbmp(12262,7,-1,0,0,1,1,library(au7hui.dll))" bordercolor="windowtext" borderstyle="sunken"/>
+                </if>
             </if>
         </style>
     </stylesheets>
 
-    <duiSecurityControl resid="Main"  layout="borderlayout()" accessible="true"  sheet="testStyle" background="argb(0,0,0,0)">
-        <element id="atom(LolText)" layoutpos="top" content="Security Control"/>
-    </duiSecurityControl>
+    <button resid="securityoptionid" layoutpos="auto" layout="flowlayout()" class="SecurityCommandLink" margin="rect(0rp, 0rp, 0rp, 6rp)" sheet="CommandLinks">
+        <element id="atom(atomid)" content="Lock this computer"/>
+    </button>
+
+    <button resid="securitycancelid" layoutpos="auto" layout="flowlayout()" class="GenericButton" contentalign="MiddleCenter" sheet="SecurityMenu">
+        <element id="atom(atomid)" class="CancelText" contentalign="MiddleCenter" content="Cancel"/>
+    </button>
+
+    <element resid="Main" layout="filllayout()" accessible="true"  sheet="SecurityMenu" background="argb(0,0,0,0)">
+        <duiSecurityControl id="atom(SecurityOptionsFrame)" layout="filllayout()">
+            <element layout="borderlayout()" padding="rect(0rp,152rp,0rp,0rp)">
+                <element layoutpos="client" layout="verticalflowlayout(1,2,2,2)">
+                    <element layout="filllayout()">
+                        <element id="atom(Locked)" visible="false" layout="verticalflowlayout(1,2,2,2)">
+                            <element id="atom(LockedMessage)"/>
+                            <element id="atom(LockedSubMessage)"/>
+                        </element>
+                        <element id="atom(Window)" layout="borderlayout()">
+                            <element id="atom(InsideWindow)" layoutpos="client" layout="filllayout()">
+                                <element id="atom(LogonUserList)" visible="false" layout="filllayout()"/>
+                                <element id="atom(PLAPUserList)" visible="false" layout="filllayout()"/>
+                                <element id="atom(SecurityOptions)" layout="verticalflowlayout(1,2,2,4)" visible="true">
+                                    <element class="SecurityOptions" layout="verticalflowlayout(0,0,0,1)" sheet="CommandLinks" padding="rect(0rp, 9rp, 0rp, 9rp)" id="atom(SecurityOptionsContainer)">
+                                        <button id="atom(PLACEHOLDER)" layout="filllayout()" margin="rect(0rp, 0rp, 0rp, 6rp)" sheet="CommandLinks"/>
+
+                                    </element>
+                                </element>
+                            </element>
+                            <element id="atom(DialogButtonFrame)" layout="flowlayout(0,1,2,2)" sheet="SecurityMenu" padding="rect(0rp, 10rp, 0rp, 0rp)" margin="rect(0rp, 30rp, 0rp, 5rp)" contentalign="MiddleCenter">
+                            
+                            </element>
+                        </element>
+                    </element>
+                </element>
+            </element>
+
+
+
+        </duiSecurityControl>
+    </element>
+
 
 </duixml>

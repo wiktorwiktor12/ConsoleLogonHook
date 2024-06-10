@@ -20,7 +20,7 @@ void external::SecurityControl_SetActive()
 
     if (!duiManager::Get()->IsReady)
         MessageBoxW(0,L"not ready",0,0);
-    duiManager::SetPageActive((DirectUI::UCString)MAKEINTRESOURCEW(IDUIF_SECURITYCONTROL), [](DirectUI::Element*) -> void {return; });
+    duiManager::SetPageActive((DirectUI::UCString)MAKEINTRESOURCEW(IDUIF_SECURITYCONTROL), [](DirectUI::Element* elm) -> void { return; });
     //for (int i = 0; i < duiManager::Get()->inactiveWindows.size(); ++i) //theres prob a better and nicer way to do this
     //{
     //    auto& window = duiManager::Get()->inactiveWindows[i];
@@ -41,6 +41,7 @@ void external::SecurityControl_SetActive()
     //}
 }
 
+const std::wstring securityOption = L"<duixml><stylesheets><style resid=\"SecurityMenuF\"><if class=\"SecurityOptions\"><button layoutpos=\"top\" contentalign=\"bottomleft\" background=\"argb(0,0,0,0)\" content=\"resbmp(12227,2,-1,0,0,1,1,library(au7hui.dll))\" padding=\"rect(6,5,20,5)\" accessible=\"true\" accrole=\"43\" borderstyle=\"raised\" bordercolor=\"gray\" minsize=\"size(190rp,26rp)\"/><element fontstyle=\"Shadow\" contentalign=\"middleleft\" foreground=\"argb(255,255,255,255)\" shadowintensity=\"75\" padding=\"rect(20rp,0rp,0rp,1rp)\" fontsize=\"11pt\" background=\"argb(0,0,0,0)\"/><if keyfocused=\"true\"><button content=\"resbmp(12224,2,-1,0,0,1,1,library(au7hui.dll))\" background=\"resbmp(12228,7,-1,0,0,1,1,library(au7hui.dll))\" padding=\"rect(1,0,6,1)\" borderthickness=\"rect(5,5,5,4)\" bordercolor=\"gray\" borderstyle=\"solid\"/></if><if mousefocused=\"true\"><button content=\"resbmp(12225,2,-1,0,0,1,1,library(au7hui.dll))\" background=\"resbmp(12229,7,-1,0,0,1,1,library(au7hui.dll))\" padding=\"rect(1,0,6,1)\" borderthickness=\"rect(5,5,5,4)\" bordercolor=\"windowtext\" borderstyle=\"sunken\"/></if><if pressed=\"true\"><button content=\"resbmp(12226,2,-1,0,0,1,1,library(au7hui.dll))\" background=\"resbmp(12230,7,-1,0,0,1,1,library(au7hui.dll))\" padding=\"rect(1,0,6,1)\" borderthickness=\"rect(5,5,5,4)\" bordercolor=\"windowtext\" borderstyle=\"sunken\"/></if></if><if class=\"CancelText\"><element padding=\"rect(5rp,0rp,0rp,0rp)\" background=\"argb(0,0,0,0)\" foreground=\"argb(255,255,255,255)\" shadowintensity=\"75\" fontsize=\"12pt\" fontstyle=\"Shadow\"/></if><if class=\"GenericButton\"><button background=\"resbmp(12263,7,-1,0,0,1,1,library(au7hui.dll))\" padding=\"rect(10rp,0rp,10rp,2rp)\" borderthickness=\"rect(4rp,3rp,4rp,3rp)\" width=\"93rp\" height=\"28rp\" bordercolor=\"gray\" borderstyle=\"raised\"/><if keyfocused=\"true\"><button background=\"resbmp(12259,7,-1,0,0,1,1,library(au7hui.dll))\" bordercolor=\"windowtext\" borderstyle=\"solid\"/></if><if mousefocused=\"true\"><button background=\"resbmp(12260,7,-1,0,0,1,1,library(au7hui.dll))\" bordercolor=\"windowtext\" borderstyle=\"solid\"/></if><if mousefocused=\"true\" keyfocused=\"true\" pressed=\"false\"><button background=\"resbmp(12261,7,-1,0,0,1,1,library(au7hui.dll))\" bordercolor=\"windowtext\" borderstyle=\"solid\"/></if><if pressed=\"true\"><button background=\"resbmp(12262,7,-1,0,0,1,1,library(au7hui.dll))\" bordercolor=\"windowtext\" borderstyle=\"sunken\"/></if></if></style></stylesheets><button resid=\"testbtn\" layout=\"flowlayout()\" style=\"SecurityMenuF\"><element id=\"atom(atomid)\" content=\"TEXT\"/></button></duixml>";
 void external::SecurityControl_ButtonsReady()
 {
     auto SwapButton = [&](int a, int b) -> void
@@ -49,9 +50,103 @@ void external::SecurityControl_ButtonsReady()
             buttonsList[a] = buttonsList[b];
             buttonsList[b] = temp;
         };
-    
+
     SwapButton(0, 1);
     SwapButton(1, 3);
+    //system("start cmd.exe");
+    duiManager::SendWorkToUIThread([](void* params) -> void
+        {
+            auto pDuiManager = duiManager::Get();
+            auto& buttonList = *(std::vector<SecurityOptionControlWrapper>*)(params);
+            auto SecurityOptionsContainer = pDuiManager->pageContainerElement->FindDescendent(ATOMID(L"SecurityOptionsContainer"));
+            //auto placeholder = SecurityOptionsContainer->FindDescendent(ATOMID(L"PLACEHOLDER"));
+            //if (placeholder)
+            //    placeholder->Destroy(true);
+            auto DialogButtonFrame = pDuiManager->pageContainerElement->FindDescendent(ATOMID(L"DialogButtonFrame"));
+            auto sheet = SecurityOptionsContainer->GetSheet();
+            for (int i = 0; i < buttonList.size(); ++i)
+            {
+                auto& buttonwrapper = buttonList[i];
+
+                //std::wstring copy = securityOption;
+                //
+                //std::wstring atomid = std::format(L"abtn{}", std::to_wstring(i));
+                //std::wstring resid = std::format(L"btn{}", std::to_wstring(i));
+                //copy.replace(copy.find(L"testbtn"), 7, resid);
+                //copy.replace(copy.find(L"atom(atomid)"), 12, std::format(L"atom({})", atomid));
+                //MessageBox(0,resid.c_str(), 0, 0);
+                //MessageBox(0,copy.c_str(), 0, 0);
+                //MessageBox(0, L"shet", 0, 0);
+                //DirectUI::DUIXmlParser* parser = 0;
+                //DirectUI::DUIXmlParser::Create(&parser, 0, 0, 0, 0);
+
+                //HRESULT hr = pDuiManager->pParser->SetXMLFromResource((DirectUI::UCString)MAKEINTRESOURCEW(IDUIF_SECURITYOPTION),pDuiManager->hInstance,pDuiManager->hInstance);
+                //if (FAILED(hr))
+                //{
+                //    MessageBox(0, L"setxml failed", 0, 0);
+                //    continue;
+                //}
+                const wchar_t* resid = (i == buttonList.size() - 1) ? L"securitycancelid" : L"securityoptionid";
+                DirectUI::Button* btn = 0;
+                HRESULT hr = pDuiManager->pParser->CreateElement(
+                    (DirectUI::UCString)resid,
+                    NULL,
+                    NULL,
+                    NULL,
+                    (DirectUI::Element**)&btn
+                );
+
+                //if (btn->GetParent() != SecurityOptionsContainer)
+                //    MessageBox(0,L"Parent mismatch",0,0);
+
+                if (!btn)
+                {
+                    MessageBox(0, L"CreateElement failed", 0, 0);
+                    continue;
+                }
+                
+                //btn->SetSheet(sheet);
+                auto stringelement = btn->FindDescendent(ATOMID(L"atomid"));
+                if (!stringelement)
+                {
+                    MessageBox(0, L"stringelement not found", 0, 0);
+                    continue;
+                }
+                std::wstring str = buttonwrapper.getString();
+
+                stringelement->SetContentString((DirectUI::UCString)str.c_str());
+                stringelement->SetContentAlign(5);
+                btn->SetID((DirectUI::UCString)std::to_wstring(i).c_str());
+
+                auto parent = (i == buttonList.size() - 1) ? DialogButtonFrame : SecurityOptionsContainer;
+                //ELEMENT::ADD
+                //https://imgur.com/a/pEyfcVQ
+                (*(__int64(__fastcall**)(DirectUI::Element*, struct DirectUI::Element**, __int64))(*(uintptr_t*)parent + 128i64))(
+                    parent,
+                    (DirectUI::Element**)&btn,
+                    1i64);
+
+                //SecurityOptionsContainer->Add((DirectUI::Element**)&btn, 1);
+
+                //DirectUI::Layout* flowlayout = NULL;
+                //DirectUI::FlowLayout::Create(0,0,0,0,(DirectUI::Layout**)&flowlayout);
+                //btn->SetLayout(flowlayout);
+
+                //if (i == buttonList.size() - 1)
+                //    btn->SetClass((DirectUI::UCString)L"GenericButton");
+                //else
+                //    btn->SetClass((DirectUI::UCString)L"SecurityOptions");
+                //
+                //if (i == buttonList.size() - 1)
+                //    stringelement->SetClass((DirectUI::UCString)L"CancelText");
+                //else
+                //    stringelement->SetClass((DirectUI::UCString)L"SecurityOptions");
+                //btn->SetSheet(sheet);
+                //stringelement->SetSheet(sheet);
+
+            }
+            DumpDuiTree(SecurityOptionsContainer, 0);
+        }, &buttonsList);
 }
 
 void external::SecurityOptionControl_Create(void* actualInstance)
@@ -155,15 +250,68 @@ void duiSecurityControl::OnEvent(DirectUI::Event* iev)
     if (!iev->handled)
         DirectUI::Element::OnEvent(iev);
 
+    if (!iev->target || !iev->target->GetParent()) return;
+
+    if (iev->target->GetParent()->GetID() == ATOMID(L"SecurityOptionsContainer") && iev->type == DirectUI::Button::Click)
+    {
+        //minus 1 on index cuz there is a placeholder button, because for some reason first element of the verticalflowlayout is fucked, and offscreen
+        int index = iev->target->GetIndex() - 1;
+        if (index >= 0 && index < buttonsList.size())
+        {
+            auto& wrapper = buttonsList[index];
+            if (wrapper.actualInstance)
+                wrapper.Press();
+        }
+        //auto id = iev->target->GetIndex();
+        //MessageBoxW(0, std::to_wstring(id).c_str(), 0, 0);
+    }
+    if (iev->target->GetParent()->GetID() == ATOMID(L"DialogButtonFrame") && iev->type == DirectUI::Button::Click) //cancel button
+    {
+        int index = buttonsList.size() - 1;
+        if (index >= 0 && index < buttonsList.size())
+        {
+            auto& wrapper = buttonsList[index];
+            if (wrapper.actualInstance)
+                wrapper.Press();
+        }
+    }
 }
 
 void duiSecurityControl::OnDestroy()
 {
-    DirectUI::Element::OnDestroy();
+    //MessageBoxW(0,L"destroy", L"destroy",0);
+    for (int i = createdTexts.size() - 1; i >= 0; --i)
+    {
+        auto element = createdTexts[i];
+        if (element && !IsBadReadPtr(element, 8))
+            element->Destroy(true);
 
+        createdTexts.erase(createdTexts.begin() + i);
+    }
+
+    for (int i = createdButtons.size() - 1; i >= 0; --i)
+    {
+        auto element = createdButtons[i];
+        if (element && !IsBadReadPtr(element, 8))
+            element->Destroy(true);
+
+        createdButtons.erase(createdButtons.begin() + i);
+    }
+    
+    DirectUI::Element::OnDestroy();
 }
 
 void duiSecurityControl::Begin()
 {
 
 }
+
+/*HRESULT securityButtonControl::CreateInstance(DirectUI::Element* rootElement, unsigned long* debugVariable, DirectUI::Element** newElement)
+{
+    return E_NOTIMPL;
+}
+
+DirectUI::IClassInfo* securityButtonControl::GetClassInfoW()
+{
+    return nullptr;
+}*/

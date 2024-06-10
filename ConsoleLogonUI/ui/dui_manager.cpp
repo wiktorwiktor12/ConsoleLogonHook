@@ -67,9 +67,9 @@ DWORD WINAPI DuiInitThread(LPVOID lparam)
     DirectUI::InitThread(2);
     DirectUI::RegisterAllControls();
 
+    DirectUI::ClassInfo<duiSecurityControl, DirectUI::Element>::Register(hInstance);
     DirectUI::ClassInfo<duiBackgroundWindow, DirectUI::Element>::Register(hInstance);
     DirectUI::ClassInfo<duiMessageView, DirectUI::Element>::Register(hInstance);
-    DirectUI::ClassInfo<duiSecurityControl, DirectUI::Element>::Register(hInstance);
     DirectUI::ClassInfo<duiSelectedCredentialView, DirectUI::Element>::Register(hInstance);
     DirectUI::ClassInfo<duiStatusView, DirectUI::Element>::Register(hInstance);
     DirectUI::ClassInfo<duiUserSelect, DirectUI::Element>::Register(hInstance);
@@ -235,11 +235,10 @@ void duiManager::SetPageActive(DirectUI::UCString resource, std::function<void(D
             DWORD defer;
             pDuiManager->pWndElement->StartDefer(&defer);
 
-            INITCOMMONCONTROLSEX iccex = { sizeof(INITCOMMONCONTROLSEX), 0x80000000 | ICC_STANDARD_CLASSES | ICC_TREEVIEW_CLASSES };
-            InitCommonControlsEx(&iccex);
-
             pDuiManager->pageContainerElement->DestroyAll(true);
-            DirectUI::InitThread(2);
+
+            //DirectUI::DUIXmlParser* parser = 0;
+            //DirectUI::DUIXmlParser::Create(&parser, 0, 0, 0, 0);
 
             HRESULT hr = pDuiManager->pParser->SetXMLFromResource(
                 prms->nextString,
@@ -252,7 +251,7 @@ void duiManager::SetPageActive(DirectUI::UCString resource, std::function<void(D
                 DirectUI::Element* newElement = 0;
                 hr = pDuiManager->pParser->CreateElement(
                     (DirectUI::UCString)L"Main",
-                    pDuiManager->pageContainerElement,
+                    NULL,
                     NULL,
                     NULL,
                     &newElement
@@ -261,11 +260,18 @@ void duiManager::SetPageActive(DirectUI::UCString resource, std::function<void(D
                     err("newelement is null!");
                 else
                 {
+                    (*(__int64(__fastcall**)(DirectUI::Element*, struct DirectUI::Element**, __int64))(*(uintptr_t*)pDuiManager->pageContainerElement + 128i64))(
+                        pDuiManager->pageContainerElement,
+                        (DirectUI::Element**)&newElement,
+                        1i64);
                     prms->nextCallback(newElement);
                 }
             }
             else
                 err("setxmlfromresource failed");
+
+            //parser->Destroy(); 
+
             pDuiManager->pUIElement->EndDefer(defer);
         };
     SendWorkToUIThread(workFunction,(void*)&prms);
