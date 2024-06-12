@@ -7,7 +7,7 @@
         </style>
     </stylesheets>
 
-    <duiMessageView resid="test"  layout="borderlayout()" accessible="true"  sheet="messageViewSheet" background="argb(0,0,0,0)">
+    <duiMessageView resid="Main"  layout="borderlayout()" accessible="true"  sheet="messageViewSheet" background="argb(0,0,0,0)">
         <element id="atom(LolText1)" layoutpos="top" content="MESSAGE VIEW"/>
     </duiMessageView>
 
