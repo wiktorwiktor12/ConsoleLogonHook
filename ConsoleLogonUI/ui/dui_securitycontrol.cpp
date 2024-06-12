@@ -119,12 +119,9 @@ void external::SecurityControl_ButtonsReady()
                 btn->SetID((DirectUI::UCString)std::to_wstring(i).c_str());
 
                 auto parent = (i == buttonList.size() - 1) ? DialogButtonFrame : SecurityOptionsContainer;
-                //ELEMENT::ADD
-                //https://imgur.com/a/pEyfcVQ
-                (*(__int64(__fastcall**)(DirectUI::Element*, struct DirectUI::Element**, __int64))(*(uintptr_t*)parent + 128i64))(
-                    parent,
-                    (DirectUI::Element**)&btn,
-                    1i64);
+
+                DirectUIElementAdd(parent,btn);
+
 
                 //SecurityOptionsContainer->Add((DirectUI::Element**)&btn, 1);
 

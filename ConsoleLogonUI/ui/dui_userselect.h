@@ -7,7 +7,7 @@ struct SelectableUserOrCredentialControlWrapper
 public:
     void* actualInstance;
     std::wstring text;
-    ID3D11ShaderResourceView* texture = 0;
+    HBITMAP pfp = 0;
     bool hastext = false;
 
     std::wstring GetText();

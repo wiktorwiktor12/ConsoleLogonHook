@@ -278,11 +278,13 @@ void duiManager::LoadBranding()
     auto brandingElement = this->pUIElement->FindDescendent(ATOMID(L"BrandingImage"));
     if (!brandingElement) return;
 
-    HBITMAP bitmap = external::BrandingLoadImage(L"Basebrd", 120, 0, 0, 0, 0);
+    HBITMAP bitmap = external::BrandingLoadImage(L"Basebrd", 122, 0, 0, 0, 0);
     if (!bitmap) return;
 
     auto graphic = DirectUI::Value::CreateGraphic(bitmap, (unsigned char)2, (unsigned int)0xFFFFFFFF, (bool)0, 0, 0);
     if (!graphic) return;
+
+    if (!brandingElement->SetMinSize(0, 0)) return;
 
     brandingElement->SetValue(DirectUI::Element::BackgroundProp, 1, graphic);
     graphic->Release();
