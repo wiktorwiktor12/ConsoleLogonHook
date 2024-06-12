@@ -183,6 +183,15 @@ namespace external
             fHideConsoleUI();
     }
 
+    static HBITMAP BrandingLoadImage(const wchar_t* a1, __int64 a2, UINT a3, int a4, int a5, UINT a6)
+    {
+        static auto fBrandingLoadImage = reinterpret_cast<HBITMAP(__fastcall*)(const wchar_t* a1, __int64 a2, UINT a3, int a4, int a5, UINT a6)>(GetProcAddress(LoadLibrary(L"winbrand.dll"),"BrandingLoadImage"));
+        if (fBrandingLoadImage)
+            return fBrandingLoadImage(a1,a2,a3,a4,a5,a6);
+
+        return 0;
+    }
+
     extern "C" __declspec(dllexport) void MessageView_SetActive();
     extern "C" __declspec(dllexport) void MessageOptionControl_Create(void* actualInsance, int optionflag);
     extern "C" __declspec(dllexport) void MessageView_SetMessage(const wchar_t* message);

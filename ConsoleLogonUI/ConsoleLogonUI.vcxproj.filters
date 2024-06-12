@@ -458,4 +458,12 @@
     <Xml Include="resources\statusview.xml" />
     <Xml Include="resources\userselect.xml" />
   </ItemGroup>
+  <ItemGroup>
+    <Image Include="Bitmap120.bmp">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="resources\Bitmap120.bmp">
+      <Filter>Resource Files</Filter>
+    </Image>
+  </ItemGroup>
 </Project>

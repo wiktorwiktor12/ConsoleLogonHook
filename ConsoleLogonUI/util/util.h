@@ -2,6 +2,10 @@
 #include <windows.h>
 #include <string>
 #include <iostream>
+#include <Gdiplus.h>
+#include <gdiplusheaders.h>
+#include <gdiplusinit.h>
+#include <atlbase.h>
 
 static std::string ws2s(const std::wstring& s)
 {
@@ -55,4 +59,20 @@ static std::vector<std::wstring> split(std::wstring s, std::wstring delimiter)
 
     res.push_back(s.substr(pos_start));
     return res;
+}
+
+static HBITMAP GetHBITMAPFromImageFile(WCHAR* pFilePath)
+{
+    Gdiplus::GdiplusStartupInput gpStartupInput;
+    ULONG_PTR gpToken;
+    Gdiplus::GdiplusStartup(&gpToken, &gpStartupInput, NULL);
+    HBITMAP result = NULL;
+    Gdiplus::Bitmap* bitmap = Gdiplus::Bitmap::FromFile(pFilePath, false);
+    if (bitmap)
+    {
+        bitmap->GetHBITMAP(Gdiplus::Color(255, 255, 255), &result);
+        delete bitmap;
+    }
+    Gdiplus::GdiplusShutdown(gpToken);
+    return result;
 }

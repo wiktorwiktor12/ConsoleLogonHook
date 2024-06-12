@@ -6,7 +6,7 @@
                 <element background="argb(0,0,0,0)" foreground="argb(255,255,255,255)" shadowintensity="75" fontsize="18pt" fontstyle="Shadow" padding="rect(24rp,0,0,100rp)"/>
             </if>
             <if class="branding">
-                <element background="resbmp(120,7,-1,0,0,1,1,library(7brand.dll))"/>
+                <element background="resbmp(107,7,-1,0,0,1,1)"/>
             </if>
 
             <if id="atom(Background)">
@@ -130,7 +130,7 @@
                         </element>
                     </element>
                     <element layout="flowlayout(0,2,2,2)">
-                        <element class="branding" width="350rp" height="50rp"/>
+                        <element id="atom(BrandingImage)" class="branding" width="350rp" height="50rp"/>
                     </element>
                 </element>
                 <element layoutpos="auto" visible="true" enabled="true" layout="filllayout()" background="argb(0,116,184,252)" height="1504rp">

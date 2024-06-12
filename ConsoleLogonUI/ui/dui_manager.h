@@ -80,4 +80,8 @@ public:
     static void SetPageActive(DirectUI::UCString resource, std::function<void(DirectUI::Element*)> elementReadyCallback);
 
     static void SendWorkToUIThread(std::function<void(void* userParams)> workFunction, void* params);
+
+    void LoadBranding();
+    void LoadBackground();
+    bool UseOEMBackground();
 };

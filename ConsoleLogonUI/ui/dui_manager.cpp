@@ -17,10 +17,7 @@
 #include "dui_selectedcredentialview.h"
 #include "dui_statusview.h"
 #include "dui_userselect.h"
-#include <Gdiplus.h>
-#include <gdiplusheaders.h>
-#include <gdiplusinit.h>
-#include <atlbase.h>
+#include <util/util.h>
 
 duiManager* duiManager::Get()
 {
@@ -50,22 +47,6 @@ DWORD WINAPI DuiPageWorkerThread(LPVOID lparam)
         DispatchMessageW(&Msg);
     }
     return 0;
-}
-
-HBITMAP GetHBITMAPFromImageFile(WCHAR* pFilePath)
-{
-    Gdiplus::GdiplusStartupInput gpStartupInput;
-    ULONG_PTR gpToken;
-    Gdiplus::GdiplusStartup(&gpToken, &gpStartupInput, NULL);
-    HBITMAP result = NULL;
-    Gdiplus::Bitmap* bitmap = Gdiplus::Bitmap::FromFile(pFilePath, false);
-    if (bitmap)
-    {
-        bitmap->GetHBITMAP(Gdiplus::Color(255, 255, 255), &result);
-        delete bitmap;
-    }
-    Gdiplus::GdiplusShutdown(gpToken);
-    return result;
 }
 
 HWND backgroundHWND;
@@ -161,24 +142,8 @@ DWORD WINAPI DuiInitThread(LPVOID lparam)
                         if (!pDuiManager->pageContainerElement)
                             err("page container element not found");
 
-                        auto backgroundElement = pDuiManager->pUIElement->FindDescendent(ATOMID(L"Background"));
-                        if (backgroundElement)
-                        {
-                            WCHAR path[] = L"C:\\Windows\\System32\\logonhookimage.jpg";
-                            if (PathFileExistsW(path))
-                            {
-                                HBITMAP bitmap = GetHBITMAPFromImageFile(path);
-                                auto graphic = DirectUI::Value::CreateGraphic(bitmap, (unsigned char)2, (unsigned int)0xFFFFFFFF, (bool)0, 0, 0);
-                                if (graphic)
-                                {
-                                    backgroundElement->SetValue(DirectUI::Element::BackgroundProp, 1, graphic);
-                                    graphic->Release();
-                                }
-                                else
-                                    err("no gfc");
-                            }
-                            
-                        }
+                        pDuiManager->LoadBackground();
+                        pDuiManager->LoadBranding();
 
                         pDuiManager->IsReady = true;
 
@@ -253,6 +218,91 @@ void duiManager::UnloadDUI()
 void duiManager::SendWorkToUIThread(std::function<void(void*)> workfunction, void* params)
 {
     SendMessageW(duiManager::Get()->pWndElement->GetHWND(), WM_USER+69, (WPARAM)&workfunction, (LPARAM)params);
+}
+
+void duiManager::LoadBackground()
+{
+    if (!this->pUIElement) return;
+
+    auto backgroundElement = this->pUIElement->FindDescendent(ATOMID(L"Background"));
+    if (!backgroundElement) return;
+
+    if (UseOEMBackground())
+    {
+        WCHAR oemPath[] = L"C:\\Windows\\system32\\oobe\\info\\backgrounds\\backgroundDefault.jpg";
+
+        if (!PathFileExistsW(oemPath)) return;
+
+        HBITMAP bitmap = GetHBITMAPFromImageFile(oemPath);
+        auto graphic = DirectUI::Value::CreateGraphic(bitmap, (unsigned char)2, (unsigned int)0xFFFFFFFF, (bool)0, 0, 0);
+        if (!graphic) return;
+
+        backgroundElement->SetValue(DirectUI::Element::BackgroundProp, 1, graphic);
+        graphic->Release();
+    }
+
+    /*WCHAR path[] = L"C:\\Windows\\System32\\logonhookimage.jpg";
+    if (!PathFileExistsW(path))
+    {
+        if (UseOEMBackground())
+        {
+            WCHAR oemPath[] = L"C:\\Windows\\system32\\oobe\\info\\backgrounds\\backgroundDefault.jpg";
+
+            if (!PathFileExistsW(oemPath)) return;
+
+            HBITMAP bitmap = GetHBITMAPFromImageFile(oemPath);
+            auto graphic = DirectUI::Value::CreateGraphic(bitmap, (unsigned char)2, (unsigned int)0xFFFFFFFF, (bool)0, 0, 0);
+            if (!graphic) return;
+
+            backgroundElement->SetValue(DirectUI::Element::BackgroundProp, 1, graphic);
+            graphic->Release();
+        }
+
+
+    }
+    else
+    {
+        HBITMAP bitmap = GetHBITMAPFromImageFile(path);
+        auto graphic = DirectUI::Value::CreateGraphic(bitmap, (unsigned char)2, (unsigned int)0xFFFFFFFF, (bool)0, 0, 0);
+        if (!graphic) return;
+
+        backgroundElement->SetValue(DirectUI::Element::BackgroundProp, 1, graphic);
+        graphic->Release();
+    }*/
+}
+
+void duiManager::LoadBranding()
+{
+    if (!this->pUIElement) return;
+
+    auto brandingElement = this->pUIElement->FindDescendent(ATOMID(L"BrandingImage"));
+    if (!brandingElement) return;
+
+    HBITMAP bitmap = external::BrandingLoadImage(L"Basebrd", 120, 0, 0, 0, 0);
+    if (!bitmap) return;
+
+    auto graphic = DirectUI::Value::CreateGraphic(bitmap, (unsigned char)2, (unsigned int)0xFFFFFFFF, (bool)0, 0, 0);
+    if (!graphic) return;
+
+    brandingElement->SetValue(DirectUI::Element::BackgroundProp, 1, graphic);
+    graphic->Release();
+}
+
+bool duiManager::UseOEMBackground()
+{
+    HKEY result;
+    if (RegOpenKeyExW(HKEY_LOCAL_MACHINE, L"Software\\Microsoft\\Windows\\CurrentVersion\\Authentication\\LogonUI\\Background", 0, KEY_READ, &result) == S_OK)
+    {
+        DWORD size = sizeof(DWORD);
+        DWORD type = REG_DWORD;
+
+        DWORD data;
+        if (RegQueryValueExW(result, L"OEMBackground", 0, &type, (LPBYTE)&data, &size) == S_OK)
+        {
+            return (bool)data;
+        }
+    }
+    return 0;
 }
 
 

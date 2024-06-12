@@ -311,6 +311,10 @@
     <Xml Include="resources\test.xml" />
     <Xml Include="resources\userselect.xml" />
   </ItemGroup>
+  <ItemGroup>
+    <Image Include="Bitmap120.bmp" />
+    <Image Include="resources\Bitmap120.bmp" />
+  </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
   </ImportGroup>
