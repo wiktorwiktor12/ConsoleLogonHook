@@ -12,8 +12,37 @@ void external::StatusView_SetActive(const wchar_t* text)
     HideConsoleUI();
     ptext = text;
     duiManager::SetPageActive((DirectUI::UCString)MAKEINTRESOURCEW(IDUIF_STATUSVIEW), [](DirectUI::Element* element) -> void { 
+        auto pDuiManager = duiManager::Get();
         auto str = element->FindDescendent(ATOMID(L"StatusText"));
         str->SetContentString((DirectUI::UCString)ptext);
+
+        auto options = pDuiManager->pUIElement->FindDescendent(ATOMID(L"OptionsButton")); //HIDE power options, ease of access
+        if (options)
+        {
+            options->SetVisible(false);
+        }
+
+        //TODO: APPLY DIFFERENT IMAGE PER DPi
+        /*auto animationStrip = (DirectUI::AnimationStrip*)pDuiManager->pUIElement->FindDescendent(ATOMID(L"WaitAnimation"));
+        if (animationStrip)
+        {
+            HBITMAP bitmap = (HBITMAP)LoadImageW(pDuiManager->hInstance, MAKEINTRESOURCEW(IDB_SPINNER3), IMAGE_BITMAP, 360, 20, LR_LOADTRANSPARENT);
+            if (bitmap)
+            {
+                auto graphic = DirectUI::Value::CreateGraphic(bitmap, (unsigned char)2, (unsigned int)0xFFFFFFFF, (bool)0, 0, 0);
+                if (graphic)
+                {
+                    {
+                        animationStrip->SetValue(DirectUI::Element::ContentProp, 1, graphic);
+                        graphic->Release();
+                    }
+                }
+            }
+            animationStrip->SetVisible(true);
+            animationStrip->SetPlay(true);
+        
+        }*/
+
         });
     //ptext = 0;
     //auto statusText = duiManager::Get()->pWndElement->FindDescendent(ATOMID(L"StatusText"));

@@ -78,6 +78,7 @@ public:
     static void InitDUI();
     static void UnloadDUI();
     static void SetPageActive(DirectUI::UCString resource, std::function<void(DirectUI::Element*)> elementReadyCallback);
+    static void FrameResize(int a3, int a4, int a5, int cy);
 
     static void SendWorkToUIThread(std::function<void(void* userParams)> workFunction, void* params);
 

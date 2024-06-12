@@ -32,24 +32,6 @@ duiManager::duiManager()
 
 #define err(msg) MessageBoxW(NULL, L ## msg, L"CLHUI", MB_ICONERROR)
 
-std::vector<DirectUI::UCString> pendingPages;
-DWORD WINAPI DuiPageWorkerThread(LPVOID lparam)
-{
-    while (true)
-    {
-        MSG Msg;
-        bool result = GetMessageW(&Msg, 0i64, 0, 0);
-        if (!result)
-            break;
-
-
-        TranslateMessage(&Msg);
-        DispatchMessageW(&Msg);
-    }
-    return 0;
-}
-
-HWND backgroundHWND;
 DWORD WINAPI DuiInitThread(LPVOID lparam)
 {
     auto pDuiManager = duiManager::Get();
@@ -89,12 +71,11 @@ DWORD WINAPI DuiInitThread(LPVOID lparam)
         );
         if (SUCCEEDED(hr))
         {
-            //backgroundHWND = backgroundWindow.Create();
             int w = GetSystemMetrics(SM_CXSCREEN);
             int h = GetSystemMetrics(SM_CYSCREEN);
             pDuiManager->pWndHost = NULL;
             hr = DirectUI::NativeHWNDHost::Create(
-                (DirectUI::UCString)L"Fucking around.",
+                (DirectUI::UCString)L"DUI LogonUI",
                 NULL,
                 NULL,
                 0, 0,
@@ -215,6 +196,32 @@ void duiManager::UnloadDUI()
     DirectUI::UnInitProcessPriv(0);
 }
 
+void duiManager::FrameResize(int a3, int a4, int a5, int cy)
+{
+    auto pDuiManager = duiManager::Get();
+    if (a5 <= 0 || cy <= 0)
+    {
+        HWND hwnd = pDuiManager->pWndHost->GetHWND();
+        int yScreen = GetSystemMetrics(1);
+        int xScreen = GetSystemMetrics(0);
+        SetWindowPos(hwnd, 0i64, 0, 0, xScreen, yScreen, 0x14u);
+    }
+    else
+    {
+        SetWindowPos(pDuiManager->pWndHost->GetHWND(), 0i64, a3, a4, a5, cy, 0x14u);
+    }
+    pDuiManager->LoadBackground();
+
+    RECT rect;
+    auto res = GetWindowRect(pDuiManager->pWndHost->GetHWND(),&rect);
+
+    if (res)
+    {
+        pDuiManager->pUIElement->SetWidth(rect.right - rect.left);
+        pDuiManager->pUIElement->SetHeight(rect.bottom - rect.top);
+    }
+}
+
 void duiManager::SendWorkToUIThread(std::function<void(void*)> workfunction, void* params)
 {
     SendMessageW(duiManager::Get()->pWndElement->GetHWND(), WM_USER+69, (WPARAM)&workfunction, (LPARAM)params);
@@ -329,6 +336,12 @@ void duiManager::SetPageActive(DirectUI::UCString resource, std::function<void(D
 
             pDuiManager->pageContainerElement->DestroyAll(true);
 
+            auto options = pDuiManager->pUIElement->FindDescendent(ATOMID(L"OptionsButton")); //UNHIDE power options, ease of access
+            if (options)
+            {
+                options->SetVisible(true);
+            }
+
             //DirectUI::DUIXmlParser* parser = 0;
             //DirectUI::DUIXmlParser::Create(&parser, 0, 0, 0, 0);
 
@@ -401,15 +414,24 @@ LRESULT duiWindowListener::WndProcCustom(HWND hwnd, UINT uMsg, WPARAM wParam, LP
             workFunction((void*)lParam);
             break;
         }
-            
-        case (WM_DISPLAYCHANGE):
+        case WM_SETTINGCHANGE:
         {
-            //int w = GetSystemMetrics(SM_CXSCREEN);
-            //int h = GetSystemMetrics(SM_CYSCREEN);
-            SetWindowLongPtr(hwnd, GWL_STYLE, WS_VISIBLE | WS_POPUP);
-            SetWindowPos(hwnd, HWND_TOP, 0, 0, LOWORD(lParam), HIWORD(lParam), SWP_FRAMECHANGED);
+            int pvParam = 0;
+            int v18 = 0;
+            int v19 = 0;
+            int v20 = 0;
+            if (SystemParametersInfoW(SPI_GETWORKAREA, 0, &pvParam, 0))
+                duiManager::FrameResize(pvParam, v18, v19 - pvParam, v20 - v18);
             break;
         }
+        //case (WM_DISPLAYCHANGE):
+        //{
+        //    //int w = GetSystemMetrics(SM_CXSCREEN);
+        //    //int h = GetSystemMetrics(SM_CYSCREEN);
+        //    SetWindowLongPtr(hwnd, GWL_STYLE, WS_VISIBLE | WS_POPUP);
+        //    SetWindowPos(hwnd, HWND_TOP, 0, 0, LOWORD(lParam), HIWORD(lParam), SWP_FRAMECHANGED);
+        //    break;
+        //}
         
     }
 
