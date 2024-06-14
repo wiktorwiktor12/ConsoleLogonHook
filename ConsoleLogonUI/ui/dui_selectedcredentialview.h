@@ -21,13 +21,17 @@ public:
     virtual ~duiSelectedCredentialView() override;
 
     DEFINE_DUIELEMENTCLASS(L"duiSelectedCredentialView");
+    virtual void OnInput(DirectUI::InputEvent* a2);
 
     //TODO: LOAD THESE FROM A MUI, SO WE HAVE TRANSLATIONS
     std::wstring switchUser = L"Switch User";
     std::wstring cancel = L"Cancel";
     std::wstring accountNameToDisplay;
-    ID3D11ShaderResourceView* texture = 0;
     int flag = 0;
+
+    static DirectUI::Element* CreateStringField(DirectUI::Element* UserTile, std::wstring content, bool bVisible, bool bIsSmall = false);
+    static DirectUI::Element* CreateEditField(DirectUI::Element* UserTile, std::wstring content, bool bVisible, bool bShowSubmit = false);
+    static DirectUI::Element* CreateCommandLinkField(DirectUI::Element* UserTile, std::wstring content, bool bVisible);
 
     bool textureExists = true;
     bool hasSetupNotify = false;
