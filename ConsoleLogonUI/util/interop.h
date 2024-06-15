@@ -192,6 +192,24 @@ namespace external
         return 0;
     }
 
+    static __int64 TouchEditBaseGetPasswordCharacter(void* touchEditbase)
+    {
+        static auto fGetPasswordCharacter = reinterpret_cast<__int64(__fastcall*)(void*)>(GetProcAddress(GetModuleHandleW(L"dui70.dll"),"?GetPasswordCharacter@TouchEditBase@DirectUI@@QEAAHXZ"));
+        if (fGetPasswordCharacter)
+            return fGetPasswordCharacter(touchEditbase);
+
+        return 0;
+    }
+
+    static __int64 TouchEditBaseSetPasswordCharacter(void* touchEditbase, unsigned int passwordCharacter)
+    {
+        static auto fSetPasswordCharacter = reinterpret_cast<__int64(__fastcall*)(void*, unsigned int)>(GetProcAddress(GetModuleHandleW(L"dui70.dll"), "?SetPasswordCharacter@TouchEditBase@DirectUI@@QEAAJH@Z"));
+        if (fSetPasswordCharacter)
+            return fSetPasswordCharacter(touchEditbase, passwordCharacter);
+
+        return 0;
+    }
+
     extern "C" __declspec(dllexport) void MessageView_SetActive();
     extern "C" __declspec(dllexport) void MessageOptionControl_Create(void* actualInsance, int optionflag);
     extern "C" __declspec(dllexport) void MessageView_SetMessage(const wchar_t* message);

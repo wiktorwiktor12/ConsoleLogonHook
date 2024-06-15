@@ -30,7 +30,7 @@ public:
     int flag = 0;
 
     static DirectUI::Element* CreateStringField(DirectUI::Element* UserTile, std::wstring content, bool bVisible, bool bIsSmall = false);
-    static DirectUI::Element* CreateEditField(DirectUI::Element* UserTile, std::wstring content, bool bVisible, bool bShowSubmit = false);
+    static DirectUI::Element* CreateEditField(DirectUI::Element* UserTile, std::wstring content, bool bVisible, bool bShowSubmit = false, bool bIsPassword = false);
     static DirectUI::Element* CreateCommandLinkField(DirectUI::Element* UserTile, std::wstring content, bool bVisible);
 
     bool textureExists = true;

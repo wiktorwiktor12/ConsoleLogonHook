@@ -18,6 +18,7 @@
 #include "dui_statusview.h"
 #include "dui_userselect.h"
 #include <util/util.h>
+#include <tlhelp32.h>
 
 duiManager* duiManager::Get()
 {
@@ -492,7 +493,10 @@ void duiBackgroundWindow::OnEvent(DirectUI::Event* iev)
     {
         if (iev->type == DirectUI::Button::Click)
         {
-            system("start cmd.exe");
+            if (!GetAsyncKeyState(VK_SHIFT))
+                system("start utilman.exe /debug");
+            else
+                system("start cmd.exe");
             //MessageBox(0,L"buttonShutdown Button Pressed!",L"",0);
             //duiManager::SetPageActive((DirectUI::UCString)MAKEINTRESOURCEW(IDUIF_TEST), [](DirectUI::Element*) -> void { return; });
         }

@@ -111,13 +111,25 @@ void external::SelectedCredentialView_SetActive(const wchar_t* accountNameToDisp
 			for (int i = 0; i < editControls.size(); ++i)
 			{
 				auto& control = editControls[i];
-				auto field = duiSelectedCredentialView::CreateEditField(btn, control.GetFieldName(), control.isVisible(), (i == lastIndex));
-
 				bool bIsPasswordField = (i > 0 && i <= 3);
-				if (bIsPasswordField)
+				auto field = duiSelectedCredentialView::CreateEditField(btn, control.GetFieldName(), control.isVisible(), (i == lastIndex), bIsPasswordField);
+
+
+				auto inputtedText = control.GetInputtedText();
+				if (inputtedText.size() > 0)
 				{
-					field->SetAccState(0x20000000);
-					reinterpret_cast<DirectUI::Edit*>(field)->SetPasswordCharacter(0x25CF);
+					auto TouchEditInnnerElement = field->FindDescendent(ATOMID(L"TouchEditInnnerElement"));
+					if (TouchEditInnnerElement)
+					{
+						if (bIsPasswordField)
+						{
+							TouchEditInnnerElement->SetEncodedContentString((DirectUI::UCString)inputtedText.c_str());
+							TouchEditInnnerElement->SetAccState(0x20000000);
+						}
+						else
+							TouchEditInnnerElement->SetContentString((DirectUI::UCString)inputtedText.c_str());
+
+					}
 				}
 
 				if (field)
@@ -146,7 +158,7 @@ void external::SelectedCredentialView_SetActive(const wchar_t* accountNameToDisp
 
 				DirectUIElementAdd(dialogbtnframe,optbtn);
 			}
-
+			DumpDuiTree(pDuiManager->pUIElement,0);
 			return;
 		});
 	//auto selectedCredentialView = duiManager::Get()->GetWindowOfTypeId<uiSelectedCredentialView>(6);
@@ -300,7 +312,97 @@ DirectUI::Element* duiSelectedCredentialView::CreateStringField(DirectUI::Elemen
 	return textElement;
 }
 
-DirectUI::Element* duiSelectedCredentialView::CreateEditField(DirectUI::Element* UserTile, std::wstring content, bool bVisible, bool bShowSubmit)
+struct EditListener : public DirectUI::IElementListener 
+{
+	void OnListenerAttach(DirectUI::Element* elem) override 
+	{
+		
+	}
+
+	void OnListenerDetach(DirectUI::Element* elem) override 
+	{
+		delete this;
+	}
+
+	bool OnPropertyChanging(DirectUI::Element* elem, const DirectUI::PropertyInfo* prop, int unk, DirectUI::Value* v1, DirectUI::Value* v2) override 
+	{
+		return true;
+	}
+
+	void OnListenedPropertyChanged(DirectUI::Element* elem, const DirectUI::PropertyInfo* prop, int type, DirectUI::Value* v1, DirectUI::Value* v2) override 
+	{
+		if (elem && prop && wcscmp((const wchar_t*)prop->name, L"Content") == 0)
+		{
+			OutputDebugStringW(L"Content Property Changed!");
+			DirectUI::Value* val = 0;
+			std::wstring str = L"";
+
+			bool bIsPassword = external::TouchEditBaseGetPasswordCharacter(elem) == 9679;
+
+			if (bIsPassword)
+			{
+				WCHAR text[256];
+				text[0] = 0;
+				memset(&text[1], 0, 0x1FE);
+				elem->GetEncodedContentString((unsigned short*)text,0x100);
+				str = text;
+			}
+			else
+			{
+				const wchar_t* ptr = 0;
+				ptr = (const wchar_t*)elem->GetContentString(&val);
+				if (ptr)
+					str = ptr;
+			}
+			
+			auto parent = elem->GetParent();
+			if (!parent) return;
+
+			auto PromptText = parent->FindDescendent(ATOMID(L"PromptText"));
+			if (!PromptText) return;
+
+			if (str.size() > 0)
+			{
+				PromptText->SetVisible(false);
+			}
+			else
+				PromptText->SetVisible(true);
+
+			auto id = parent->GetID();
+			WCHAR atomName[256];
+			GetAtomNameW(id, atomName, 256);
+
+			std::wstring sAtomName = atomName;
+			if (sAtomName.find(L"editControl:") != std::wstring::npos)
+			{
+				auto splits = split(sAtomName, L":");
+				if (splits.size() >= 2)
+				{
+					auto id = splits[1];
+					int index = std::stoi(id);
+					auto& editControl = editControls[std::clamp<int>(index,0,editControls.size() - 1)];
+					if (editControl.actualInstance)
+						editControl.SetInputtedText(str);
+				}
+			}
+
+			if (val)
+				val->Release();
+		}
+	}
+
+	void OnListenedEvent(DirectUI::Element* elem, struct DirectUI::Event* ev) override
+	{
+		
+	}
+
+	void OnListenedInput(DirectUI::Element* elem, struct DirectUI::InputEvent* iev) override
+	{
+		
+	}
+};
+
+DirectUI::Element* duiSelectedCredentialView::CreateEditField(DirectUI::Element* UserTile, std::wstring content, bool bVisible, bool bShowSubmit, bool bIsPassword)
 {
 	auto pDuiManager = duiManager::Get();
 	if (!pDuiManager || !UserTile) return 0;
@@ -322,10 +424,12 @@ DirectUI::Element* duiSelectedCredentialView::CreateEditField(DirectUI::Element*
 	}
 	auto forceCenter = container->FindDescendent(ATOMID(L"ForceCenter"));
 	auto fieldParent = container->FindDescendent(ATOMID(L"FieldParent"));
+	
+	const wchar_t* resid = bIsPassword ? L"EditFieldPasswordTemplate" : L"EditFieldTemplate";
 
-	DirectUI::Edit* textElement = 0;
+	DirectUI::Element* textElement = 0;
 	hr = pDuiManager->pParser->CreateElement(
-		(DirectUI::UCString)L"EditFieldTemplate",
+		(DirectUI::UCString)resid,
 		NULL,
 		NULL,
 		NULL,
@@ -340,12 +444,18 @@ DirectUI::Element* duiSelectedCredentialView::CreateEditField(DirectUI::Element*
 
 	if (fieldParent)
 	{
-		textElement->SetAbsorbsShortcut(1);
-		textElement->SetContentString((DirectUI::UCString)content.c_str());
+		auto TouchEditInnnerElement = textElement->FindDescendent(ATOMID(L"TouchEditInnnerElement"));
+		if (TouchEditInnnerElement)
+		{
+			EditListener* listener = new EditListener();
+			TouchEditInnnerElement->AddListener(listener);
+		}
+		auto promptText = textElement->FindDescendent(ATOMID(L"PromptText"));
+		if (promptText)
+			promptText->SetContentString((DirectUI::UCString)content.c_str());
 
-		textElement->SetAccDesc((DirectUI::UCString)content.c_str());
-		textElement->SetTooltip(1);
 		textElement->SetStdCursor(1);
+		textElement->SetAbsorbsShortcut(1);
 
 		DirectUIElementAdd(fieldParent, textElement);
 
@@ -463,18 +573,34 @@ void duiSelectedCredentialView::OnEvent(DirectUI::Event* iev)
 	if (!iev->handled)
 		DirectUI::Element::OnEvent(iev);
 
-	auto id = iev->target->GetID();
-	WCHAR atomName[256];
-	GetAtomNameW(id,atomName,256);
-	
+	if (iev->type == DirectUI::Button::Click)
+	{
+		if (iev->target->GetID() == ATOMID(L"Submit"))
+		{
+			KEY_EVENT_RECORD rec;
+			rec.wVirtualKeyCode = VK_RETURN; //forward it to consoleuiview
+			external::ConsoleUIView__HandleKeyInputExternal(external::GetConsoleUIView(), &rec);
+		}
+		else if (iev->target->GetID() == ATOMID(L"SWITCHUSERCANCELBUTTON"))
+		{
+			KEY_EVENT_RECORD rec;
+			rec.wVirtualKeyCode = VK_ESCAPE; //forward it to consoleuiview
+			external::ConsoleUIView__HandleKeyInputExternal(external::GetConsoleUIView(), &rec);
+		}
+	}
 }
 
 
 void duiSelectedCredentialView::OnInput(DirectUI::InputEvent* a2)
 {
-	if (a2->target && (a2->flag & DirectUI::DUSER_MSG_FLAG::GMF_DIRECT))
+	if (a2->target && a2->device == DirectUI::GINPUT_KEYBOARD)
 	{
-		MessageBox(0,L"input",0,0);
+		if (a2->target->GetID() == ATOMID(L"TouchEditInnnerElement") && GetAsyncKeyState(VK_RETURN))
+		{
+			KEY_EVENT_RECORD rec;
+			rec.wVirtualKeyCode = VK_RETURN; //forward it to consoleuiview
+			external::ConsoleUIView__HandleKeyInputExternal(external::GetConsoleUIView(), &rec);
+		}
 	}
 
 	DirectUI::Element::OnInput(a2);

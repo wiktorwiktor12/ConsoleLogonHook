@@ -87,3 +87,10 @@ static __int64 DirectUIElementAdd(DirectUI::Element* Parent, DirectUI::Element* 
         (DirectUI::Element**)&Child,
         1i64);
 }
+
+static std::wstring AtomToStr(ATOM atom)
+{
+    WCHAR atomName[256];
+    GetAtomNameW(atom, atomName, 256);
+    return atomName;
+}

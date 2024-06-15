@@ -192,7 +192,7 @@ DWORD WINAPI TickThread(LPVOID lparam)
                 button.tickMarkedPressed = 0;
             }
         }
-        if (locked && GetTickCount64() - tickLocked >= 25)
+        if (locked && GetTickCount64() - tickLocked >= 10)
         {
             locked = false;
 
