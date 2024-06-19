@@ -106,16 +106,15 @@ void external::SecurityControl_ButtonsReady()
                 }
                 
                 //btn->SetSheet(sheet);
-                auto stringelement = btn->FindDescendent(ATOMID(L"atomid"));
-                if (!stringelement)
-                {
-                    MessageBox(0, L"stringelement not found", 0, 0);
-                    continue;
-                }
-                std::wstring str = buttonwrapper.getString();
-
+                auto stringelement = btn->FindDescendent(ATOMID(L"atomid"));     
+                if (!stringelement)                                              
+                {                                                                
+                    stringelement = btn;
+                }                                                                
+                std::wstring str = buttonwrapper.getString();                    
+                                                                                 
                 stringelement->SetContentString((DirectUI::UCString)str.c_str());
-                stringelement->SetContentAlign(5);
+                stringelement->SetContentAlign(5);                               
                 btn->SetID((DirectUI::UCString)std::to_wstring(i).c_str());
 
                 auto parent = (i == buttonList.size() - 1) ? DialogButtonFrame : SecurityOptionsContainer;

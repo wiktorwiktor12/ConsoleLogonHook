@@ -95,7 +95,7 @@ static void MinimizeLogonConsole()
     if (!consoleWindow) return;
 
     //MoveWindow(consoleWindow,0,0,1,1,0);
-    //ShowWindow(consoleWindow, SW_FORCEMINIMIZE);
+    ShowWindow(consoleWindow, SW_FORCEMINIMIZE);
     //ShowWindow(consoleWindow, SW_HIDE);
     //ShowWindow(consoleWindow, SW_RESTORE);
 }

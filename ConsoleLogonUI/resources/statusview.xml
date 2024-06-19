@@ -7,7 +7,7 @@
         </style>
     </stylesheets>
     
-    <element resid="Main" layout="filllayout()" accessible="true"  sheet="statusViewSheet" background="argb(0,0,0,0)">
+    <element resid="Main" layout="filllayout()" accessible="true" sheet="statusViewSheet" background="argb(0,0,0,0)">
         <duiStatusView id="atom(StatusViewFrame)" layout="filllayout()">
             <element layout="borderlayout()" >
                 <element layoutpos="client" layout="verticalflowlayout(1,2,2,2)">

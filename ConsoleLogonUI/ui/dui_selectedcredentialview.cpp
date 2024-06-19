@@ -150,10 +150,9 @@ void external::SelectedCredentialView_SetActive(const wchar_t* accountNameToDisp
 			if (optbtn)
 			{
 				auto dialogbtnframe = pDuiManager->pUIElement->FindDescendent(ATOMID(L"DialogButtonFrame"));
-				auto textElm = optbtn->FindDescendent(ATOMID(L"textElement"));
+				auto textElm = optbtn;
 				if (textElm)
 					textElm->SetContentString((DirectUI::UCString)text.c_str());
-
 				optbtn->SetID((DirectUI::UCString)L"SWITCHUSERCANCELBUTTON");
 
 				DirectUIElementAdd(dialogbtnframe,optbtn);
@@ -454,7 +453,7 @@ DirectUI::Element* duiSelectedCredentialView::CreateEditField(DirectUI::Element*
 		if (promptText)
 			promptText->SetContentString((DirectUI::UCString)content.c_str());
 
-		textElement->SetStdCursor(1);
+		textElement->SetStdCursor(10);
 		textElement->SetAbsorbsShortcut(1);
 
 		DirectUIElementAdd(fieldParent, textElement);

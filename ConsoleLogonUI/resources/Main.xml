@@ -29,7 +29,7 @@
             </if>
 
             <if class="ShutDownFrame">
-                <element margin = "rect(6rp, 0rp, 6rp, 0rp)"/>
+                <element margin="rect(6rp, 0rp, 6rp, 0rp)"/>
             </if>
 
 

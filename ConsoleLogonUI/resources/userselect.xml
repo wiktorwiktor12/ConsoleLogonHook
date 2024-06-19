@@ -1,10 +1,6 @@
 <duixml>
     <stylesheets>
         <style resid="credviewsheet">
-            <if class="CancelTexts">
-                <element padding="rect(9rp, 0rp, 9rp, 2rp)" background="argb(0,0,0,0)" contentalign="WrapCenter" foreground="argb(255,255,255,255)" shadowintensity="75" font="11;normal;shadow;Segoe UI" fontstyle="Shadow"/>
-            </if>
-
             <element background="argb(0, 0, 0, 0)" foreground="white" font="11;normal;shadow;Segoe UI" shadowintensity="75"/>
             <button foreground="white" font="11;normal;shadow;Segoe UI" shadowintensity="75" contentalign="middlecenter" margin="rect(6rp, 0rp, 6rp, 0rp)" accessible="true" accrole="43"/>
             <if class="GenericButtons">
