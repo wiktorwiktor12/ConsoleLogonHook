@@ -167,7 +167,6 @@ bool locked = false;
 __int64(__fastcall* LogonViewManager__Lock)(__int64 a1, int a2, char a3, HSTRING a4, __int64 a5);
 __int64 LogonViewManager__Lock_Hook(__int64 a1, int a2, char a3, HSTRING a4, __int64 a5)
 {
-    return 0;
     auto res = LogonViewManager__Lock(a1, a2, a3, a4, a5);
 
     SPDLOG_INFO("LogonViewManager__Lock_Hook {} {} {} {} {}", (void*)a1, a2, (int)a3, ws2s(ConvertHStringToString(a4)), (void*)a5);
@@ -193,7 +192,7 @@ DWORD WINAPI TickThread(LPVOID lparam)
                 button.tickMarkedPressed = 0;
             }
         }
-        if (locked && GetTickCount64() - tickLocked >= 10)
+        if (locked && GetTickCount64() - tickLocked > 0)
         {
             locked = false;
 
