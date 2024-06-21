@@ -141,7 +141,7 @@ void external::SelectedCredentialView_SetActive(const wchar_t* accountNameToDisp
 			}
 
 			bool isCancel = (gflag == 2);
-			std::wstring text = isCancel ? L"Cancel" : L"Switch User"; //TODO: LOCALISE
+			std::wstring text = isCancel ? /*Cancel*/GetStringFromConsoleLogon(107) : /*Switch User*/GetStringFromConsoleLogon(114);
 
 			DirectUI::Button* optbtn = 0;
 			hr = pDuiManager->pParser->CreateElement(

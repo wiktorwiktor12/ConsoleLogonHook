@@ -88,6 +88,14 @@ static __int64 DirectUIElementAdd(DirectUI::Element* Parent, DirectUI::Element* 
         1i64);
 }
 
+static std::wstring GetStringFromConsoleLogon(UINT str)
+{
+    WCHAR buf[256];
+    buf[0] = '\0';
+    LoadStringW(GetModuleHandle(L"ConsoleLogon.dll"),str, buf,256);
+    return buf;
+}
+
 static std::wstring AtomToStr(ATOM atom)
 {
     WCHAR atomName[256];
