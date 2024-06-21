@@ -183,6 +183,13 @@ namespace external
             fHideConsoleUI();
     }
 
+    static void ShowConsoleUI()
+    {
+        static auto fShowConsoleUI = EXTERNAL(void(*)(), "ShowConsoleUI");
+        if (fShowConsoleUI)
+            fShowConsoleUI();
+    }
+
     static HBITMAP BrandingLoadImage(const wchar_t* a1, __int64 a2, UINT a3, int a4, int a5, UINT a6)
     {
         static auto fBrandingLoadImage = reinterpret_cast<HBITMAP(__fastcall*)(const wchar_t* a1, __int64 a2, UINT a3, int a4, int a5, UINT a6)>(GetProcAddress(LoadLibrary(L"winbrand.dll"),"BrandingLoadImage"));

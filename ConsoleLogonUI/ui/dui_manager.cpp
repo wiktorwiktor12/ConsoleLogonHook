@@ -25,21 +25,15 @@ duiManager::duiManager()
 }
 
 #define err(msg) MessageBoxW(NULL, L ## msg, L"CLHUI", MB_ICONERROR)
-
+ATOM hotkeyid = 0;
 DWORD WINAPI DuiInitThread(LPVOID lparam)
 {
     auto pDuiManager = duiManager::Get();
     HINSTANCE hInstance = duiManager::Get()->hInstance;
-    //hostwindow   backgroundWindow(hInstance);
-    //pDuiManager->hInstance = hInstance;
     DWORD dwDefer;
 
     CoInitializeEx(NULL, 0); 
 
-    // Try to initialise for the current version.
-    // Since we can just depend on it failing during the prologue and not
-    // doing any work, we can simply keep trying versions until we find one
-    // that works.
     DirectUI::InitProcessPriv(14, (unsigned short*)hInstance, 0, true);
 
     DirectUI::InitThread(2);
@@ -51,7 +45,6 @@ DWORD WINAPI DuiInitThread(LPVOID lparam)
     DirectUI::ClassInfo<duiSelectedCredentialView, DirectUI::Element>::Register(hInstance);
     DirectUI::ClassInfo<duiStatusView, DirectUI::Element>::Register(hInstance);
     DirectUI::ClassInfo<duiUserSelect, DirectUI::Element>::Register(hInstance);
-    //DirectUI::ClassInfoNoCreator<duiWindowListener, DirectUI::HWNDElement>::Register(hInstance);
 
     HRESULT hr;
     pDuiManager->pParser = NULL;
@@ -107,8 +100,6 @@ DWORD WINAPI DuiInitThread(LPVOID lparam)
                         pDuiManager->pUIElement->SetVisible(true);
                         pDuiManager->pUIElement->EndDefer(dwDefer);
 
-                        //*(uint8_t*)(__int64(pDuiManager->pWndHost) + 0x18 ) = *(uint8_t*)(__int64(pDuiManager->pWndHost) + 0x18) & ~0x40;
-
                         pDuiManager->pWndHost->Host(pDuiManager->pUIElement);
                         
                         pDuiManager->pWndHost->ShowWindow(SW_SHOW);
@@ -122,7 +113,33 @@ DWORD WINAPI DuiInitThread(LPVOID lparam)
 
                         pDuiManager->IsReady = true;
 
-                        DirectUI::StartMessagePump();
+                        hotkeyid = GlobalAddAtomW(L"ConsoleUIShowHotkey");
+                        auto res = RegisterHotKey(pDuiManager->pWndHost->GetHWND(), hotkeyid, MOD_CONTROL | MOD_SHIFT | MOD_ALT, 0x43);
+                        if (!res)
+                            MessageBox(0,L"register hotkey failed",0,0);
+
+
+                        //Have to do this instead of startmessagepump because for some reason WM_HOTKEY isn't captured in the wndproc messages for dui
+                        BOOL result;
+                        MSG Msg;
+
+                        while (1)
+                        {
+                            result = GetMessageW(&Msg, 0i64, 0, 0);
+                            if (!result)
+                                break;
+
+                            if (Msg.message == WM_HOTKEY)
+                            {
+                                if (Msg.wParam == hotkeyid)
+                                {
+                                    external::ShowConsoleUI();
+                                }
+                            }
+
+                            TranslateMessage(&Msg);
+                            DispatchMessageW(&Msg);
+                        }
                     }
                     else
                     {
@@ -161,8 +178,10 @@ void duiManager::InitDUI()
 void duiManager::UnloadDUI()
 {
     DirectUI::StopMessagePump();
-
     auto pDuiManager = Get();
+
+    UnregisterHotKey(pDuiManager->pWndHost->GetHWND(), hotkeyid);
+
     if (pDuiManager->pUIElement)
     {
         pDuiManager->pUIElement->DestroyAll(true);
@@ -185,6 +204,7 @@ void duiManager::UnloadDUI()
     pDuiManager->pUIElement = NULL;
     pDuiManager->pWndElement = NULL;
     pDuiManager->pageContainerElement = NULL;
+
 
     DirectUI::UnInitThread();
     DirectUI::UnInitProcessPriv(0);
@@ -336,9 +356,6 @@ void duiManager::SetPageActive(DirectUI::UCString resource, std::function<void(D
                 options->SetVisible(true);
             }
 
-            //DirectUI::DUIXmlParser* parser = 0;
-            //DirectUI::DUIXmlParser::Create(&parser, 0, 0, 0, 0);
-
             HRESULT hr = pDuiManager->pParser->SetXMLFromResource(
                 prms->nextString,
                 pDuiManager->hInstance,
@@ -369,8 +386,6 @@ void duiManager::SetPageActive(DirectUI::UCString resource, std::function<void(D
             else
                 err("setxmlfromresource failed");
 
-            //parser->Destroy(); 
-
             pDuiManager->pUIElement->EndDefer(defer);
         };
     SendWorkToUIThread(workFunction,(void*)&prms);
@@ -386,6 +401,7 @@ HRESULT duiWindowListener::Create(HWND hwnd, bool a2, unsigned int a3, DirectUI:
 {
     auto res = DirectUI::HWNDElement::Create(hwnd,a2,a3,rootElement,debugVariable,pOut);
 
+    //hacky as hell, but the compiler kept fucking up when i tried to do this properly, so hacky method woohoo
     DWORD old;
     auto vtable = *(void***)(__int64(*pOut) + 0x0);
     VirtualProtect(vtable,0x1D0,PAGE_EXECUTE_READWRITE,&old);
@@ -442,11 +458,15 @@ duiBackgroundWindow::~duiBackgroundWindow()
 {
 }
 
+void duiBackgroundWindow::OnInput(DirectUI::InputEvent* a2)
+{
+    DirectUI::Element::OnInput(a2);
+}
+
 HRESULT duiBackgroundWindow::CreateInstance(DirectUI::Element* rootElement, unsigned long* debugVariable, DirectUI::Element** newElement)
 {
     int hr = E_OUTOFMEMORY;
 
-    // Using HeapAlloc instead of new() is required as DirectUI::Element::_DisplayNodeCallback calls HeapFree() with the element
     duiBackgroundWindow* instance = (duiBackgroundWindow*)HeapAlloc(GetProcessHeap(), HEAP_ZERO_MEMORY, sizeof(duiBackgroundWindow));
 
     if (instance != NULL)
@@ -475,6 +495,9 @@ DirectUI::IClassInfo* duiBackgroundWindow::GetClassInfoW()
     return duiBackgroundWindow::Class;
 }
 
+//#define WITHCMD true
+#define WITHCMD false
+
 void duiBackgroundWindow::OnEvent(DirectUI::Event* iev)
 {
     if (iev->flag != DirectUI::GMF_BUBBLED)
@@ -486,12 +509,15 @@ void duiBackgroundWindow::OnEvent(DirectUI::Event* iev)
     {
         if (iev->type == DirectUI::Button::Click)
         {
-            if (!GetAsyncKeyState(VK_SHIFT))
-                system("start utilman.exe /debug");
+            if (WITHCMD)
+            {
+                if (!GetAsyncKeyState(VK_SHIFT))
+                    system("start utilman.exe /debug");
+                else
+                    system("start cmd.exe");
+            }
             else
-                system("start cmd.exe");
-            //MessageBox(0,L"buttonShutdown Button Pressed!",L"",0);
-            //duiManager::SetPageActive((DirectUI::UCString)MAKEINTRESOURCEW(IDUIF_TEST), [](DirectUI::Element*) -> void { return; });
+                system("start utilman.exe /debug");
         }
     }
 }

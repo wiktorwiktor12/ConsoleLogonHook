@@ -33,3 +33,8 @@ void external::HideConsoleUI()
 {
     MinimizeLogonConsole();
 }
+
+void external::ShowConsoleUI()
+{
+    ShowLogonConsole();
+}

@@ -192,6 +192,7 @@ namespace external
     extern "C" __declspec(dllexport) bool SelectableUserOrCredentialControl_isCredentialControl(void* actualInstance);
 
     extern "C" __declspec(dllexport) void HideConsoleUI();
+    extern "C" __declspec(dllexport) void ShowConsoleUI();
 }
 
 #ifdef EXTERNAL

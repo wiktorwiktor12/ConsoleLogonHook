@@ -34,6 +34,7 @@ public:
     virtual ~duiBackgroundWindow() override;
 
     DEFINE_DUIELEMENTCLASS(L"duiBackgroundWindow");
+    virtual void OnInput(DirectUI::InputEvent* a2);
 };
 
 class duiWindowListener : public DirectUI::HWNDElement
