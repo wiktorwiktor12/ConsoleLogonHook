@@ -17,8 +17,10 @@ The following steps explain how you can contribute to the project
 > [!NOTE]
 > **It will most likely ask you to provide adminsistrator permission to copy to System32, just accept the warning**
 >
-2. Take ownership of ConsoleLogon.dll and replace it with version, 10.0.19041.3636 (should be in releases)
-3. Import the following registry key as TrustedInstaller by copying it into a text file and save as a .reg file then running with psexec64, or using any other method to run something as trusted installer
+2. Rename authui.dll to au7hui.dll and copy into %SYSTEMROOT%\System32 , this is so the windows 7 consolelogonui can pull the resources from it (note: this step may not be necessary in the future)
+ Or alternatively, just copy au7hui.dll from a release 
+3. Take ownership of ConsoleLogon.dll and replace it with version, 10.0.19041.3636 (should be in releases)
+4. Import the following registry key as TrustedInstaller by copying it into a text file and save as a .reg file then running with psexec64, or using any other method to run something as trusted installer
 
 
 ```
