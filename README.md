@@ -5,7 +5,9 @@ This project hooks onto and provides a graphical user interface for the console 
 
 > [!WARNING] 
 > **This project is currently in development, use it at your own risk.**
-> You may encounter issues using a Microsoft account, however, this will work perfectly on local accounts
+> 
+> You may encounter issues using a Microsoft account, however, this will work perfectly on local accounts.
+> 
 > I would reccommend disabling the lock screen and <kbd>CTRL</kbd> <kbd>Alt</kbd> <kbd>Del</kbd> logon keybinds as they're not fully implemented yet
 >
 
