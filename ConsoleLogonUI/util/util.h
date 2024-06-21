@@ -82,7 +82,7 @@ static __int64 DirectUIElementAdd(DirectUI::Element* Parent, DirectUI::Element* 
 {
     //ELEMENT::ADD
     //https://imgur.com/a/pEyfcVQ
-    return (*(__int64(__fastcall**)(DirectUI::Element*, struct DirectUI::Element**, __int64))(*(uintptr_t*)Parent + 128i64))(
+    return (*(__int64(__fastcall**)(DirectUI::Element*, DirectUI::Element**, __int64))(*(uintptr_t*)Parent + 128i64))(
         Parent,
         (DirectUI::Element**)&Child,
         1i64);

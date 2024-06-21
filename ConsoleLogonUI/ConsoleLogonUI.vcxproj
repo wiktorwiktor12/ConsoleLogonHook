@@ -114,7 +114,7 @@
       <PrecompiledHeaderFile>pch.h</PrecompiledHeaderFile>
       <LanguageStandard>stdcpplatest</LanguageStandard>
       <LanguageStandard_C>stdc17</LanguageStandard_C>
-      <AdditionalIncludeDirectories>$(ProjectDir);imgui;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(ProjectDir);%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
@@ -135,7 +135,7 @@
       <PrecompiledHeaderFile>pch.h</PrecompiledHeaderFile>
       <LanguageStandard>stdcpplatest</LanguageStandard>
       <LanguageStandard_C>stdc17</LanguageStandard_C>
-      <AdditionalIncludeDirectories>$(ProjectDir);imgui;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(ProjectDir);%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
@@ -148,13 +148,6 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="dllmain.cpp" />
-    <ClCompile Include="imgui\imgui.cpp" />
-    <ClCompile Include="imgui\imgui_demo.cpp" />
-    <ClCompile Include="imgui\imgui_draw.cpp" />
-    <ClCompile Include="imgui\imgui_impl_dx11.cpp" />
-    <ClCompile Include="imgui\imgui_impl_win32.cpp" />
-    <ClCompile Include="imgui\imgui_tables.cpp" />
-    <ClCompile Include="imgui\imgui_widgets.cpp" />
     <ClCompile Include="ui\dui_manager.cpp" />
     <ClCompile Include="ui\dui_messageview.cpp" />
     <ClCompile Include="ui\dui_securitycontrol.cpp" />
@@ -165,15 +158,6 @@
   <ItemGroup>
     <ClInclude Include="dui\dui_includes.h" />
     <ClInclude Include="dui\templates.h" />
-    <ClInclude Include="imgui\imconfig.h" />
-    <ClInclude Include="imgui\imgui.h" />
-    <ClInclude Include="imgui\imgui_impl_dx11.h" />
-    <ClInclude Include="imgui\imgui_impl_win32.h" />
-    <ClInclude Include="imgui\imgui_internal.h" />
-    <ClInclude Include="imgui\imstb_rectpack.h" />
-    <ClInclude Include="imgui\imstb_textedit.h" />
-    <ClInclude Include="imgui\imstb_truetype.h" />
-    <ClInclude Include="imgui\stb_image.h" />
     <ClInclude Include="resource.h" />
     <ClInclude Include="resources\resource.h" />
     <ClInclude Include="spdlog\async.h" />
@@ -280,7 +264,6 @@
     <ClInclude Include="spdlog\stopwatch.h" />
     <ClInclude Include="spdlog\tweakme.h" />
     <ClInclude Include="spdlog\version.h" />
-    <ClInclude Include="ui\ui_helper.h" />
     <ClInclude Include="ui\dui_manager.h" />
     <ClInclude Include="ui\dui_messageview.h" />
     <ClInclude Include="ui\dui_securitycontrol.h" />

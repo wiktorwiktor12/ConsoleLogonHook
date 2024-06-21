@@ -2,7 +2,6 @@
 #include "spdlog/spdlog.h"
 #include <winstring.h>
 #include "util/util.h"
-#include "ui_helper.h"
 #include "util/interop.h"
 #include "resources/resource.h"
 

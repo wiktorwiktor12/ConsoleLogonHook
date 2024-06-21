@@ -1,12 +1,5 @@
-#define STB_IMAGE_IMPLEMENTATION
-#define IM_VEC2_CLASS_EXTRA
-#define IMGUI_DEFINE_MATH_OPERATORS
 #include "dui_manager.h"
 #include "ui_sink.h"
-#include "../imgui/imgui.h"
-#include "../imgui/imgui_internal.h"
-#include "ui_helper.h"
-#include "stb_image.h"
 #include "resources/resource.h"
 #include <util/interop.h>
 #include <dui/templates.h>
