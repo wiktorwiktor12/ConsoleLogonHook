@@ -40,3 +40,9 @@ Windows Registry Editor Version 5.00
 ```
 
 4. Take ownership of and rename Windows.UI.Logon.dll to anything else so it will invoke console login, it'll just work and do its thing
+
+> [!NOTE]
+> **THIS IS STILL EARLY INTO DEVELOPMENT AND MAY BE BUGGY**
+> You may encounter issues using a microsoft account, this will work perfectly on local accounts
+> I would reccommend disabling the lock screen and ctrl alt delete logon keybinds as they're not fully implemented yet
+>
