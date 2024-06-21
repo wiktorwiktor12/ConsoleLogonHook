@@ -1,5 +1,6 @@
 # ConsoleLogonHook
 Welcome!
+
 This project hooks onto and provides a graphical user interface for the console logon screen in Windows 10.
 
 > [!WARNING] 
