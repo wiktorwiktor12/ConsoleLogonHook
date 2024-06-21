@@ -12,7 +12,7 @@ The following steps explain how you can contribute to the project
 2. Pull using git commandline or any git ui manager such as github desktop
 3. enjoy
  
-## How to use
+## Installation
 > [!WARNING]
 > **This LogonUI modification will require administrator privileges to be installed.**
 >
