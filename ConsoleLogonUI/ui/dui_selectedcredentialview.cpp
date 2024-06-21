@@ -27,6 +27,7 @@ void external::SelectedCredentialView_SetActive(const wchar_t* accountNameToDisp
 	bReady = false;
 	duiManager::SetPageActive((DirectUI::UCString)MAKEINTRESOURCEW(IDUIF_SELECTEDCREDENTIALVIEW), [](DirectUI::Element*) -> void 
 		{
+			bool isChangePassword = (gflag == 2);
 			auto pDuiManager = duiManager::Get();
 			auto UserList = (DirectUI::Selector*)pDuiManager->pUIElement->FindDescendent(ATOMID(L"UserList"));
 			auto InsideFrame = pDuiManager->pUIElement->FindDescendent(ATOMID(L"InsideFrame"));
@@ -47,22 +48,24 @@ void external::SelectedCredentialView_SetActive(const wchar_t* accountNameToDisp
 			std::wstring sid = L"";
 			external::GetSIDFromName(gname, &sid);
 
-			std::wstring nametoshow = L"";
+			std::wstring nametoshow = gname;
 			std::wstring nameforPfp = L"";
+			std::wstring path = L"C:\\ProgramData\\Microsoft\\User Account Pictures\\user-192.png";
 
 			if (sid.size() > 0)
 			{
-				nametoshow = gname;
 				nameforPfp = gname;
 			}
 			else if (editControls.size() > 0 && editControls[0].actualInstance)
 			{
 				nameforPfp = editControls[0].GetInputtedText();
 				external::GetSIDFromName(nameforPfp.c_str(), &sid);
+
 				if (sid.size() <= 0)
-					nameforPfp = L"";
+					nameforPfp = gname;
 			}
-			auto userName = duiSelectedCredentialView::CreateStringField(btn, nametoshow, true, false);
+			if (!isChangePassword)
+				auto userName = duiSelectedCredentialView::CreateStringField(btn, nametoshow, true, false);
 			
 			//TODO: FIND A WAY TO CHECK IF A USER IS LOCKED
 			bool locked = false;
@@ -71,9 +74,12 @@ void external::SelectedCredentialView_SetActive(const wchar_t* accountNameToDisp
 				duiSelectedCredentialView::CreateStringField(btn, L"Locked", true, true); //TODO: LOCALISE THIS STRING
 
 			auto pic = btn->FindDescendent(ATOMID(L"Picture"));
-			if (pic && nameforPfp.size() > 0)
+			if (pic)
 			{
-				auto path = external::GetProfilePicturePathFromSID(sid,true);
+				auto overridepath = external::GetProfilePicturePathFromSID(sid, true);
+				if (overridepath.size() >= 0)
+					path = overridepath;
+
 				if (path.size() > 0)
 				{
 					auto pfp = GetHBITMAPFromImageFile(const_cast<WCHAR*>(path.c_str()));
@@ -140,8 +146,7 @@ void external::SelectedCredentialView_SetActive(const wchar_t* accountNameToDisp
 					field->SetID((DirectUI::UCString)std::format(L"editControl:{}", i).c_str());
 			}
 
-			bool isCancel = (gflag == 2);
-			std::wstring text = isCancel ? /*Cancel*/GetStringFromConsoleLogon(107) : /*Switch User*/GetStringFromConsoleLogon(114);
+			std::wstring text = isChangePassword ? /*Cancel*/GetStringFromConsoleLogon(107) : /*Switch User*/GetStringFromConsoleLogon(114);
 
 			DirectUI::Button* optbtn = 0;
 			hr = pDuiManager->pParser->CreateElement(
