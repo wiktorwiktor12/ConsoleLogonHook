@@ -4,7 +4,10 @@ Welcome!
 This project hooks onto and provides a graphical user interface for the console logon screen in Windows 10.
 
 > [!WARNING] 
-**This project is currently in development, use it at your own risk.**
+> **This project is currently in development, use it at your own risk.**
+> You may encounter issues using a Microsoft account, however, this will work perfectly on local accounts
+> I would reccommend disabling the lock screen and <kbd>CTRL</kbd> <kbd>Alt</kbd> <kbd>Del</kbd> logon keybinds as they're not fully implemented yet
+>
 
 ## How to contribute to the project
 The following steps explain how you can contribute to the project
@@ -13,7 +16,7 @@ The following steps explain how you can contribute to the project
 3. Enjoy!
  
 ## Installation
-> [!WARNING]
+> [!NOTE]
 > **This will require administrator privileges to be installed.**
 >
 
@@ -39,9 +42,3 @@ reg add HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\WindowsRuntime\ActivatableClassId\
 ```
 
 5. Take ownership of the file `Windows.UI.Logon.dll` and rename it to something else. Example: `Windows.UI.Logon.dll.bak`, this is required as it will force the use of the console logon screen.
-
-> [!NOTE]
-> **THIS IS STILL EARLY INTO DEVELOPMENT AND MAY BE BUGGY**
-> You may encounter issues using a Microsoft account, however, this will work perfectly on local accounts
-> I would reccommend disabling the lock screen and <kbd>CTRL</kbd> <kbd>Alt</kbd> <kbd>Del</kbd> logon keybinds as they're not fully implemented yet
->
