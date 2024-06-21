@@ -20,7 +20,7 @@ The following steps explain how you can contribute to the project
 2. Take and rename authui.dll to au7hui.dll from windows 7 sp1 and copy into %SYSTEMROOT%\System32 , this is so the windows 7 consolelogonui can pull the resources from it (note: this step may not be necessary in the future)
  Or alternatively, just copy au7hui.dll from a release 
 3. Take ownership of ConsoleLogon.dll and replace it with version, 10.0.19041.3636 (should be in releases), this only temporary until a pdb offset finder system is written as they are hardcoded atm
-4. Import the following registry key as TrustedInstaller by copying it into a text file and save as a .reg file then running with psexec64, or using any other method to run something as trusted installer
+4. A) Import the following registry key as TrustedInstaller by copying it into a text file and save as a .reg file then running with psexec64, or using any other method to run something as trusted installer
 
 
 ```
@@ -39,7 +39,19 @@ Windows Registry Editor Version 5.00
 "DllPath"="C:\\Windows\\System32\\ConsoleLogonHook.dll"
 ```
 
-4. Take ownership of and rename Windows.UI.Logon.dll to anything else so it will invoke console login, it'll just work and do its thing
+4. B) Or open a CMD window as TrustedInstaller via psexec64 and run the following commands:
+
+```
+reg add HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\WindowsRuntime\ActivatableClassId\Windows.Internal.Shell.PlatformExtensions.ConsoleCredUX /v DllPath /t REG_SZ /d %systemroot%\System32\ConsoleLogonHook.dll /f
+
+reg add HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\WindowsRuntime\ActivatableClassId\Windows.Internal.UI.Logon.Controller.ConsoleBlockedShutdownResolver /v DllPath /t REG_SZ /d %systemroot%\System32\ConsoleLogonHook.dll /f
+
+reg add HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\WindowsRuntime\ActivatableClassId\Windows.Internal.UI.Logon.Controller.ConsoleLockScreen /v DllPath /t REG_SZ /d %systemroot%\System32\ConsoleLogonHook.dll /f
+
+reg add HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\WindowsRuntime\ActivatableClassId\Windows.Internal.UI.Logon.Controller.ConsoleLogonUX /v DllPath /t REG_SZ /d %systemroot%\System32\ConsoleLogonHook.dll /f
+```
+
+5. Take ownership of and rename Windows.UI.Logon.dll to anything else so it will invoke console login, it'll just work and do its thing
 
 > [!NOTE]
 > **THIS IS STILL EARLY INTO DEVELOPMENT AND MAY BE BUGGY**
