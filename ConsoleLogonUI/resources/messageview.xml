@@ -1,14 +1,266 @@
 <duixml>
     <stylesheets>
-        <style resid="messageViewSheet">
-            <if id="atom(LolText1)">
-                <element background="argb(255, 0, 255, 0)"/>
+        <style resid="messageviewsheet">
+            <element background="argb(0, 0, 0, 0)" foreground="white" font="11;normal;shadow;Segoe UI" shadowintensity="75"/>
+            <button foreground="white" font="11;normal;shadow;Segoe UI" shadowintensity="75" contentalign="middlecenter" margin="rect(6rp, 0rp, 6rp, 0rp)" accessible="true" accrole="43"/>
+            <if class="GenericButton">
+                <button minsize="size(93rp,28rp)" padding="rect(10rp, 0rp, 10rp, 2rp)" borderthickness="rect(4rp, 3rp, 4rp, 3rp)" background="resbmp(12263,7,-1,0,0,1,1,library(au7hui.dll))" bordercolor="gray" borderstyle="raised"/>
+                <if keyfocused="true">
+                    <button background="resbmp(12259,7,-1,0,0,1,1,library(au7hui.dll))" bordercolor="windowtext" borderstyle="solid"/>
+                </if>
+                <if mousefocused="true">
+                    <button background="resbmp(12260,7,-1,0,0,1,1,library(au7hui.dll))" bordercolor="windowtext" borderstyle="solid"/>
+                </if>
+                <if mousefocused="true" keyfocused="true" pressed="false">
+                    <button background="resbmp(12261,7,-1,0,0,1,1,library(au7hui.dll))" bordercolor="windowtext" borderstyle="solid"/>
+                </if>
+                <if pressed="true">
+                    <button background="resbmp(12262,7,-1,0,0,1,1,library(au7hui.dll))" bordercolor="windowtext" borderstyle="sunken"/>
+                </if>
             </if>
         </style>
+
+        <style resid="UsersStyle">
+            <if visible="false">
+                <element width="0rp" height="0rp" layoutpos="none" accessible="false"/>
+                <button width="0rp" height="0rp" layoutpos="none" accessible="false"/>
+                <if class="UserTile">
+                    <button width="0rp" height="0rp" layoutpos="none" accessible="false"/>
+                </if>
+            </if>
+            <if class="HorizontalViewSpacer">
+                <element height="0rp" width="80rp"/>
+            </if>
+            <if class="UserTile">
+                <button accessible="true" accrole="34" accstate="0" height="123rp"/>
+                <if selected="true">
+                    <button accstate="2"/>
+                </if>
+            </if>
+            <if id="atom(PictureContainer)">
+                <element width="80rp" height="80rp"/>
+            </if>
+            <if id="atom(PicturePadding)">
+                <element padding="rect(16rp, 16rp, 16rp, 16rp)"/>
+            </if>
+            <if id="atom(Overlay)">
+                <element width="80rp" height="80rp" borderthickness="rect(1rp, 1rp, 1rp, 1rp)" background="resbmp(12222,7,-1,0,0,1,1,library(au7hui.dll))"/>
+                <if HighDPI="true">
+                    <element background="resbmp(12237, 7,-1,0,0,1,1,library(au7hui.dll))"/>
+                </if>
+                <if selected="true">
+                    <element background="resbmp(12219,7,-1,0,0,1,1,library(au7hui.dll))"/>
+                    <if HighDPI="true">
+                        <element background="resbmp(12234, 7,-1,0,0,1,1,library(au7hui.dll))"/>
+                    </if>
+                </if>
+                <if mousefocused="true">
+                    <element background="resbmp(12218,7,-1,0,0,1,1,library(au7hui.dll))"/>
+                    <if HighDPI="true">
+                        <element background="resbmp(12233, 7,-1,0,0,1,1,library(au7hui.dll))"/>
+                    </if>
+                </if>
+                <if selected="true" mousefocused="true">
+                    <element background="resbmp(12220,7,-1,0,0,1,1,library(au7hui.dll))"/>
+                    <if HighDPI="true">
+                        <element background="resbmp(12235, 7,-1,0,0,1,1,library(au7hui.dll))"/>
+                    </if>
+                </if>
+            </if>
+            <if id="atom(Picture)">
+                <element width="48rp" height="48rp" accessible="true" accrole="40" accname="User Picture"/>
+            </if>
+            <if class="Link">
+                <button font="9;normal;shadow|underline;Segoe UI" shadowintensity="75" cursor="hand" contentalign="middlecenter"/>
+                <if keyfocused="true">
+                    <button contentalign="middlecenter|focusrect"/>
+                </if>
+                <if mousefocused="true">
+                    <button fontstyle="underline"/>
+                </if>
+            </if>
+            <if class="SmallText">
+                <element font="9;normal;shadow;Segoe UI" shadowintensity="75" contentalign="topcenter | endellipsis"/>
+            </if>
+            <if class="LargeText">
+                <element font="9;normal;shadow;Segoe UI" shadowintensity="75" contentalign="topcenter | endellipsis"/>
+            </if>
+            <if class="RestrictedEdit">
+                <Edit width="225rp" height="25rp" font="9;normal;shadow;Segoe UI" shadowintensity="75" margin="rect(0rp, 3rp, 0rp, 3rp)" padding="rect(0rp, 1rp, 0rp, 0rp)" borderthickness="rect(4, 4, 4, 4)" bordercolor="gray" accessible="true" accrole="42" background="resbmp(11003, 7,-1,0,0,1,1,library(au7hui.dll))"/>
+                <if mousefocused="true">
+                    <Edit background="resbmp(11002, 7,-1,0,0,1,1,library(au7hui.dll))" bordercolor="windowtext"/>
+                </if>
+                <if keyfocused="true">
+                    <Edit background="resbmp(11001, 7,-1,0,0,1,1,library(au7hui.dll))" bordercolor="windowtext"/>
+                </if>
+                <if enabled="false">
+                    <Edit background="resbmp(11000, 7,-1,0,0,1,1,library(au7hui.dll))"/>
+                </if>
+            </if>
+            <if class="DUIComboBox">
+                <Combobox width="225rp" height="24rp" font="9;normal;shadow;Segoe UI" shadowintensity="75" margin="rect(0rp, 4rp, 0rp, 0rp)" padding="rect(0rp, 1rp, 0rp, 0rp)" accessible="true"/>
+            </if>
+            <if id="atom(Submit)">
+                <Button background="resbmp(12288,7,-1,0,0,1,1,library(au7hui.dll))" margin="rect(4rp, 0rp, 0rp, 0rp)" visible="false" enabled="false" borderthickness="rect(1rp, 1rp, 1rp, 1rp)" bordercolor="gray" borderstyle="raised"/>
+                <if HighDPI="true">
+                    <Button background="resbmp(12291,7,-1,0,0,1,1,library(au7hui.dll))"/>
+                </if>
+                <if keyfocused="true">
+                    <Button background="resbmp(12286,7,-1,0,0,1,1,library(au7hui.dll))" bordercolor="windowtext" borderstyle="solid"/>
+                    <if HighDPI="true">
+                        <Button background="resbmp(12289,7,-1,0,0,1,1,library(au7hui.dll))"/>
+                    </if>
+                </if>
+                <if mousefocused="true">
+                    <Button background="resbmp(12286,7,-1,0,0,1,1,library(au7hui.dll))" bordercolor="windowtext" borderstyle="solid"/>
+                    <if HighDPI="true">
+                        <Button background="resbmp(12289,7,-1,0,0,1,1,library(au7hui.dll))"/>
+                    </if>
+                </if>
+                <if pressed="true">
+                    <Button background="resbmp(12287,7,-1,0,0,1,1,library(au7hui.dll))" bordercolor="windowtext" borderstyle="sunken"/>
+                    <if HighDPI="true">
+                        <Button background="resbmp(12290,7,-1,0,0,1,1,library(au7hui.dll))"/>
+                    </if>
+                </if>
+            </if>
+        </style>
+
+        <style resid="ScrollStyle">
+            <Viewer layoutpos="nineclient" margin="rect(0rp,  0rp, 12rp,  0rp)"/>
+            <Scrollbar padding="rect(0, 0, 0, 0)"/>
+            <if visible="false">
+                <Scrollbar layoutpos="none"/>
+                <RepeatButton accessible="false"/>
+                <Thumb accessible="false"/>
+            </if>
+            <if vertical="true">
+                <ScrollBar layoutpos="nineright"/>
+            </if>
+            <if id="atom(lineup)">
+                <RepeatButton accessible="true" content="resbmp(12204, 2,-1,0,0,1,1,library(au7hui.dll))" contentalign="topcenter" accname="Line up" accrole="43"/>
+                <if pressed="true">
+                    <RepeatButton content="resbmp(12205,2,-1,0,0,1,1,library(au7hui.dll))"/>
+                </if>
+                <if mousefocused="true">
+                    <RepeatButton content="resbmp(12205,2,-1,0,0,1,1,library(au7hui.dll))"/>
+                </if>
+            </if>
+            <if id="atom(pageup)">
+                <RepeatButton accessible="true" accname="Page up" accrole="43"/>
+            </if>
+            <Thumb borderthickness="rect(1, 10, 1, 10)" background="resbmp(12201, 7,-1,0,0,1,1,library(au7hui.dll))" contentalign="middlecenter" accessible="true" accname="Position" accrole="39"/>
+            <if pressed="true">
+                <Thumb background="resbmp(12203, 7,-1,0,0,1,1,library(au7hui.dll))" content="resbmp(12212,2,-1,0,0,1,1,library(au7hui.dll))"/>
+            </if>
+            <if mousefocused="true" pressed="false">
+                <Thumb background="resbmp(12202, 7,-1,0,0,1,1,library(au7hui.dll))" content="resbmp(12211,2,-1,0,0,1,1,library(au7hui.dll))"/>
+            </if>
+            <if id="atom(pagedown)">
+                <RepeatButton accessible="true" accname="Page down" accrole="43"/>
+            </if>
+            <if id="atom(linedown)">
+                <RepeatButton accessible="true" content="resbmp(12207,2,-1,0,0,1,1,library(au7hui.dll))" contentalign="topcenter" accname="Line down" accrole="43"/>
+                <if pressed="true">
+                    <RepeatButton content="resbmp(12208,2,-1,0,0,1,1,library(au7hui.dll))"/>
+                </if>
+                <if mousefocused="true">
+                    <RepeatButton content="resbmp(12208,2,-1,0,0,1,1,library(au7hui.dll))"/>
+                </if>
+            </if>
+        </style>
+
+        <style resid="MainFrameStyle">
+            <if visible="false">
+                <element width="0rp" height="0rp" layoutpos="none" accessible="false"/>
+                <button width="0rp" height="0rp" layoutpos="none" accessible="false"/>
+            </if>
+            <if enabled="false">
+                <element visible="false"/>
+                <button visible="false"/>
+            </if>
+            <element foreground="white" background="argb(0,0,0,0)"/>
+            <if id="atom(WaitAnimation)">
+                <if visible="false">
+                    <AnimationStrip visible="false" play="false" framewidth="20rp" frameduration="33" frameindex="0" width="0rp" height="0rp" margin="rect(0rp,0rp,5rp,0rp)"/>
+                </if>
+            </if>
+            <if id="atom(StatusText)">
+                <element foreground="white" contentalign="wrapcenter" font="18;normal;shadow;Segoe UI" shadowintensity="75" accessible="true" accrole="41"/>
+            </if>
+            <if id="atom(Locked)">
+                <element contentalign="wrapleft" padding="rect(0rp,10rp,0rp,0rp)"/>
+            </if>
+            <if id="atom(LockedMessage)">
+                <element font="18;normal;shadow;Segoe UI" shadowintensity="75" padding="rect(34rp,0rp,34rp,0rp)" contentalign="wrapcenter" accessible="true" accrole="41"/>
+            </if>
+            <if id="atom(LockedSubMessage)">
+                <element font="9;normal;shadow;Segoe UI" shadowintensity="75" contentalign="wrapcenter" padding="rect(0rp,10rp,0rp,10rp)" accessible="true" accrole="41"/>
+            </if>
+            <if id="atom(SecurityOptions)">
+                <element contentalign="middlecenter"/>
+            </if>
+            <if id="atom(SecurityInformation)">
+                <element contentalign="wrapleft" padding="rect(0rp, 0rp, 0rp, 20rp)" accessible="true" accrole="41"/>
+            </if>
+            <button foreground="white" font="11;normal;shadow;Segoe UI" shadowintensity="75" fontface="Segoe UI" cursor="arrow" accessible="true" accrole="43"/>
+        </style>
+
     </stylesheets>
 
-    <duiMessageView resid="Main"  layout="borderlayout()" accessible="true"  sheet="messageViewSheet" background="argb(0,0,0,0)">
-        <element id="atom(LolText1)" layoutpos="top" content="MESSAGE VIEW"/>
-    </duiMessageView>
+    <button resid="dialogButton" layoutpos="auto" class="GenericButton" contentalign="MiddleCenter" sheet="messageviewsheet" />
+
+    <element resid="Main" layout="filllayout()" accessible="true"  sheet="messageviewsheet" background="argb(0,0,0,0)">
+        <duiMessageView id="atom(UserSelectFrame)" layout="filllayout()">
+            <element layout="borderlayout()" padding="rect(0rp,96rp,0rp,0rp)">
+                <element layoutpos="client" layout="verticalflowlayout(1,2,2,2)">
+                    <element layout="filllayout()">
+                        <element id="atom(Locked)" visible="false" layout="verticalflowlayout(1,2,2,2)">
+                            <element id="atom(LockedMessage)"/>
+                            <element id="atom(LockedSubMessage)"/>
+                        </element>
+                        <element id="atom(Window)" layout="borderlayout()">
+                            <element id="atom(InsideWindow)" layoutpos="client" layout="filllayout()">
+                                <element id="atom(MessageFrame)" layout="filllayout()" visible="true">
+                                    <element id="atom(FullMessageFrame)" layout="borderlayout()">
+                                        <macro layoutpos="bottom" expand="hr" margin="rect(0,0,0,8rp)" id="atom(LowerDiv)"/>
+                                        <StyledScrollviewer sheet="ScrollStyle" id="atom(MessageScrollviewer)" xscrollable="false" padding="rect(0rp,0rp,0rp,0rp)" layoutpos="bottom" width="600rp" height="300rp">
+                                            <element layoutpos="top" content="" sheet="MainFrameStyle" id="atom(Message)" width="600rp" font="9;normal;shadow;Segoe UI" shadowintensity="75" contentalign="wrapleft" accessible="true" accrole="41"/>
+                                        </StyledScrollviewer>
+                                        <macro expand="hr" layoutpos="bottom" id="atom(UpperDiv)" margin="rect(0rp, 5rp, 0rp, 0rp)"/>
+                                        <element layoutpos="bottom" layout="flowlayout()">
+                                            <element layout="flowlayout(0,2,1)" padding="rect(0rp,0rp,8rp,0rp)">
+                                                <element id="atom(FullIcon)" width="sysmetric(11)" height="sysmetric(12)"/>
+                                            </element>
+                                            <element id="atom(MessageCaption)" content="" font="12;normal;shadow;Segoe UI" shadowintensity="75" accessible="true" accrole="41"/>
+                                        </element>
+                                    </element>
+                                    <element id="atom(ShortMessageFrame)" layout="borderlayout()" height="406rp" width="600rp" visible="true">
+                                        <element layoutpos="bottom" layout="flowlayout(1,1,2,2)" padding="rect(0rp,0rp,0rp,0rp)">
+                                            <StyledScrollviewer layoutpos="bottom" sheet="ScrollStyle" id="atom(ShortScrollviewer)" visible="true" xscrollable="false" margin="rect(8rp, 10rp, 0rp, 0rp)">
+                                                <element layout="flowlayout(0, 0, 0, 0)" padding="rect(4rp, 0rp, 4rp, 0rp)" visible="true">
+                                                    <element id="atom(ShortIcon)" width="sysmetric(11)" height="sysmetric(12)"/>
+                                                    <element sheet="MainFrameStyle" id="atom(ShortMessage)" content="short Message abcdef" font="9;normal;shadow;Segoe UI" shadowintensity="75" contentalign="wrapleft" accessible="true" visible="true" accrole="41" padding="rect(8rp, 10rp, 0rp, 0rp)"/>
+                                                </element>
+                                            </StyledScrollviewer>
+                                        </element>
+                                    </element>
+                                    <element id="atom(ConnectMessageFrame)" layout="verticalflowlayout(1,2,2,2)">
+                                        <element id="atom(ConnectMessage)" foreground="white" contentalign="wrapcenter" accessible="true" accrole="41" font="12;normal;shadow;Segoe UI" shadowintensity="75"/>
+                                    </element>
+                                </element>
+                            </element>
+                            <element id="atom(DialogButtonFrame)" layout="flowlayout(0,1,2,2)" sheet="messageviewsheet" padding="rect(0rp, 10rp, 0rp, 0rp)" margin="rect(0rp, 30rp, 0rp, 5rp)" contentalign="MiddleCenter">
+                                
+                            </element>
+                        </element>
+                    </element>
+                </element>
+            </element>
+
+
+
+        </duiMessageView>
+    </element>
 
 </duixml>

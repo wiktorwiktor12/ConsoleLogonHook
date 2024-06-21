@@ -163,6 +163,13 @@ namespace external
             fSelectableUserOrCredentialControl_Destroy(actualInstance);
     }
 
+    static void MessageOrStatusView_Destroy()
+    {
+        static auto fMessageOrStatusView_Destroy = EXTERNAL(void(*)(), "MessageOrStatusView_Destroy");
+        if (fMessageOrStatusView_Destroy)
+            fMessageOrStatusView_Destroy();
+    }
+
     extern "C" __declspec(dllexport) void MessageOptionControl_Press(void* actualInstance, const struct _KEY_EVENT_RECORD* keyrecord, int* success);
     extern "C" __declspec(dllexport) const wchar_t* MessageOptionControl_GetText(void* actualInstance);
 

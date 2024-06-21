@@ -40,6 +40,11 @@ void external::SelectableUserOrCredentialControl_Sort()
             auto& userButtons = *reinterpret_cast<std::vector<SelectableUserOrCredentialControlWrapper>*>(param);
             auto pDuiManager = duiManager::Get();
             auto UserList = (DirectUI::Selector*)pDuiManager->pUIElement->FindDescendent(ATOMID(L"UserList"));
+            if (!UserList)
+            {
+                MessageBox(0,L"NO USERLIST",L"",0);
+                return;
+            }
             auto InsideFrame = pDuiManager->pUIElement->FindDescendent(ATOMID(L"InsideFrame"));
             DirectUI::Value* v13;
             auto extent = InsideFrame->GetExtent(&v13);

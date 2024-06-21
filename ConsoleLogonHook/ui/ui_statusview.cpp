@@ -64,6 +64,7 @@ void* StatusView__Destructor_Hook(void* _this, char a2)
         statusview->statusText = L"";
         statusview->SetInactive();
     }*/
+    external::MessageOrStatusView_Destroy();
 
     return StatusView__Destructor(_this,a2);
 }

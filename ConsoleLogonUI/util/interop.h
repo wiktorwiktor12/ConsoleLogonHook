@@ -228,6 +228,7 @@ namespace external
     extern "C" __declspec(dllexport) void EditControl_Destroy(void* actualInstance);
 
     extern "C" __declspec(dllexport) void StatusView_SetActive(const wchar_t* text);
+    extern "C" __declspec(dllexport) void MessageOrStatusView_Destroy(void);
 
     extern "C" __declspec(dllexport) void UserSelect_SetActive();
     extern "C" __declspec(dllexport) void SelectableUserOrCredentialControl_Sort();
