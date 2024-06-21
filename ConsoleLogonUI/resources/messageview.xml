@@ -212,7 +212,7 @@
 
     <element resid="Main" layout="filllayout()" accessible="true"  sheet="messageviewsheet" background="argb(0,0,0,0)">
         <duiMessageView id="atom(UserSelectFrame)" layout="filllayout()">
-            <element layout="borderlayout()" padding="rect(0rp,96rp,0rp,0rp)">
+            <element layout="borderlayout()" padding="rect(0rp,68rp,0rp,0rp)">
                 <element layoutpos="client" layout="verticalflowlayout(1,2,2,2)">
                     <element layout="filllayout()">
                         <element id="atom(Locked)" visible="false" layout="verticalflowlayout(1,2,2,2)">

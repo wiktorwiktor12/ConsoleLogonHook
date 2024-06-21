@@ -108,12 +108,12 @@ void external::SelectedCredentialView_SetActive(const wchar_t* accountNameToDisp
 				}
 			}
 
+			bool bSetFocus = false;
 			for (int i = 0; i < editControls.size(); ++i)
 			{
 				auto& control = editControls[i];
 				bool bIsPasswordField = (i > 0 && i <= 3);
 				auto field = duiSelectedCredentialView::CreateEditField(btn, control.GetFieldName(), control.isVisible(), (i == lastIndex), bIsPasswordField);
-
 
 				auto inputtedText = control.GetInputtedText();
 				if (inputtedText.size() > 0)
@@ -129,6 +129,11 @@ void external::SelectedCredentialView_SetActive(const wchar_t* accountNameToDisp
 						else
 							TouchEditInnnerElement->SetContentString((DirectUI::UCString)inputtedText.c_str());
 
+						if (control.isVisible() && !bSetFocus)
+						{
+							TouchEditInnnerElement->SetKeyFocus();
+							bSetFocus = true;
+						}
 					}
 				}
 
@@ -592,9 +597,11 @@ void duiSelectedCredentialView::OnEvent(DirectUI::Event* iev)
 
 void duiSelectedCredentialView::OnInput(DirectUI::InputEvent* a2)
 {
+	DirectUI::Element::OnInput(a2);
+
 	if (a2->target && a2->device == DirectUI::GINPUT_KEYBOARD)
 	{
-		if (a2->target->GetID() == ATOMID(L"TouchEditInnnerElement") && GetAsyncKeyState(VK_RETURN))
+		if (a2->target->GetKeyFocused() && a2->target->GetID() == ATOMID(L"TouchEditInnnerElement") && GetKeyState(VK_RETURN))
 		{
 			KEY_EVENT_RECORD rec;
 			rec.wVirtualKeyCode = VK_RETURN; //forward it to consoleuiview
@@ -602,7 +609,6 @@ void duiSelectedCredentialView::OnInput(DirectUI::InputEvent* a2)
 		}
 	}
 
-	DirectUI::Element::OnInput(a2);
 }
 
 void duiSelectedCredentialView::OnDestroy()
