@@ -17,6 +17,7 @@
 #include "ui/ui_selectedcredentialview.h"
 #include "ui/ui_userselect.h"
 #include "util\interop.h"
+#include "util\memory_man.h"
 
 namespace init
 {
@@ -35,9 +36,12 @@ namespace init
         spdlog::flush_every(std::chrono::microseconds(100));
     }
 
-    __int64(__fastcall* EditControl__Repaint)(void* a1);
-    __int64 EditControl__Repaint_Hook(void* a1)
+    __int64(__fastcall* ControlBase__PaintArea)(void* a1, __int64 a2, unsigned int a3, __int64 a4, unsigned int a5);
+    __int64 ControlBase__PaintArea_Hook(void* a1, __int64 a2, unsigned int a3, __int64 a4, unsigned int a5)
     {
+        if (bLogonConsoleShown)
+            return ControlBase__PaintArea(a1,a2,a3,a4,a5);
+
         if (!a1) return 0;
 
         if (IsBadReadPtr(a1, 8)) return 0;
@@ -45,7 +49,7 @@ namespace init
         if (IsBadReadPtr(*(uintptr_t**)(__int64(a1) + 0x20), 8)) return 0;
         if (IsBadReadPtr(**(void***)(__int64(a1) + 0x20), 8)) return 0;
 
-        return EditControl__Repaint(a1);
+        return ControlBase__PaintArea(a1,a2,a3,a4,a5);
     }
 
     void(__stdcall* fOutputDebugStringW)(LPCWSTR lpoutputstring);
@@ -67,12 +71,10 @@ namespace init
         auto baseaddress = (uintptr_t)LoadLibraryW(L"C:\\Windows\\System32\\ConsoleLogon.dll");
         if (!baseaddress)
             MessageBox(0, L"FAILED TO LOAD", L"FAILED TO LOAD", 0);
-        //MessageBox(0,L"1",L"1",0);
-        //check we are running correct consolelogon, very very low chance will this check pass if diff version dll
-        auto SecurityOptionsView__RuntimeClassIntialise = (uint8_t*)(baseaddress + 0x36EB4);
-        if (SecurityOptionsView__RuntimeClassIntialise[0] != 0x48 || SecurityOptionsView__RuntimeClassIntialise[1] != 0x89 || SecurityOptionsView__RuntimeClassIntialise[2] != 0x5C)
-            return;
-        //MessageBox(0,L"2",L"2",0);
+
+        memory::LoadOffsetCache();
+        memory::CheckCache();
+        //MessageBox(0, L"dbg1", 0, 0);
         MinimizeLogonConsole();
         //MessageBox(0,L"3",L"3",0);
 
@@ -87,21 +89,29 @@ namespace init
             fWindowsDeleteString = decltype(fWindowsDeleteString)(GetProcAddress(stringdll, "WindowsDeleteString"));
             fWindowsCreateString = decltype(fWindowsCreateString)(GetProcAddress(stringdll, "WindowsCreateString"));
         }
+        //MessageBox(0, L"dbg2", 0, 0);
 
         fOutputDebugStringW = decltype(fOutputDebugStringW)(GetProcAddress(GetModuleHandle(L"api-ms-win-core-debug-l1-1-0.dll"), "OutputDebugStringW"));
         Hook(fOutputDebugStringW, OutputDebugStringW_Hook);
-        EditControl__Repaint = (decltype(EditControl__Repaint))(baseaddress + 0x44528);
-        Hook(EditControl__Repaint, EditControl__Repaint_Hook);
-
+        //EditControl__Repaint = (decltype(EditControl__Repaint))(baseaddress + 0x44528);
+        ControlBase__PaintArea = memory::FindPatternCached<decltype(ControlBase__PaintArea)>("ControlBasePaintArea","48 89 5C 24 10 48 89 6C 24 18 56 57 41 54 41 56 41 57 48 83 EC 40");
+        Hook(ControlBase__PaintArea, ControlBase__PaintArea_Hook);
+        //MessageBox(0, L"dbg3", 0, 0);
         external::InitExternal();
         uiSecurityControl::InitHooks(baseaddress);
+        //MessageBox(0, L"dbg3.1", 0, 0);
         uiMessageView::InitHooks(baseaddress);
+        //MessageBox(0, L"dbg3.2", 0, 0);
         uiStatusView::InitHooks(baseaddress);
+        //MessageBox(0, L"dbg3.3", 0, 0);
         uiUserSelect::InitHooks(baseaddress);
+        //MessageBox(0, L"dbg3.4", 0, 0);
         uiSelectedCredentialView::InitHooks(baseaddress);
+        //MessageBox(0, L"dbg4", 0, 0);
+        memory::SaveOffsetCache();
 
         MinimizeLogonConsole();
-
+        //MessageBox(0, L"dbg5", 0, 0);
         external::InitUI();
         //MessageBox(0,L"4",L"4",0);
     }

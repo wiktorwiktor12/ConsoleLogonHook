@@ -5,6 +5,7 @@
 #include "../util/util.h"
 #include <winstring.h>
 #include <util/interop.h>
+#include <util/memory_man.h>
 
 __int64 (__fastcall* MessageOptionControl__v_HandleKeyInput)(void* _this, const struct _KEY_EVENT_RECORD* a2, int* a3);
 
@@ -94,13 +95,14 @@ __int64 MessageOptionControl__Destructor_Hook(void* _this, char a2)
 
 void uiMessageView::InitHooks(uintptr_t baseaddress)
 {
-    MessageView__RuntimeClassInitialize = decltype(MessageView__RuntimeClassInitialize)(baseaddress + 0x389B0);
+    MessageView__RuntimeClassInitialize = memory::FindPatternCached<decltype(MessageView__RuntimeClassInitialize)>("MessageView__RuntimeClassInitialize","48 89 5C 24 10 48 89 74 24 18 55 57 41 54 41 56 41 57 48 8B EC 48 83 EC 50 41 8B F9");
     //CredUIViewManager__ShowCredentialView = decltype(CredUIViewManager__ShowCredentialView)(baseaddress + 0x201BC);
-    BasicTextControl__RuntimeClassInitialize1 = decltype(BasicTextControl__RuntimeClassInitialize1)(baseaddress + 0x43FB8);
-    BasicTextControl__RuntimeClassInitialize2 = decltype(BasicTextControl__RuntimeClassInitialize2)(baseaddress + 0x44104);
-    MessageOptionControl__RuntimeClassInitialize = decltype(MessageOptionControl__RuntimeClassInitialize)(baseaddress + 0x40D38);
-    MessageOptionControl__Destructor = decltype(MessageOptionControl__Destructor)(baseaddress + 0x402A0);
-    MessageOptionControl__v_HandleKeyInput = decltype(MessageOptionControl__v_HandleKeyInput)(baseaddress + 0x41040);
+    BasicTextControl__RuntimeClassInitialize1 = memory::FindPatternCached<decltype(BasicTextControl__RuntimeClassInitialize1)>("BasicTextControl__RuntimeClassInitialize1", "48 8B C4 48 89 58 08 48 89 68 10 48 89 70 18 48 89 78 20 41 56 48 83 EC 20 48 8B F9 44 88 49 58");
+    BasicTextControl__RuntimeClassInitialize2 = memory::FindPatternCached<decltype(BasicTextControl__RuntimeClassInitialize2)>("BasicTextControl__RuntimeClassInitialize2", "48 89 5C 24 08 48 89 74 24 10 57 48 83 EC 20 48 8B F2 48 8B F9 48 83 C1");
+    //MessageOptionControl__RuntimeClassInitialize = memory::FindPatternCached<decltype(MessageOptionControl__RuntimeClassInitialize)>("MessageOptionControl__RuntimeClassInitialize", "48 8B C4 48 89 58 08 48 89 68 10 48 89 70 18 4C 89 48 20 57 41 56 41 57 48 83 EC 20 49 8B D9 41 8B F8 4C 8B FA 48 8B F1 44 89 41 70");
+    MessageOptionControl__RuntimeClassInitialize = memory::FindPatternCached<decltype(MessageOptionControl__RuntimeClassInitialize)>("MessageOptionControl__RuntimeClassInitialize", "48 8B C4 48 89 58 08 48 89 68 10 48 89 70 18 4C 89 48 20 57 41 56 41 57 48 83 EC 20 49 8B D9 41 8B F8 4C 8B FA 48 8B F1 44 89 41 70");
+    MessageOptionControl__Destructor = memory::FindPatternCached<decltype(MessageOptionControl__Destructor)>("MessageOptionControl__Destructor", "48 89 5C 24 08 48 89 74 24 10 57 48 83 EC 20 8B F2 48 8B D9 48 8B 79 68 48 83 61 68 00");
+    MessageOptionControl__v_HandleKeyInput = memory::FindPatternCached<decltype(MessageOptionControl__v_HandleKeyInput)>("MessageOptionControl__v_HandleKeyInput", "48 89 5C 24 10 55 56 57 41 56 41 57 48 8B EC 48 83 EC 60 48 8B 05 ?? ?? ?? ?? 48 33 C4");
 
 
     Hook(MessageView__RuntimeClassInitialize, MessageView__RuntimeClassInitialize_Hook);

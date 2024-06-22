@@ -281,6 +281,7 @@
     <ClInclude Include="ui\ui_statusview.h" />
     <ClInclude Include="ui\ui_userselect.h" />
     <ClInclude Include="util\interop.h" />
+    <ClInclude Include="util\memory_man.h" />
     <ClInclude Include="util\util.h" />
   </ItemGroup>
   <ItemGroup>

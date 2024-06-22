@@ -5,6 +5,7 @@
 #include "../util/util.h"
 #include <winstring.h>
 #include <util/interop.h>
+#include <util/memory_man.h>
 
 __int64(__fastcall* StatusView__RuntimeClassInitialize)(/*StatusView*/void* _this, HSTRING a2, /*IUser*/void* a3);
 __int64 StatusView__RuntimeClassInitialize_Hook(/*StatusView*/void* _this, HSTRING a2, /*IUser*/void* a3)
@@ -71,8 +72,8 @@ void* StatusView__Destructor_Hook(void* _this, char a2)
 
 void uiStatusView::InitHooks(uintptr_t baseaddress)
 {
-    StatusView__RuntimeClassInitialize = decltype(StatusView__RuntimeClassInitialize)(baseaddress + 0x387D0);
-    StatusView__Destructor = decltype(StatusView__Destructor)(baseaddress + 0x224F8);
+    StatusView__RuntimeClassInitialize = memory::FindPatternCached<decltype(StatusView__RuntimeClassInitialize)>("StatusView__RuntimeClassInitialize","48 89 5C 24 10 48 89 74 24 18 55 57 41 56 48 8B EC 48 83 EC 40");
+    StatusView__Destructor = memory::FindPatternCached<decltype(StatusView__Destructor)>("StatusView__Destructor", "48 89 5C 24 08 57 48 83 EC 20 8B DA 48 8B F9 E8 ?? ?? ?? ?? F6 C3 01 74 ?? BA 78 00 00 00 48 8B CF E8 ?? ?? ?? ?? 48 8B 5C 24 30");
 
     Hook(StatusView__RuntimeClassInitialize, StatusView__RuntimeClassInitialize_Hook);
     Hook(StatusView__Destructor, StatusView__Destructor_Hook);

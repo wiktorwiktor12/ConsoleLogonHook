@@ -8,7 +8,10 @@
 #include <vector>
 #include <spdlog/spdlog.h>
 
-#define Hook(a,b) DetourTransactionBegin(); DetourAttach(&(PVOID&)a, b); DetourTransactionCommit();
+#define Hook(a,b) DetourTransactionBegin(); \
+if (a) \
+{DetourAttach(&(PVOID&)a, b);} \
+DetourTransactionCommit();
 
 inline HRESULT(__stdcall* fWindowsCreateString)(PCWSTR sourceString,UINT32 length,HSTRING* string);
 inline PCWSTR(__stdcall* fWindowsGetStringRawBuffer)(HSTRING string, UINT32* length);
@@ -89,12 +92,14 @@ static const wchar_t* ConvertHStringToRawString(HSTRING string)
     return convertedString;
 }
 
+inline bool bLogonConsoleShown = true;
 static void MinimizeLogonConsole()
 {
     auto consoleWindow = FindWindowW(0, L"C:\\Windows\\system32\\LogonUI.exe");
     if (!consoleWindow) return;
 
     //ShowWindow(consoleWindow, SW_FORCEMINIMIZE);
+    bLogonConsoleShown = false;
     ShowWindow(consoleWindow, SW_HIDE);
     //ShowWindow(consoleWindow, SW_RESTORE);
 }
@@ -104,6 +109,7 @@ static void ShowLogonConsole()
     auto consoleWindow = FindWindowW(0, L"C:\\Windows\\system32\\LogonUI.exe");
     if (!consoleWindow) return;
 
+    bLogonConsoleShown = true;
     ShowWindow(consoleWindow, SW_SHOW);
 }
 

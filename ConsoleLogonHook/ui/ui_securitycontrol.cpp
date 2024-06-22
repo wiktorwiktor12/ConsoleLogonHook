@@ -5,6 +5,7 @@
 #include "../util/util.h"
 #include <winstring.h>
 #include <util/interop.h>
+#include <util/memory_man.h>
 
 //std::vector<SecurityOptionControlWrapper> buttonsList;
 
@@ -142,8 +143,8 @@ __int64 CredUIManager__ShowCredentialView_Hook(void* _this, HSTRING a2)
     return CredUIManager__ShowCredentialView(_this,a2);
 }
 
-__int64(__fastcall* SecurityOptionsView__Destructor)(__int64 a1, unsigned int a2);
-__int64 SecurityOptionsView__Destructor_Hook(__int64 a1, unsigned int a2)
+__int64(__fastcall* SecurityOptionsView__Destructor)(__int64 a1, char a2);
+__int64 SecurityOptionsView__Destructor_Hook(__int64 a1, char a2)
 {
     //auto securityControl = uiRenderer::Get()->GetWindowOfTypeId<uiSecurityControl>(2);
     //if (securityControl)
@@ -185,19 +186,21 @@ const wchar_t* external::SecurityOptionControl_getString(void* actualInstance)
 
 void uiSecurityControl::InitHooks(uintptr_t baseaddress)
 {
-    LogonViewManager__ShowSecurityOptionsUIThread = decltype(LogonViewManager__ShowSecurityOptionsUIThread)(baseaddress + 0x2BFC0);
-    LogonViewManager__ShowSecurityOptions = decltype(LogonViewManager__ShowSecurityOptions)(baseaddress + 0x2964C);
-    MakeAndInitialize_SecurityOptionControl = decltype(MakeAndInitialize_SecurityOptionControl)(baseaddress + 0x37774);
-    SecurityOptionControlHandleKeyInput = decltype(SecurityOptionControlHandleKeyInput)(baseaddress + 0x40680);
+    LogonViewManager__ShowSecurityOptionsUIThread = memory::FindPatternCached<decltype(LogonViewManager__ShowSecurityOptionsUIThread)>("LogonViewManager__ShowSecurityOptionsUIThread","48 89 5C 24 08 4C 89 44 24 18 55 56 57 41 56 41 57 48 8B EC 48 83 EC 40");
+    LogonViewManager__ShowSecurityOptions = memory::FindPatternCached<decltype(LogonViewManager__ShowSecurityOptions)>("LogonViewManager__ShowSecurityOptions", "48 89 5C 24 10 4C 89 44 24 18 55 56 57 41 54 41 55 41 56 41 57");
+    auto adr = memory::FindPatternCached<uintptr_t>("MakeAndInitialize_SecurityOptionControl", "E8 ?? ?? ?? ?? 44 8B F0 85 C0 79 ?? 48 8B 4D ?? 44 8B C8 4C 8D 05 ?? ?? ?? ?? BA ?? ?? ?? ?? E8 ?? ?? ?? ?? 90");
+    MakeAndInitialize_SecurityOptionControl = (decltype(MakeAndInitialize_SecurityOptionControl))(REL(adr,1));
+    SecurityOptionControlHandleKeyInput = memory::FindPatternCached<decltype(SecurityOptionControlHandleKeyInput)>("SecurityOptionControlHandleKeyInput", "48 89 5C 24 10 48 89 74 24 20 55 57 41 56 48 8B EC 48 83 EC 70 48 8B 05 ?? ?? ?? ?? 48 33 C4");
     //SecurityOptionControlHandleKeyInput = decltype(SecurityOptionControlHandleKeyInput)(baseaddress + 0x44490);
     //ConsoleUIView__Initialize = decltype(ConsoleUIView__Initialize)(baseaddress + 0x42710);
     //ConsoleUIView__HandleKeyInput = decltype(ConsoleUIView__HandleKeyInput)(baseaddress + 0x43530);
-    SecurityOptionControl_Destructor = decltype(SecurityOptionControl_Destructor)(baseaddress + 0x40C40);
-    SecurityOptionsView__RuntimeClassInitialize = decltype(SecurityOptionsView__RuntimeClassInitialize)(baseaddress + 0x36EB4);
-    CredUIManager__ShowCredentialView = decltype(CredUIManager__ShowCredentialView)(baseaddress + 0x201BC);
-    SecurityOptionsView__Destructor = decltype(SecurityOptionsView__Destructor)(baseaddress + 0x37880);
-
-
+    
+    void** SecurityOptionControlVtable = (void**)REL(memory::FindPatternCached<uintptr_t>("SecurityOptionControlVtable", "48 8D 05 ?? ?? ?? ?? 48 83 63 48 00 48 83 63 50 00 48 83 63 58 00 48 83 63 68 00 83 63 70 00 48 89 43 08"),3);
+    
+    SecurityOptionControl_Destructor = (decltype(SecurityOptionControl_Destructor))(SecurityOptionControlVtable[7]);
+    SecurityOptionsView__RuntimeClassInitialize = memory::FindPatternCached<decltype(SecurityOptionsView__RuntimeClassInitialize)>("SecurityOptionsView__RuntimeClassInitialize", "48 89 5C 24 10 4C 89 44 24 18 55 56 57 41 56 41 57 48 8B EC 48 83 EC 30");
+    //CredUIManager__ShowCredentialView = memory::FindPatternCached<decltype(CredUIManager__ShowCredentialView)>("CredUIManager__ShowCredentialView", "48 89 5C 24 08 55 56 57 41 54 41 55 41 56 41 57 48 8B EC");
+    SecurityOptionsView__Destructor = memory::FindPatternCached<decltype(SecurityOptionsView__Destructor)>("SecurityOptionsView__Destructor", "48 89 5C 24 08 48 89 74 24 10 57 48 83 EC 20 8B F2 48 8B D9 48 8B 79 78 48 83 61 78 00");
 
     Hook(LogonViewManager__ShowSecurityOptionsUIThread, LogonViewManager__ShowSecurityOptionsUIThread_Hook);
     Hook(LogonViewManager__ShowSecurityOptions, LogonViewManager__ShowSecurityOptions_Hook);
@@ -205,7 +208,7 @@ void uiSecurityControl::InitHooks(uintptr_t baseaddress)
     Hook(SecurityOptionControlHandleKeyInput, SecurityOptionControlHandleKeyInput_Hook);
     Hook(SecurityOptionControl_Destructor, SecurityOptionControl_Destructor_Hook);
     Hook(SecurityOptionsView__RuntimeClassInitialize, SecurityOptionsView__RuntimeClassInitialize_Hook);
-    Hook(CredUIManager__ShowCredentialView, CredUIManager__ShowCredentialView_Hook);
+    //Hook(CredUIManager__ShowCredentialView, CredUIManager__ShowCredentialView_Hook);
     Hook(SecurityOptionsView__Destructor, SecurityOptionsView__Destructor_Hook);
 
     //Hook(ConsoleUIView__Initialize, ConsoleUIView__Initialize_Hook);

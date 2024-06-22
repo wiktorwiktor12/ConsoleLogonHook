@@ -396,6 +396,9 @@
     <ClInclude Include="util\interop.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="util\memory_man.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="dllmain.cpp">

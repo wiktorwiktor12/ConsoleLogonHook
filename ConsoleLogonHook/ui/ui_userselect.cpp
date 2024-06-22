@@ -7,6 +7,7 @@
 #include <vector>
 #include <atlbase.h>
 #include "util/interop.h"
+#include "util/memory_man.h"
 
 std::vector<SelectableUserOrCredentialControlWrapper> buttons;
 const int signInOptionChoice = 0;
@@ -126,14 +127,6 @@ __int64 SelectableUserOrCredentialControl__RuntimeClassInitialize_Hook(void* _th
     return res;
 }
 
-__int64(__fastcall* CredUIViewManager__ShowCredentialView)(void* _this, HSTRING a2);
-__int64 CredUIViewManager__ShowCredentialView_Hook(void* _this, HSTRING a2)
-{
-    auto res = CredUIViewManager__ShowCredentialView(_this,a2);
-
-    return res;
-}
-
 void* (__fastcall* SelectableUserOrCredentialControl_Destructor)(void* _this,char a2);
 void* SelectableUserOrCredentialControl_Destructor_Hook(void* _this, char a2)
 {
@@ -211,19 +204,18 @@ DWORD WINAPI TickThread(LPVOID lparam)
 
 void uiUserSelect::InitHooks(uintptr_t baseaddress)
 {
-    UserSelectionView__RuntimeClassInitialize = decltype(UserSelectionView__RuntimeClassInitialize)(baseaddress + 0x378F0);
-    SelectableUserOrCredentialControl__RuntimeClassInitialize = decltype(SelectableUserOrCredentialControl__RuntimeClassInitialize)(baseaddress + 0x3FD24);
-    CredProvSelectionView__RuntimeClassInitialize = decltype(CredProvSelectionView__RuntimeClassInitialize)(baseaddress + 0x35640);
-    CredProvSelectionView__v_OnKeyInput = decltype(CredProvSelectionView__v_OnKeyInput)(baseaddress + 0x35A00);
+    UserSelectionView__RuntimeClassInitialize = memory::FindPatternCached<decltype(UserSelectionView__RuntimeClassInitialize)>("UserSelectionView__RuntimeClassInitialize","40 55 53 56 57 41 54 41 56 41 57 48 8B EC 48 83 EC 60");
+    SelectableUserOrCredentialControl__RuntimeClassInitialize = memory::FindPatternCached<decltype(SelectableUserOrCredentialControl__RuntimeClassInitialize)>("SelectableUserOrCredentialControl__RuntimeClassInitialize", "48 89 5C 24 08 48 89 6C 24 10 48 89 74 24 18 57 48 83 EC 20 48 8D 79 58");
+    CredProvSelectionView__RuntimeClassInitialize = memory::FindPatternCached<decltype(CredProvSelectionView__RuntimeClassInitialize)>("CredProvSelectionView__RuntimeClassInitialize", "48 89 5C 24 10 48 89 74 24 18 48 89 7C 24 20 55 41 56 41 57 48 8B EC 48 83 EC 60");
+    CredProvSelectionView__v_OnKeyInput = memory::FindPatternCached<decltype(CredProvSelectionView__v_OnKeyInput)>("CredProvSelectionView__v_OnKeyInput", "40 55 53 56 57 41 56 48 8B EC 48 83 EC 20 49 8B F0");
 
-    SelectableUserOrCredentialControl_Destructor = decltype(SelectableUserOrCredentialControl_Destructor)(baseaddress + 0x363A8);
-    UserSelectionView__v_OnKeyInput = decltype(UserSelectionView__v_OnKeyInput)(baseaddress + 0x37C30);
-    CredUIViewManager__ShowCredentialView = decltype(CredUIViewManager__ShowCredentialView)(baseaddress + 0x201BC);
+    SelectableUserOrCredentialControl_Destructor = memory::FindPatternCached<decltype(SelectableUserOrCredentialControl_Destructor)>("SelectableUserOrCredentialControl_Destructor", "48 89 5C 24 08 57 48 83 EC 20 8B FA 48 8B D9 48 8B 49 58 48 85 C9 74 13 48 83 63 58 00 48 8B 01 48 8B 40 10 FF 15 ?? ?? ?? ?? 90 48 8B 4B 50 48 85 C9 74 13 48 83 63 50 00 48 8B 01 48 8B 40 10 FF 15 ?? ?? ?? ?? 90 48 8B CB");
+    UserSelectionView__v_OnKeyInput = memory::FindPatternCached<decltype(UserSelectionView__v_OnKeyInput)>("UserSelectionView__v_OnKeyInput", "40 55 53 56 57 41 56 48 8B EC 48 83 EC 20 49 8B F8 48 8B F1 41 83 20 00 66 83 7A 06 0D");
 
-    globals::ConsoleUIView__Initialize = decltype(globals::ConsoleUIView__Initialize)(baseaddress + 0x42710);
-    globals::ConsoleUIView__HandleKeyInput = decltype(globals::ConsoleUIView__HandleKeyInput)(baseaddress + 0x43530);
+    globals::ConsoleUIView__Initialize = memory::FindPatternCached<decltype(globals::ConsoleUIView__Initialize)>("ConsoleUIView__Initialize", "48 89 5C 24 08 57 48 83 EC 30 83 64 24 48 00");
+    globals::ConsoleUIView__HandleKeyInput = memory::FindPatternCached<decltype(globals::ConsoleUIView__HandleKeyInput)>("ConsoleUIView__HandleKeyInput", "48 89 5C 24 10 48 89 74 24 18 57 48 83 EC 20 83 64 24 30 00 48 8B FA");
 
-    LogonViewManager__Lock = decltype(LogonViewManager__Lock)(baseaddress + 0x2884C);
+    LogonViewManager__Lock = memory::FindPatternCached<decltype(LogonViewManager__Lock)>("LogonViewManager__Lock", "48 89 5C 24 18 89 54 24 10 55 56 57 41 54 41 55 41 56 41 57 48 8B EC 48 83 EC 70 49 8B F9 45 8A E8 8B F2");
     Hook(LogonViewManager__Lock, LogonViewManager__Lock_Hook);
 
     Hook(UserSelectionView__RuntimeClassInitialize, UserSelectionView__RuntimeClassInitialize_Hook);
@@ -231,7 +223,6 @@ void uiUserSelect::InitHooks(uintptr_t baseaddress)
     Hook(CredProvSelectionView__RuntimeClassInitialize, CredProvSelectionView__RuntimeClassInitialize_Hook);
     Hook(SelectableUserOrCredentialControl_Destructor, SelectableUserOrCredentialControl_Destructor_Hook);
     Hook(globals::ConsoleUIView__Initialize, ConsoleUIView__Initialize_Hook);
-    Hook(CredUIViewManager__ShowCredentialView, CredUIViewManager__ShowCredentialView_Hook);
 
     uiUserSelectThreadHandle = CreateThread(0,0, TickThread,0,0,0);
     
