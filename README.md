@@ -6,7 +6,7 @@ This project hooks onto and provides a graphical user interface for the console 
 > [!WARNING]
 > **THIS PROJECT IS IN EARLY DEVELOPMENT AND MIGHT BE UNSTABLE**
 >
-> You may encounter issues using a microsoft account, this will work perfectly on local accounts
+> You may encounter issues using a Microsoft account, however, this will work perfectly fine on local accounts.
 >
 > Disabling the lockscreen and the <kbd>CTRL</kbd> <kbd>Alt</kbd> <kbd>Del</kbd> logon keybinds is recommended as they're not fully implemented yet.
 >
@@ -16,7 +16,7 @@ This project hooks onto and provides a graphical user interface for the console 
 ## How to contribute to the project
 The following steps explain how you can contribute to the project
 1. Fork this repository.
-2. Pull using git commandline or any git ui manager such as GitHub Desktop.
+2. Pull using git commandline, or any Git UI manager (such as Github Desktop, etc.)
 3. Enjoy.
  
 ## Installation
