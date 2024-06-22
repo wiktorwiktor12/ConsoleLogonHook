@@ -106,6 +106,8 @@ void external::SelectedCredentialView_SetActive(const wchar_t* accountNameToDisp
 			for (int x = editControls.size() - 1; x >= 0; --x)
 			{
 				auto& control = editControls[x];
+				if (!control.actualInstance) continue;
+
 				if (control.isVisible())
 				{
 					lastIndex = x;
@@ -117,6 +119,8 @@ void external::SelectedCredentialView_SetActive(const wchar_t* accountNameToDisp
 			for (int i = 0; i < editControls.size(); ++i)
 			{
 				auto& control = editControls[i];
+				if (!control.actualInstance) continue;
+
 				bool bIsPasswordField = (i > 0 && i <= 3);
 				auto field = duiSelectedCredentialView::CreateEditField(btn, control.GetFieldName(), control.isVisible(), (i == lastIndex), bIsPasswordField);
 
@@ -148,14 +152,17 @@ void external::SelectedCredentialView_SetActive(const wchar_t* accountNameToDisp
 
 			std::wstring text = isChangePassword ? /*Cancel*/GetStringFromConsoleLogon(107) : /*Switch User*/GetStringFromConsoleLogon(114);
 
-			DirectUI::Button* optbtn = 0;
-			hr = pDuiManager->pParser->CreateElement(
-				(DirectUI::UCString)L"securitycancelid",
-				NULL,
-				NULL,
-				NULL,
-				(DirectUI::Element**)&optbtn
-			);
+			DirectUI::Button* optbtn = (DirectUI::Button*)pDuiManager->pUIElement->FindDescendent(ATOMID(L"SWITCHUSERCANCELBUTTON"));
+			if (!optbtn)
+			{
+				hr = pDuiManager->pParser->CreateElement(
+					(DirectUI::UCString)L"securitycancelid",
+					NULL,
+					NULL,
+					NULL,
+					(DirectUI::Element**)&optbtn
+				);
+			}
 			if (optbtn)
 			{
 				auto dialogbtnframe = pDuiManager->pUIElement->FindDescendent(ATOMID(L"DialogButtonFrame"));
@@ -169,17 +176,8 @@ void external::SelectedCredentialView_SetActive(const wchar_t* accountNameToDisp
 			DumpDuiTree(pDuiManager->pUIElement,0);
 			return;
 		});
-	//auto selectedCredentialView = duiManager::Get()->GetWindowOfTypeId<uiSelectedCredentialView>(6);
-	//if (selectedCredentialView)
-	//{
-	//	SPDLOG_INFO("Setting active status selectedCredentialView");
-	//	selectedCredentialView->accountNameToDisplay = accountNameToDisplay;
-	//	selectedCredentialView->texture = nullptr;
-	//	selectedCredentialView->textureExists = true;
-	//	selectedCredentialView->flag = flag;
-	//	selectedCredentialView->SetActive();
-	//}
 }
+
 int it = 0;
 void external::EditControl_Create(void* actualInstance)
 {
@@ -605,7 +603,7 @@ void duiSelectedCredentialView::OnInput(DirectUI::InputEvent* a2)
 
 	if (a2->target && a2->device == DirectUI::GINPUT_KEYBOARD)
 	{
-		if (a2->target->GetKeyFocused() && a2->target->GetID() == ATOMID(L"TouchEditInnnerElement") && GetKeyState(VK_RETURN))
+		if (a2->target->GetKeyFocused() && a2->target->GetID() == ATOMID(L"TouchEditInnnerElement") && reinterpret_cast<DirectUI::KeyboardEvent*>(a2)->ch == VK_RETURN)
 		{
 			KEY_EVENT_RECORD rec;
 			rec.wVirtualKeyCode = VK_RETURN; //forward it to consoleuiview

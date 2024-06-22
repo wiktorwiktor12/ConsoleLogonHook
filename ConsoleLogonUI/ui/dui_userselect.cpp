@@ -149,11 +149,11 @@ void external::SelectableUserOrCredentialControl_Destroy(void* actualInstance)
 
 std::wstring SelectableUserOrCredentialControlWrapper::GetText()
 {
-    if (hastext)
-        return text;
+    //if (hastext)
+    //    return text;
 
     text = external::SelectableUserOrCredentialControl_GetText(actualInstance);
-    hastext = true;
+    //hastext = true;
     return text;
 }
 

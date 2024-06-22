@@ -139,6 +139,12 @@ struct InputEvent {
   DUSER_INPUT_MODIFIERS modifiers;
 };
 
+struct KeyboardEvent : InputEvent {
+    WCHAR ch;
+    WORD cRep;
+    WORD wFlags;
+};
+
 struct RectangleChange {};
 
 struct ElementRuntimeId {};

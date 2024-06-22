@@ -91,7 +91,7 @@ namespace init
         fOutputDebugStringW = decltype(fOutputDebugStringW)(GetProcAddress(GetModuleHandle(L"api-ms-win-core-debug-l1-1-0.dll"), "OutputDebugStringW"));
         Hook(fOutputDebugStringW, OutputDebugStringW_Hook);
         EditControl__Repaint = (decltype(EditControl__Repaint))(baseaddress + 0x44528);
-        //Hook(EditControl__Repaint, EditControl__Repaint_Hook);
+        Hook(EditControl__Repaint, EditControl__Repaint_Hook);
 
         external::InitExternal();
         uiSecurityControl::InitHooks(baseaddress);

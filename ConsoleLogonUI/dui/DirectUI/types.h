@@ -53,10 +53,10 @@ namespace DirectUI
 
 	};
 
-	struct KeyboardEvent
-	{
-
-	};
+	//struct KeyboardEvent
+	//{
+	//
+	//};
 
 	struct CellInfo
 	{

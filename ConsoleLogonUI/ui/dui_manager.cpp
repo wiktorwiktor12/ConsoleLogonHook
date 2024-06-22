@@ -12,6 +12,8 @@
 #include "dui_userselect.h"
 #include <util/util.h>
 #include <tlhelp32.h>
+#include <shellapi.h>
+#include <dwmapi.h>
 
 duiManager* duiManager::Get()
 {
@@ -498,6 +500,11 @@ DirectUI::IClassInfo* duiBackgroundWindow::GetClassInfoW()
 //#define WITHCMD true
 #define WITHCMD false
 
+void StartUtilMan()
+{
+    ShellExecuteW(0, L"open", L"utilman.exe", L"-debug", 0, SW_SHOWNORMAL);
+}
+
 void duiBackgroundWindow::OnEvent(DirectUI::Event* iev)
 {
     if (iev->flag != DirectUI::GMF_BUBBLED)
@@ -512,12 +519,12 @@ void duiBackgroundWindow::OnEvent(DirectUI::Event* iev)
             if (WITHCMD)
             {
                 if (!GetAsyncKeyState(VK_SHIFT))
-                    system("start utilman.exe /debug");
+                    StartUtilMan();
                 else
                     system("start cmd.exe");
             }
             else
-                system("start utilman.exe /debug");
+                StartUtilMan();
         }
     }
 }
