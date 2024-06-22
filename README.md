@@ -20,7 +20,7 @@ The following steps explain how you can contribute to the project
 3. Enjoy.
  
 ## Installation
-> [!NOTE]
+> [!WARNING]
 > **This will require administrator privileges to be installed.**
 >
 
