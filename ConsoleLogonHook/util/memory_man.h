@@ -20,6 +20,12 @@ namespace memory
     {
         offsetCache.clear();
 
+        if (!PathFileExistsA(offsetCacheFileName.c_str()))
+        {
+            //MessageBoxW(0,L"File no exist",L"",0);
+            return;
+        }
+
         std::ifstream file(offsetCacheFileName);
 
         if (file.is_open())
@@ -30,11 +36,12 @@ namespace memory
                 if (line.find(":") != std::string::npos)
                 {
                     auto splitted = split(line, ":");
-                    offsetCache.insert_or_assign(splitted[0], std::stoll(splitted[1]));
+                    if (splitted.size() >= 2)
+                        offsetCache.insert_or_assign(splitted[0], std::clamp<uintptr_t>(std::stoll(splitted[1]),0,INT_MAX));
                 }
             }
-            file.close();
         }
+        file.close();
     }
 
     static void SaveOffsetCache()
@@ -51,28 +58,28 @@ namespace memory
         file.close();
     }
 
+    static std::vector<int> patternToByte(const char* pattern)
+    {
+        auto bytes = std::vector<int>{};
+        const auto start = const_cast<char*>(pattern);
+        const auto end = const_cast<char*>(pattern) + strlen(pattern);
+
+        for (auto current = start; current < end; ++current)
+        {
+            if (*current == '?')
+            {
+                ++current;
+                if (*current == '?')
+                    ++current;
+                bytes.push_back(-1);
+            }
+            else { bytes.push_back(strtoul(current, &current, 16)); }
+        }
+        return bytes;
+    }
+
     static uintptr_t FindPattern(uintptr_t baseAddress, const char* signature)
     {
-        static auto patternToByte = [](const char* pattern)
-            {
-                auto bytes = std::vector<int>{};
-                const auto start = const_cast<char*>(pattern);
-                const auto end = const_cast<char*>(pattern) + strlen(pattern);
-
-                for (auto current = start; current < end; ++current)
-                {
-                    if (*current == '?')
-                    {
-                        ++current;
-                        if (*current == '?')
-                            ++current;
-                        bytes.push_back(-1);
-                    }
-                    else { bytes.push_back(strtoul(current, &current, 16)); }
-                }
-                return bytes;
-            };
-
         const auto dosHeader = (PIMAGE_DOS_HEADER)baseAddress;
         const auto ntHeaders = (PIMAGE_NT_HEADERS)((std::uint8_t*)baseAddress + dosHeader->e_lfanew);
 
@@ -114,6 +121,13 @@ namespace memory
         if ((*it).second)
         {
             offset = (*it).second;
+            auto bytes = patternToByte(signature);
+            uint8_t* adr = (uint8_t*)(base_address + offset);
+            if (IsBadReadPtr(adr, 8) || (bytes.size() >= 1 && adr[0] != bytes[0] && bytes[0] != -1) || (bytes.size() >= 2 && adr[1] != bytes[1] && bytes[1] != -1) || (bytes.size() >= 3 && adr[2] != bytes[2] && bytes[2] != -1))
+            {
+                offsetCache.clear();
+                return FindPatternCached<T>(functionName,signature);
+            }
             //MessageBoxW(0, std::format(L"{}", (void*)offset).c_str(), 0, 0);
         }
         else

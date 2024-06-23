@@ -152,20 +152,20 @@ void external::SelectedCredentialView_SetActive(const wchar_t* accountNameToDisp
 
 			std::wstring text = isChangePassword ? /*Cancel*/GetStringFromConsoleLogon(107) : /*Switch User*/GetStringFromConsoleLogon(114);
 
-			DirectUI::Button* optbtn = (DirectUI::Button*)pDuiManager->pUIElement->FindDescendent(ATOMID(L"SWITCHUSERCANCELBUTTON"));
-			if (!optbtn)
-			{
-				hr = pDuiManager->pParser->CreateElement(
-					(DirectUI::UCString)L"securitycancelid",
-					NULL,
-					NULL,
-					NULL,
-					(DirectUI::Element**)&optbtn
-				);
-			}
+			DirectUI::Button* optbtn = 0;
+			hr = pDuiManager->pParser->CreateElement(
+				(DirectUI::UCString)L"securitycancelid",
+				NULL,
+				NULL,
+				NULL,
+				(DirectUI::Element**)&optbtn
+			);
+
 			if (optbtn)
 			{
 				auto dialogbtnframe = pDuiManager->pUIElement->FindDescendent(ATOMID(L"DialogButtonFrame"));
+				dialogbtnframe->DestroyAll(true);
+
 				auto textElm = optbtn;
 				if (textElm)
 					textElm->SetContentString((DirectUI::UCString)text.c_str());

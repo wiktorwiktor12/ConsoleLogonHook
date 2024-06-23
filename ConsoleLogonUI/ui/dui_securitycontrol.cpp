@@ -19,7 +19,13 @@ void external::SecurityControl_SetActive()
 
     if (!duiManager::Get()->IsReady)
         MessageBoxW(0,L"not ready",0,0);
-    duiManager::SetPageActive((DirectUI::UCString)MAKEINTRESOURCEW(IDUIF_SECURITYCONTROL), [](DirectUI::Element* elm) -> void { return; });
+    duiManager::SetPageActive((DirectUI::UCString)MAKEINTRESOURCEW(IDUIF_SECURITYCONTROL), [](DirectUI::Element* elm) -> void {
+        
+        auto secOptsFrame = duiManager::Get()->pUIElement->FindDescendent(ATOMID(L"SecurityOptionsFrame"));
+        if (secOptsFrame)
+            secOptsFrame->SetKeyFocus();
+        return; 
+        });
     //for (int i = 0; i < duiManager::Get()->inactiveWindows.size(); ++i) //theres prob a better and nicer way to do this
     //{
     //    auto& window = duiManager::Get()->inactiveWindows[i];
@@ -205,6 +211,20 @@ duiSecurityControl::~duiSecurityControl()
 {
 }
 
+void duiSecurityControl::OnInput(DirectUI::InputEvent* a2)
+{
+    if (a2->device == DirectUI::GINPUT_KEYBOARD)
+    {
+        if (reinterpret_cast<DirectUI::KeyboardEvent*>(a2)->ch == VK_ESCAPE)
+        {
+            KEY_EVENT_RECORD rec;
+            rec.wVirtualKeyCode = VK_ESCAPE; //forward it to consoleuiview
+            external::ConsoleUIView__HandleKeyInputExternal(external::GetConsoleUIView(), &rec);
+        }
+    }
+    DirectUI::Element::OnInput(a2);
+}
+
 HRESULT duiSecurityControl::CreateInstance(DirectUI::Element* rootElement, unsigned long* debugVariable, DirectUI::Element** newElement)
 {
     int hr = E_OUTOFMEMORY;
@@ -240,12 +260,7 @@ DirectUI::IClassInfo* duiSecurityControl::GetClassInfoW()
 
 void duiSecurityControl::OnEvent(DirectUI::Event* iev)
 {
-    if (iev->flag != DirectUI::GMF_BUBBLED)
-        return;
-    if (!iev->handled)
-        DirectUI::Element::OnEvent(iev);
-
-    if (!iev->target || !iev->target->GetParent()) return;
+    if (!iev->target || !iev->target->GetParent()) return DirectUI::Element::OnEvent(iev);
 
     if (iev->target->GetParent()->GetID() == ATOMID(L"SecurityOptionsContainer") && iev->type == DirectUI::Button::Click)
     {
@@ -270,6 +285,7 @@ void duiSecurityControl::OnEvent(DirectUI::Event* iev)
                 wrapper.Press();
         }
     }
+    DirectUI::Element::OnEvent(iev);
 }
 
 void duiSecurityControl::OnDestroy()

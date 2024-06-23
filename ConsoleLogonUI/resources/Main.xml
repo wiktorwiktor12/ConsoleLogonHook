@@ -10,7 +10,7 @@
             </if>
 
             <if id="atom(Background)">
-                <element background="resbmp(1000,4,-1,0,0,0,0,library(au7hui.dll))"/>
+                <element background="resbmp(113,4,-1,0,0,0,0)"/>
             </if>
 
             <if class="passwordBox">

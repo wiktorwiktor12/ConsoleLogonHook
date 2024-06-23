@@ -462,6 +462,7 @@ duiBackgroundWindow::~duiBackgroundWindow()
 
 void duiBackgroundWindow::OnInput(DirectUI::InputEvent* a2)
 {
+
     DirectUI::Element::OnInput(a2);
 }
 
@@ -507,11 +508,6 @@ void StartUtilMan()
 
 void duiBackgroundWindow::OnEvent(DirectUI::Event* iev)
 {
-    if (iev->flag != DirectUI::GMF_BUBBLED)
-        return;
-    if (!iev->handled)
-        DirectUI::Element::OnEvent(iev);
-
     if (iev->target->GetID() == DirectUI::StrToID((DirectUI::UCString)L"buttonEaseOfAccess"))
     {
         if (iev->type == DirectUI::Button::Click)
@@ -527,6 +523,8 @@ void duiBackgroundWindow::OnEvent(DirectUI::Event* iev)
                 StartUtilMan();
         }
     }
+
+    DirectUI::Element::OnEvent(iev);
 }
 
 void duiBackgroundWindow::OnDestroy()

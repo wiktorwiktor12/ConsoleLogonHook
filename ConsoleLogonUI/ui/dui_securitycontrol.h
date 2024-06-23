@@ -46,6 +46,8 @@ public:
 
     DEFINE_DUIELEMENTCLASS(L"duiSecurityControl");
 
+    virtual void OnInput(DirectUI::InputEvent* a2) override;
+
     std::vector<DirectUI::Element*> createdButtons;
     std::vector<DirectUI::Element*> createdTexts;
 

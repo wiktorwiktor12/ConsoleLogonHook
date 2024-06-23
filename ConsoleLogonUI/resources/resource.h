@@ -11,3 +11,4 @@
 #define IDB_SPINNER3 110
 #define IDB_SPINNER4 111
 #define IDB_SPINNER5 112
+#define IDB_BG 113
