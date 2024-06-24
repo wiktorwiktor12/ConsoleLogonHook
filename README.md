@@ -26,14 +26,11 @@ The following steps explain how you can contribute to the project
 
 1. Copy the 2 DLL files (ConsoleLogonHook.dll and ConsoleLogonUI.dll) from [Releases](https://github.com/wiktorwiktor12/ConsoleLogonHook/releases) into %SYSTEMROOT%\System32
 
-> [!NOTE]
-Step 2 might not be necessary in a future release.
-> 
 2. Take `authui.dll` from Windows 7 SP1, rename it to `au7hui.dll` and place it into %SYSTEMROOT%\System32, Or alternatively, just copy au7hui.dll from releases. This is required, as ConsoleLogonHook will push resources from it to use in the logon screen.
 
-3. Take ownership of `ConsoleLogon.dll` and replace it with the version from [Releases](https://github.com/wiktorwiktor12/ConsoleLogonHook/releases), this a temporary solution until a pdb offset finder system is added in.
+~~3. Take ownership of `ConsoleLogon.dll` and replace it with the version from [Releases](https://github.com/wiktorwiktor12/ConsoleLogonHook/releases), this a temporary solution until a pdb offset finder system is added in.~~ **No longer necessary as of v1.0.3**
 
-4. Open a CMD window as TrustedInstaller via PsExec64 and copy and paste the following commands:
+3. Open a CMD window as TrustedInstaller via PsExec64 and copy and paste the following commands:
 
 ```cmd
 reg add HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\WindowsRuntime\ActivatableClassId\Windows.Internal.UI.Logon.Controller.ConsoleBlockedShutdownResolver /v DllPath /t REG_SZ /d %systemroot%\System32\ConsoleLogonHook.dll /f
@@ -45,4 +42,4 @@ reg add HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\WindowsRuntime\ActivatableClassId\
 reg add HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\WindowsRuntime\ActivatableClassId\Windows.Internal.Shell.PlatformExtensions.ConsoleCredUX /v DllPath /t REG_SZ /d %systemroot%\System32\ConsoleLogonHook.dll /f
 ```
 
-5. Take ownership of the file `Windows.UI.Logon.dll` and rename it to something else. Example: `Windows.UI.Logon.dll.bak`, this is required as it will force the use of the console logon screen.
+4. Take ownership of the file `Windows.UI.Logon.dll` and rename it to something else. Example: `Windows.UI.Logon.dll.bak`, this is required as it will force the use of the console logon screen.
