@@ -72,8 +72,11 @@ void* StatusView__Destructor_Hook(void* _this, char a2)
 
 void uiStatusView::InitHooks(uintptr_t baseaddress)
 {
-    StatusView__RuntimeClassInitialize = memory::FindPatternCached<decltype(StatusView__RuntimeClassInitialize)>("StatusView__RuntimeClassInitialize","48 89 5C 24 10 48 89 74 24 18 55 57 41 56 48 8B EC 48 83 EC 40");
-    StatusView__Destructor = memory::FindPatternCached<decltype(StatusView__Destructor)>("StatusView__Destructor", "48 89 5C 24 08 57 48 83 EC 20 8B DA 48 8B F9 E8 ?? ?? ?? ?? F6 C3 01 74 ?? BA 78 00 00 00 48 8B CF E8 ?? ?? ?? ?? 48 8B 5C 24 30");
+    //MessageBoxW(0,L" stat v 1", 0, 0);
+    StatusView__RuntimeClassInitialize = memory::FindPatternCached<decltype(StatusView__RuntimeClassInitialize)>("StatusView__RuntimeClassInitialize", { "48 89 5C 24 10 48 89 74 24 18 55 57 41 56 48 8B EC 48 83 EC 40","48 89 5C 24 10 55 56 57 41 56 41 57 48 8B EC 48 83 EC 60 48 8B F1"});
+    //MessageBoxW(0,L" stat v 2", 0, 0);
+    StatusView__Destructor = memory::FindPatternCached<decltype(StatusView__Destructor)>("StatusView__Destructor", { "48 89 5C 24 08 57 48 83 EC 20 8B DA 48 8B F9 E8 ?? ?? ?? ?? F6 C3 01 74 ?? BA 78 00 00 00 48 8B CF E8 ?? ?? ?? ?? 48 8B 5C 24 30" });
+    //MessageBoxW(0,L" stat v 3",0,0);
 
     Hook(StatusView__RuntimeClassInitialize, StatusView__RuntimeClassInitialize_Hook);
     Hook(StatusView__Destructor, StatusView__Destructor_Hook);

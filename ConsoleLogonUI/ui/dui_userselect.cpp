@@ -50,7 +50,8 @@ void external::SelectableUserOrCredentialControl_Sort()
             int xExtent = extent->cx;
             v13->Release();
 
-            int DPI = 96;
+            
+            int DPI = GetDpiForSystem();
 
             int width = 0;
             int userCount = userButtons.size() & 0xFFFFFFF;
@@ -66,9 +67,9 @@ void external::SelectableUserOrCredentialControl_Sort()
                 v10 -= 180;
                 xExtent = InsideFrame->GetExtent(&v13)->cx;
                 v13->Release();
-                DPI = 96;
+                DPI = GetDpiForSystem();
             }
-            int v11 = 96;
+            int v11 = GetDpiForSystem();
             int v12 = MulDiv(180 * width + 12, v11, 96);
             UserList->SetWidth(v12);
 

@@ -120,15 +120,15 @@ GUID guid;
 
 void uiSelectedCredentialView::InitHooks(uintptr_t baseaddress)
 {
-	SelectedCredentialView__v_OnKeyInput = memory::FindPatternCached<decltype(SelectedCredentialView__v_OnKeyInput)>("SelectedCredentialView__v_OnKeyInput","48 89 5C 24 08 57 48 83 EC 20 41 83 20 00 49 8B F8 66 83 7A 06 08 48 8B D9 74");
-	CredUISelectedCredentialView__RuntimeClassInitialize = memory::FindPatternCached<decltype(CredUISelectedCredentialView__RuntimeClassInitialize)>("CredUISelectedCredentialView__RuntimeClassInitialize", "48 8B C4 48 89 58 18 48 89 70 20 48 89 50 10 55 57 41 54 41 56 41 57");
-	SelectedCredentialView__RuntimeClassInitialize = memory::FindPatternCached<decltype(SelectedCredentialView__RuntimeClassInitialize)>("SelectedCredentialView__RuntimeClassInitialize", "48 8B C4 48 89 58 10 48 89 70 18 48 89 78 20 55 41 54 41 55 41 56 41 57 48 8D 68 B8 48 81 EC 20 01 00 00");
-	EditControl__RuntimeClassInitialize = memory::FindPatternCached<decltype(EditControl__RuntimeClassInitialize)>("EditControl__RuntimeClassInitialize", "48 8B C4 48 89 58 08 48 89 68 10 48 89 70 18 48 89 78 20 41 56 48 83 EC 30 49 8B F0 4C 8B F2 48 8B F9 48 8D 59 70 48 8B 0B 48 85 C9 74 ?? 48 83 23 00 48 8B 01 48 8B 40 10 FF 15 ?? ?? ?? ?? 48 8B 06 4C 8B C3 48 8D 15 ?? ?? ?? ?? 48 8B CE 48 8B 00 FF 15 ?? ?? ?? ?? 8B D8 85 C0 79 ?? BA 18 00 00 00"); // fucking kill me
-	CheckboxControl__Destructor = memory::FindPatternCached<decltype(CheckboxControl__Destructor)>("CheckboxControl__Destructor", "48 89 5C 24 08 57 48 83 EC 20 8B FA 48 8B D9 48 8B 49 70 48 85 C9 74 ?? 48 83 ?? ?? ?? 48 8B 01 48 8B 40 10 FF 15 ?? ?? ?? ?? 90 48 8B CB");
-	CredentialFieldControlBase__GetVisibility = memory::FindPatternCached<decltype(CredentialFieldControlBase__GetVisibility)>("CredentialFieldControlBase__GetVisibility", "48 89 5C 24 18 55 56 57 48 83 EC 20 48 8B E9 48 8B F2");
-	EditControl__v_HandleKeyInput = memory::FindPatternCached<decltype(EditControl__v_HandleKeyInput)>("EditControl__v_HandleKeyInput", "48 89 5C 24 10 55 56 57 41 56 41 57 48 8B EC 48 83 EC 70 48 8B 05 ?? ?? ?? ?? 48 33 C4");
+	SelectedCredentialView__v_OnKeyInput = memory::FindPatternCached<decltype(SelectedCredentialView__v_OnKeyInput)>("SelectedCredentialView__v_OnKeyInput", { "48 89 5C 24 08 57 48 83 EC 20 41 83 20 00 49 8B F8 66 83 7A 06 08 48 8B D9 74" });
+	CredUISelectedCredentialView__RuntimeClassInitialize = memory::FindPatternCached<decltype(CredUISelectedCredentialView__RuntimeClassInitialize)>("CredUISelectedCredentialView__RuntimeClassInitialize", { "48 8B C4 48 89 58 18 48 89 70 20 48 89 50 10 55 57 41 54 41 56 41 57","48 89 5C 24 18 48 89 54 24 10 55 56 57 41 54 41 55 41 56 41 57"});
+	SelectedCredentialView__RuntimeClassInitialize = memory::FindPatternCached<decltype(SelectedCredentialView__RuntimeClassInitialize)>("SelectedCredentialView__RuntimeClassInitialize", { "48 8B 8E 80 00 00 00 49 3B CE 74 35 4D 85 F6 74 17 49 8B 06" }, true);
+	EditControl__RuntimeClassInitialize = memory::FindPatternCached<decltype(EditControl__RuntimeClassInitialize)>("EditControl__RuntimeClassInitialize", { "E8 ?? ?? ?? ?? 8B D8 85 C0 79 07 BA 1A 00 00 00 EB CB" }, true);
+	CheckboxControl__Destructor = memory::FindPatternCached<decltype(CheckboxControl__Destructor)>("CheckboxControl__Destructor", { "48 89 5C 24 08 57 48 83 EC 20 8B FA 48 8B D9 48 8B 49 70 48 85 C9 74 ?? 48 83 ?? ?? ?? 48 8B 01 48 8B 40 10 FF 15 ?? ?? ?? ?? 90 48 8B CB","48 89 5C 24 08 57 48 83 EC 20 48 8B D9 8B FA 48 8B 49 70 48 85 C9 74 ?? 48 83 ?? ?? ?? 48 8B 01 48 8B 40 10 FF 15 ?? ?? ?? ?? 48 8B CB E8"});
+	CredentialFieldControlBase__GetVisibility = memory::FindPatternCached<decltype(CredentialFieldControlBase__GetVisibility)>("CredentialFieldControlBase__GetVisibility", { "48 89 5C 24 18 55 56 57 48 83 EC 20 48 8B E9 48 8B F2" });
+	EditControl__v_HandleKeyInput = memory::FindPatternCached<decltype(EditControl__v_HandleKeyInput)>("EditControl__v_HandleKeyInput", { "48 89 5C 24 10 55 56 57 41 56 41 57 48 8B EC 48 83 EC 70 48 8B 05 ?? ?? ?? ?? 48 33 C4" });
 
-	uint8_t* focusPatch = memory::FindPatternCached<uint8_t*>("focusPatch", "74 ?? 48 8B 4B ?? 48 8B 01 48 8B 80"); //to patch the check for the bottom most field being selected when pressing enter
+	uint8_t* focusPatch = memory::FindPatternCached<uint8_t*>("focusPatch", { "74 ?? 48 8B 4B ?? 48 8B 01 48 8B 80" }); //to patch the check for the bottom most field being selected when pressing enter
 
 	DWORD old;
 	VirtualProtect(focusPatch,2,PAGE_EXECUTE_READWRITE,&old);

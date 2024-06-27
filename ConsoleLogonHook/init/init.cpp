@@ -72,6 +72,7 @@ namespace init
         if (!baseaddress)
             MessageBox(0, L"FAILED TO LOAD", L"FAILED TO LOAD", 0);
 
+        //MessageBox(0, L"dbg0", 0, 0);
         memory::LoadOffsetCache();
         memory::CheckCache();
         //MessageBox(0, L"dbg1", 0, 0);
@@ -94,10 +95,11 @@ namespace init
         fOutputDebugStringW = decltype(fOutputDebugStringW)(GetProcAddress(GetModuleHandle(L"api-ms-win-core-debug-l1-1-0.dll"), "OutputDebugStringW"));
         Hook(fOutputDebugStringW, OutputDebugStringW_Hook);
         //EditControl__Repaint = (decltype(EditControl__Repaint))(baseaddress + 0x44528);
-        ControlBase__PaintArea = memory::FindPatternCached<decltype(ControlBase__PaintArea)>("ControlBasePaintArea","48 89 5C 24 10 48 89 6C 24 18 56 57 41 54 41 56 41 57 48 83 EC 40");
+        ControlBase__PaintArea = memory::FindPatternCached<decltype(ControlBase__PaintArea)>("ControlBasePaintArea", { "48 89 5C 24 10 48 89 6C 24 18 56 57 41 54 41 56 41 57 48 83 EC 40" });
         Hook(ControlBase__PaintArea, ControlBase__PaintArea_Hook);
         //MessageBox(0, L"dbg3", 0, 0);
         external::InitExternal();
+        //MessageBox(0, L"dbg3.05", 0, 0);
         uiSecurityControl::InitHooks(baseaddress);
         //MessageBox(0, L"dbg3.1", 0, 0);
         uiMessageView::InitHooks(baseaddress);
