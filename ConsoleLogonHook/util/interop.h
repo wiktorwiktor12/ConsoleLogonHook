@@ -187,7 +187,7 @@ namespace external
     extern "C" __declspec(dllexport) void GetProfilePicturePathFromSID(const wchar_t* sid, const wchar_t* outUsername, bool bHighRes);
     extern "C" __declspec(dllexport) void GetSIDFromName(const wchar_t* username, wchar_t** sid);
 
-    extern "C" __declspec(dllexport) const wchar_t* SelectableUserOrCredentialControl_GetText(void* actualInstance);
+    extern "C" __declspec(dllexport) void SelectableUserOrCredentialControl_GetText(void* actualInstance, wchar_t* OutText, int MaxLength);
     extern "C" __declspec(dllexport) void SelectableUserOrCredentialControl_Press(void* actualInstance);
     extern "C" __declspec(dllexport) bool SelectableUserOrCredentialControl_isCredentialControl(void* actualInstance);
 

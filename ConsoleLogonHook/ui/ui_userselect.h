@@ -14,7 +14,6 @@ public:
     bool hastext = false;
 
     std::wstring GetText();
-    const wchar_t* GetTextRaw();
 
     void Press();
     bool isCredentialControl();

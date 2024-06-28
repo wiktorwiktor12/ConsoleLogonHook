@@ -238,7 +238,7 @@ void* external::GetConsoleUIView()
     return globals::ConsoleUIView;
 }
 
-const wchar_t* external::SelectableUserOrCredentialControl_GetText(void* actualInstance)
+void external::SelectableUserOrCredentialControl_GetText(void* actualInstance, wchar_t* OutText, int MaxLength)
 {
     for (int i = 0; i < buttons.size(); ++i)
     {
@@ -246,9 +246,11 @@ const wchar_t* external::SelectableUserOrCredentialControl_GetText(void* actualI
         if (button.actualInstance != actualInstance)
             continue;
 
-        return button.GetTextRaw();
+        std::wstring text = button.GetText();
+        wcscpy_s(OutText, MaxLength,text.c_str());
+        
+        return;
     }
-    return L"";
 }
 
 void external::SelectableUserOrCredentialControl_Press(void* actualInstance)
@@ -300,13 +302,14 @@ std::wstring SelectableUserOrCredentialControlWrapper::GetText()
     return text;
 }
 
+/*
 const wchar_t* SelectableUserOrCredentialControlWrapper::GetTextRaw()
 {
     uintptr_t pointer = *(uintptr_t*)(__int64(actualInstance) + 0x58);
     if (!pointer)
         pointer = *(uintptr_t*)(__int64(actualInstance) + 0x50);
 
-    HSTRING hstring;
+    HSTRING hstring{};
 
     __int64 result = (*(__int64(__fastcall**)(__int64, HSTRING*))(*(uintptr_t*)pointer + 0x40i64))(pointer, &hstring); //keep this line as is, this is very funky when it comes down to specifics
     if (result < 0)
@@ -314,9 +317,9 @@ const wchar_t* SelectableUserOrCredentialControlWrapper::GetTextRaw()
 
     auto rawtext = ConvertHStringToRawString(hstring);
 
-    fWindowsDeleteString(hstring);
+    //fWindowsDeleteString(hstring);
     return rawtext;
-}
+}*/
 
 //please dont touch, its messy, needs clean up, but its fragile af, ill fix at a later date
 void SelectableUserOrCredentialControlWrapper::Press()

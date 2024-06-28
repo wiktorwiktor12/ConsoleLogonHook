@@ -152,9 +152,17 @@ namespace external
 
     static std::wstring SelectableUserOrCredentialControl_GetText(void* actualInstance)
     {
-        static auto fSelectableUserOrCredentialControl_GetText = EXTERNAL(const wchar_t*(*)(void* actualInstance), "SelectableUserOrCredentialControl_GetText");
+        static auto fSelectableUserOrCredentialControl_GetText = EXTERNAL(void(*)(void* actualInstance, wchar_t* OutText, int MaxLength), "SelectableUserOrCredentialControl_GetText");
         if (fSelectableUserOrCredentialControl_GetText)
-            return fSelectableUserOrCredentialControl_GetText(actualInstance);
+        {
+            std::wstring textOut;
+
+            WCHAR textBuffer[256];
+            textBuffer[0] = '\0';
+            fSelectableUserOrCredentialControl_GetText(actualInstance, textBuffer, 256);
+            textOut = textBuffer;
+            return textOut;
+        }
 
         return std::wstring();
     }
