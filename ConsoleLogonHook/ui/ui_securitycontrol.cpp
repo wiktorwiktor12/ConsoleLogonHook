@@ -82,7 +82,7 @@ __int64 __fastcall SecurityOptionsView__RuntimeClassInitialize_Hook(__int64 a1, 
     return res;
 }
 
-__int64(__fastcall* MakeAndInitialize_SecurityOptionControl)(void** _this, void* a2, int* a3, void* a4);
+/*__int64(__fastcall* MakeAndInitialize_SecurityOptionControl)(void** _this, void* a2, int* a3, void* a4);
 __int64 __fastcall MakeAndInitialize_SecurityOptionControl_Hook(void** _this, void* a2, int* a3, void* a4)
 {
     auto res = MakeAndInitialize_SecurityOptionControl(_this, a2, a3, a4);
@@ -104,7 +104,28 @@ __int64 __fastcall MakeAndInitialize_SecurityOptionControl_Hook(void** _this, vo
     }
 
     return res;
+}*/
+
+__int64(__fastcall* SecurityOptionControl_RuntimeClassInitialize)(void* _this, void* a2, int a3, void* a4);
+__int64 __fastcall SecurityOptionControl_RuntimeClassInitialize_Hook(void** _this, void* a2, int a3, void* a4)
+{
+    auto res = SecurityOptionControl_RuntimeClassInitialize(_this, a2, a3, a4);
+
+    //SPDLOG_INFO("Got Control!");
+
+    wchar_t* text = *(wchar_t**)(__int64(_this) + 0x48);
+
+    //SecurityOptionControlWrapper button(control);
+
+    SPDLOG_INFO("text: {}, controlptr {} a2 {} a3 {} a4 {}", ws2s(text).c_str(), (void*)_this, (void*)a2, (void*)a3, (void*)a4);
+
+    external::SecurityOptionControl_Create(_this);
+
+    //buttonsList.push_back(button);
+
+    return res;
 }
+
 void* (__fastcall* SecurityOptionControl_Destructor)(__int64 a1, unsigned int a2);
 void* SecurityOptionControl_Destructor_Hook(__int64 a1, unsigned int a2)
 {
@@ -186,10 +207,9 @@ const wchar_t* external::SecurityOptionControl_getString(void* actualInstance)
 
 void uiSecurityControl::InitHooks(uintptr_t baseaddress)
 {
-    LogonViewManager__ShowSecurityOptionsUIThread = memory::FindPatternCached<decltype(LogonViewManager__ShowSecurityOptionsUIThread)>("LogonViewManager__ShowSecurityOptionsUIThread", { "48 89 5C 24 08 4C 89 44 24 18 55 56 57 41 56 41 57 48 8B EC 48 83 EC 40" });
-    LogonViewManager__ShowSecurityOptions = memory::FindPatternCached<decltype(LogonViewManager__ShowSecurityOptions)>("LogonViewManager__ShowSecurityOptions", { "48 89 5C 24 10 4C 89 44 24 18 55 56 57 41 54 41 55 41 56 41 57" });
-    auto adr = memory::FindPatternCached<uintptr_t>("MakeAndInitialize_SecurityOptionControl", { "E8 ?? ?? ?? ?? 44 8B F0 85 C0 79 ?? 48 8B 4D ?? 44 8B C8 4C 8D 05 ?? ?? ?? ?? BA ?? ?? ?? ?? E8 ?? ?? ?? ?? 90" });
-    MakeAndInitialize_SecurityOptionControl = (decltype(MakeAndInitialize_SecurityOptionControl))(REL(adr,1));
+    LogonViewManager__ShowSecurityOptionsUIThread = memory::FindPatternCached<decltype(LogonViewManager__ShowSecurityOptionsUIThread)>("LogonViewManager__ShowSecurityOptionsUIThread", { "48 8B EC 48 83 EC 40 49 8B F8 8B F2 4C 8B F1 E8" },true);
+    LogonViewManager__ShowSecurityOptions = memory::FindPatternCached<decltype(LogonViewManager__ShowSecurityOptions)>("LogonViewManager__ShowSecurityOptions", { "48 89 ?? 28 44 89 ?? 30 ?? 89 ?? 38 ?? 89 73 40 ?? 85 F6 74 10 ?? 8B 06 ?? 8B CE 48 8B 40 08 FF 15" },true);
+    SecurityOptionControl_RuntimeClassInitialize = memory::FindPatternCached<decltype(SecurityOptionControl_RuntimeClassInitialize)>("SecurityOptionControl_RuntimeClassInitialize", {"B9 10 00 00 00 E8 ?? ?? ?? ?? 4C 8B F0 48 85 C0 74 22 48 8B 07 49 89 06 48 8B 4F 08 49 89 4E 08 48 85 C9 74 12 48 8B 01"}, true);
     SecurityOptionControlHandleKeyInput = memory::FindPatternCached<decltype(SecurityOptionControlHandleKeyInput)>("SecurityOptionControlHandleKeyInput", { "48 89 5C 24 10 48 89 74 24 20 55 57 41 56 48 8B EC 48 83 EC 70 48 8B 05 ?? ?? ?? ?? 48 33 C4" });
     //SecurityOptionControlHandleKeyInput = decltype(SecurityOptionControlHandleKeyInput)(baseaddress + 0x44490);
     //ConsoleUIView__Initialize = decltype(ConsoleUIView__Initialize)(baseaddress + 0x42710);
@@ -204,7 +224,7 @@ void uiSecurityControl::InitHooks(uintptr_t baseaddress)
 
     Hook(LogonViewManager__ShowSecurityOptionsUIThread, LogonViewManager__ShowSecurityOptionsUIThread_Hook);
     Hook(LogonViewManager__ShowSecurityOptions, LogonViewManager__ShowSecurityOptions_Hook);
-    Hook(MakeAndInitialize_SecurityOptionControl, MakeAndInitialize_SecurityOptionControl_Hook);
+    Hook(SecurityOptionControl_RuntimeClassInitialize, SecurityOptionControl_RuntimeClassInitialize_Hook);
     Hook(SecurityOptionControlHandleKeyInput, SecurityOptionControlHandleKeyInput_Hook);
     Hook(SecurityOptionControl_Destructor, SecurityOptionControl_Destructor_Hook);
     Hook(SecurityOptionsView__RuntimeClassInitialize, SecurityOptionsView__RuntimeClassInitialize_Hook);

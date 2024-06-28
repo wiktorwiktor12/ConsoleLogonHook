@@ -178,8 +178,8 @@ namespace memory
     static T FindPatternCached(std::string functionName, std::vector<std::string> signatures, bool bFindTop = false)
     {
         uintptr_t base_address = (uintptr_t)GetModuleHandle(L"ConsoleLogon.dll");
-        //offsetCache.find(functionName);
-
+        ////offsetCache.find(functionName);
+        //
         //for (int i = 0; i < signatures.size(); ++i)
         //{
         //    auto signature = signatures[i];
@@ -233,11 +233,11 @@ namespace memory
     {
         //return;
         //auto SecurityOptionsView__RuntimeClassIntialise = (uint8_t*)(baseaddress + 0x36EB4);
-        auto SecurityOptionsView__RuntimeClassIntialise = FindPatternCached<uint8_t*>("SecurityOptionsViewRuntimeClassIntialise", { "48 89 5C 24 10 4C 89 44 24 18 55 56 57 41 56" });
-        if (IsBadReadPtr(SecurityOptionsView__RuntimeClassIntialise,8) || SecurityOptionsView__RuntimeClassIntialise[0] != 0x48 || SecurityOptionsView__RuntimeClassIntialise[1] != 0x89 || SecurityOptionsView__RuntimeClassIntialise[2] != 0x5C)
+        auto SecurityOptionsView__RuntimeClassIntialise = FindPatternCached<uint8_t*>("SecurityOptionsViewRuntimeClassIntialise", { "55 56 57 41 56 41 57 48 8B EC 48 83 EC 30" });
+        if (IsBadReadPtr(SecurityOptionsView__RuntimeClassIntialise,8) || SecurityOptionsView__RuntimeClassIntialise[0] != 0x55 || SecurityOptionsView__RuntimeClassIntialise[1] != 0x56 || SecurityOptionsView__RuntimeClassIntialise[2] != 0x57)
         {
             offsetCache.clear();
-            SecurityOptionsView__RuntimeClassIntialise = FindPatternCached<uint8_t*>("SecurityOptionsViewRuntimeClassIntialise", { "48 89 5C 24 10 4C 89 44 24 18 55 56 57 41 56" });
+            SecurityOptionsView__RuntimeClassIntialise = FindPatternCached<uint8_t*>("SecurityOptionsViewRuntimeClassIntialise", { "55 56 57 41 56 41 57 48 8B EC 48 83 EC 30" });
             if (!SecurityOptionsView__RuntimeClassIntialise)
                 MessageBoxW(0,L"SecurityOptionsView__RuntimeClassIntialise pattern Broke!",0,0);
         }
