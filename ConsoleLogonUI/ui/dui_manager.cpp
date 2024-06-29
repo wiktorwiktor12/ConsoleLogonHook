@@ -183,30 +183,7 @@ void duiManager::UnloadDUI()
     auto pDuiManager = Get();
 
     UnregisterHotKey(pDuiManager->pWndHost->GetHWND(), hotkeyid);
-
-    if (pDuiManager->pUIElement)
-    {
-        pDuiManager->pUIElement->DestroyAll(true);
-    }
-    if (pDuiManager->pWndElement)
-    {
-        pDuiManager->pWndElement->DestroyAll(true);
-
-    }
-    if (pDuiManager->pWndHost)
-    {
-        pDuiManager->pWndHost->DestroyWindow();
-        pDuiManager->pWndHost->Destroy();
-    }
-    if (pDuiManager->pParser)
-        pDuiManager->pParser->Destroy();
-
-    pDuiManager->pParser = NULL;
-    pDuiManager->pWndHost = NULL;
-    pDuiManager->pUIElement = NULL;
-    pDuiManager->pWndElement = NULL;
-    pDuiManager->pageContainerElement = NULL;
-
+    pDuiManager->pWndHost->DestroyWindow();
 
     DirectUI::UnInitThread();
     DirectUI::UnInitProcessPriv(0);

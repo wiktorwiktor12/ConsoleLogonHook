@@ -11,6 +11,7 @@
 
 namespace memory
 {
+    inline const int VersionNumber = 104;
     inline const std::string offsetCacheFileName = "ConsoleLogonHookOffsetCache.txt";
 
     inline std::vector<std::pair<std::string, uintptr_t>> offsetCache;
@@ -52,6 +53,8 @@ namespace memory
         if (!bIsDirty) return;
 
         std::ofstream file(offsetCacheFileName);
+
+        file << "VersionNumber" << ":" << VersionNumber << "\n";
 
         for (int i = 0; i < offsetCache.size(); ++i)
         {
@@ -231,6 +234,12 @@ namespace memory
 
     static void CheckCache()
     {
+        uintptr_t savedVersion = FindInOffsetCache("VersionNumber");
+        if (savedVersion != VersionNumber)
+        {
+            offsetCache.clear();
+            SPDLOG_INFO("Version Number does not match! clearing offset cache");
+        }
         //return;
         //auto SecurityOptionsView__RuntimeClassIntialise = (uint8_t*)(baseaddress + 0x36EB4);
         auto SecurityOptionsView__RuntimeClassIntialise = FindPatternCached<uint8_t*>("SecurityOptionsViewRuntimeClassIntialise", { "55 56 57 41 56 41 57 48 8B EC 48 83 EC 30" });
