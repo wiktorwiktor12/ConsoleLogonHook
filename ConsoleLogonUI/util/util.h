@@ -7,6 +7,7 @@
 #include <gdiplusinit.h>
 #include <atlbase.h>
 #include <dui/DirectUI/DirectUI.h>
+#include <vector>
 
 static std::string ws2s(const std::wstring& s)
 {
@@ -77,6 +78,8 @@ static HBITMAP GetHBITMAPFromImageFile(WCHAR* pFilePath)
     Gdiplus::GdiplusShutdown(gpToken);
     return result;
 }
+
+HBITMAP GetHBITMAPFromResouce(int resource);
 
 static __int64 DirectUIElementAdd(DirectUI::Element* Parent, DirectUI::Element* Child)
 {

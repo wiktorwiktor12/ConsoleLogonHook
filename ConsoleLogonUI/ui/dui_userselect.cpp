@@ -92,8 +92,8 @@ void external::SelectableUserOrCredentialControl_Sort()
                     continue;
                 }
 
-                int DPI = 96;
-                int width = MulDiv(180, DPI, 96);
+                int DPI_1 = GetDpiForSystem();
+                int width = MulDiv(180, DPI_1, 96);
                 btn->SetWidth(width);
 
                 std::wstring username = wrapper.GetText();
@@ -105,10 +105,10 @@ void external::SelectableUserOrCredentialControl_Sort()
                 auto pic = btn->FindDescendent(ATOMID(L"Picture"));
                 if (pic)
                 {
-                    auto graphic = DirectUI::Value::CreateGraphic(wrapper.pfp, (unsigned char)2, (unsigned int)0xFFFFFFFF, (bool)0, 0, 0);
+                    auto graphic = DirectUI::Value::CreateGraphic(wrapper.pfp, (unsigned char)4, (unsigned int)0xFFFFFFFF, (bool)0, 0, 0);
                     if (!graphic) return;
 
-                    pic->SetValue(DirectUI::Element::ContentProp, 1, graphic);
+                    pic->SetValue(DirectUI::Element::BackgroundProp, 1, graphic);
                     graphic->Release();
                 }
 

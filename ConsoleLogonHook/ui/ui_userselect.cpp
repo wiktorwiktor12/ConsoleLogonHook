@@ -115,7 +115,14 @@ __int64 SelectableUserOrCredentialControl__RuntimeClassInitialize_Hook(void* _th
 
         std::wstring sid = L"";
         auto hr = GetSIDStringFromUsername(wrapper.GetText().c_str(), &sid);
-        auto path = GetProfilePicturePathFromSID(sid.c_str());
+
+        //Use higher res image for dpis higher than 96
+        bool bHighRes = false;
+        int DPI = GetDpiForSystem();
+        if (DPI > 96)
+            bHighRes = true;
+
+        auto path = GetProfilePicturePathFromSID(sid.c_str(), bHighRes);
             
         external::SelectableUserOrCredentialControl_Create(wrapper.actualInstance, path);
 

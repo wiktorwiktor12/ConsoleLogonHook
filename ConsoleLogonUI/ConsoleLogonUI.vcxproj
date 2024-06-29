@@ -121,7 +121,7 @@
       <SubSystem>Windows</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <EnableUAC>false</EnableUAC>
-      <AdditionalDependencies>comctl32.lib;gdiplus.lib;dwmapi.lib</AdditionalDependencies>
+      <AdditionalDependencies>comctl32.lib;gdiplus.lib;dwmapi.lib;gdi32.lib</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
@@ -145,7 +145,7 @@
       <OptimizeReferences>true</OptimizeReferences>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <EnableUAC>false</EnableUAC>
-      <AdditionalDependencies>comctl32.lib;gdiplus.lib;dwmapi.lib</AdditionalDependencies>
+      <AdditionalDependencies>comctl32.lib;gdiplus.lib;dwmapi.lib;gdi32.lib</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
@@ -156,6 +156,7 @@
     <ClCompile Include="ui\dui_selectedcredentialview.cpp" />
     <ClCompile Include="ui\dui_statusview.cpp" />
     <ClCompile Include="ui\dui_userselect.cpp" />
+    <ClCompile Include="util\util.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="dui\dui_includes.h" />

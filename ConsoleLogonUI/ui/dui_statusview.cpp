@@ -6,6 +6,75 @@
 #include "resources/resource.h"
 
 const wchar_t* ptext;
+
+int g_fHighDPIAware;
+int g_iLPX;
+int g_fHighDPI;
+int g_iLPY;
+void InitDPI(void)
+{
+    int v0 = 0; // eax
+    HDC v1 = 0; // rax
+    int v2 = 0; // edi
+    HDC v3 = 0; // rbx
+    int v4 = 0; // eax
+
+    v0 = IsProcessDPIAware();
+    if (g_iLPX == -1 || g_fHighDPIAware != v0)
+    {
+        g_fHighDPIAware = v0;
+        v1 = GetDC(0i64);
+        v2 = 0;
+        v3 = v1;
+        if (v1)
+        {
+            g_iLPX = GetDeviceCaps(v1, 88);
+            v4 = GetDeviceCaps(v3, 90);
+            v2 = g_iLPX != 96;
+            g_fHighDPI = v2;
+            g_iLPY = v4;
+            ReleaseDC(0i64, v3);
+        }
+    }
+}
+
+void __fastcall SHLogicalToPhysicalDPI(int* a1, int* a2)
+{
+    InitDPI();
+    if (a1)
+        *a1 = MulDiv(*a1, g_iLPX, 96);
+    if (a2)
+        *a2 = MulDiv(*a2, g_iLPY, 96);
+}
+
+static int GetSpinnerResourceID(int* OutSize)
+{
+    int v18 = 20;
+    SHLogicalToPhysicalDPI(&v18,0);
+    int v15 = 0;
+    
+    int v14 = v18;
+    if (v18 == 20)
+    {
+        v15 = IDB_SPINNER3;
+    }
+    else if (v18 == 25)
+    {
+        v15 = IDB_SPINNER4;
+    }
+    else
+    {
+        v15 = IDB_SPINNER5;
+        if (v18 != 30)
+            v14 = 30;
+        v18 = v14;
+    }
+    if (OutSize)
+        *OutSize = v14;
+
+    return v15;
+}
+
 void external::StatusView_SetActive(const wchar_t* text)
 {
     HideConsoleUI();
@@ -21,45 +90,26 @@ void external::StatusView_SetActive(const wchar_t* text)
             options->SetVisible(false);
         }
 
-        //TODO: APPLY DIFFERENT IMAGE PER DPi
-        /*auto animationStrip = (DirectUI::AnimationStrip*)pDuiManager->pUIElement->FindDescendent(ATOMID(L"WaitAnimation"));
+
+        auto animationStrip = (DirectUI::AnimationStrip*)pDuiManager->pUIElement->FindDescendent(ATOMID(L"WaitAnimation"));
         if (animationStrip)
         {
-            HBITMAP bitmap = (HBITMAP)LoadImageW(pDuiManager->hInstance, MAKEINTRESOURCEW(IDB_SPINNER3), IMAGE_BITMAP, 360, 20, LR_LOADTRANSPARENT);
-            if (bitmap)
+            int size = 0;
+            int resid = GetSpinnerResourceID(&size);
+            auto graphic = DirectUI::Value::CreateGraphic((DirectUI::UCString)MAKEINTRESOURCE(resid), 3, (UINT)-1, 0, 0, pDuiManager->hInstance,0,0);
+            if (graphic)
             {
-                auto graphic = DirectUI::Value::CreateGraphic(bitmap, (unsigned char)2, (unsigned int)0xFFFFFFFF, (bool)0, 0, 0);
-                if (graphic)
-                {
-                    {
-                        animationStrip->SetValue(DirectUI::Element::ContentProp, 1, graphic);
-                        graphic->Release();
-                    }
-                }
+                animationStrip->SetValue(DirectUI::Element::ContentProp, 1, graphic);
+                graphic->Release();
+
+                animationStrip->SetFrameWidth(size);
+
+                animationStrip->SetVisible(true);
+                animationStrip->SetPlay(true);
             }
-            animationStrip->SetVisible(true);
-            animationStrip->SetPlay(true);
-        
-        }*/
+        }
 
         });
-    //ptext = 0;
-    //auto statusText = duiManager::Get()->pWndElement->FindDescendent(ATOMID(L"StatusText"));
-    //if (!statusText)
-    //{
-    //    MessageBoxW(0,L"failed to find statustext",0,0);
-    //    return;
-    //}
-    
-    
-
-    //auto statusview = duiManager::Get()->GetWindowOfTypeId<uiStatusView>(4);
-    //if (statusview)
-    //{
-    //    SPDLOG_INFO("Setting active status view instance");
-    //    statusview->statusText = text;
-    //    statusview->SetActive();
-    //}
 }
 
 DirectUI::IClassInfo* duiStatusView::Class = NULL;

@@ -15,7 +15,7 @@
                         
                     </element>
                     <element id="atom(Status)" visible="true" Enabled="true" layout="flowlayout(0,0,2,2)" minsize="size(0rp,36rp)">
-                        <AnimationStrip id="atom(WaitAnimation)" content="resbmp(110)" visible="true" play="true" framewidth="20" frameduration="33" frameindex="0" width="20rp" height="20rp" margin="rect(0rp,0rp,5rp,0rp)"/>
+                        <AnimationStrip id="atom(WaitAnimation)" content="resbmp(110)" visible="true" play="true" framewidth="20rp" frameduration="33" frameindex="0" width="20rp" height="20rp" margin="rect(0rp,0rp,5rp,0rp)"/>
                         <element content="STATUS VIEW" id="atom(StatusText)"/>
                     </element>
                 </element>

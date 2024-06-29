@@ -271,6 +271,15 @@ void duiManager::LoadBackground()
     }*/
 }
 
+void duiManager::LoadHighResImageForDPI()
+{
+    int DPI = GetDpiForSystem();
+    if (DPI <= 96) // no change
+        return;
+
+
+}
+
 void duiManager::LoadBranding()
 {
     if (!this->pUIElement) return;
@@ -278,15 +287,45 @@ void duiManager::LoadBranding()
     auto brandingElement = this->pUIElement->FindDescendent(ATOMID(L"BrandingImage"));
     if (!brandingElement) return;
 
-    HBITMAP bitmap = external::BrandingLoadImage(L"Basebrd", 122, 0, 0, 0, 0);
-    if (!bitmap) return;
+    const int brandingSizes[3][2] = {{122,350}, {1122,438} ,{2122,525}};
+
+    int residToUse = 122;
+    int lastdist = 9999999;
+    int DPI = GetDpiForSystem();
+    int scalecompare = MulDiv(350, DPI, 96);/* 350 * (DPI / 96);*/
+    for (int i = 0; i < 3; ++i)
+    {
+        auto pair = brandingSizes[i];
+        int resid = pair[0];
+        int reso = pair[1];
+
+        int dist = abs(reso - scalecompare);
+        if (dist < lastdist)
+        {
+            lastdist = dist;
+            residToUse = resid;
+        }
+    }
+    //MessageBoxW(0,std::format(L"resid{} dist{} DPI {} scalecompare{}",residToUse,lastdist,DPI,scalecompare).c_str(),0,0);
+    HBITMAP bitmap = external::BrandingLoadImage(L"Basebrd", residToUse, 0, 0, 0, 0);
+    if (!bitmap)
+    {
+        bitmap = LoadBitmapW(duiManager::Get()->hInstance, MAKEINTRESOURCEW(residToUse));
+    }
 
     auto graphic = DirectUI::Value::CreateGraphic(bitmap, (unsigned char)2, (unsigned int)0xFFFFFFFF, (bool)0, 0, 0);
+    if (!graphic)
+    {
+        bitmap = LoadBitmapW(duiManager::Get()->hInstance, MAKEINTRESOURCEW(residToUse));
+        graphic = DirectUI::Value::CreateGraphic(bitmap, (unsigned char)2, (unsigned int)0xFFFFFFFF, (bool)0, 0, 0);
+    }
     if (!graphic) return;
+    //MessageBoxW(0,L"",0,0);
 
-    if (!brandingElement->SetMinSize(0, 0)) return;
 
-    brandingElement->SetValue(DirectUI::Element::BackgroundProp, 1, graphic);
+    //if (!brandingElement->SetMinSize(0, 0)) return;
+
+    brandingElement->SetValue(DirectUI::Element::ContentProp, 1, graphic);
     graphic->Release();
 }
 
