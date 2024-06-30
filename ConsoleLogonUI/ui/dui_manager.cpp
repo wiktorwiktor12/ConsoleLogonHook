@@ -522,8 +522,32 @@ void StartUtilMan()
     ShellExecuteW(0, L"open", L"utilman.exe", L"-debug", 0, SW_SHOWNORMAL);
 }
 
+MIDL_INTERFACE("b1325ef5-dd4d-4988-a2b3-c776ad45d0d6")
+CLegacyShutdownDialog : public IUnknown
+{
+public:
+    virtual __int64 __fastcall Show(HWND a2, unsigned int a3, __int64* a4) = 0;
+    virtual __int64 __fastcall ShowSETOnly(HWND a2, int a3, __int64* a4) = 0;
+};
+
+GUID CLSID_AuthUILegacyShutdownDialog{ 0x0B1325EF5,0x0DD4D,0x4988,0x0A2,0x0B3,0x0C7,0x76,0x0AD,0x45,0x0D0,0x0D6 };
+GUID GUID_b1325ef5_dd4d_4988_a2b3_c776ad45d0d6{0x0EC530685 ,0x6C7B ,0x4D06 ,0x0A5,0x5B, 0x5A, 0x1A, 0x81, 0x78, 0x3E, 0x0F4 };
+
 void duiBackgroundWindow::OnEvent(DirectUI::Event* iev)
 {
+    if (iev->target->GetID() == DirectUI::StrToID((DirectUI::UCString)L"Shutdown") && iev->type == DirectUI::Button::Click) //good enough
+    {
+        system("shutdown /s /t 0");
+
+        //TODO: FIGURE OUT HOW TO GET THIS TO WORK PROPERLY AND NOT CRASH
+        //CComPtr<CLegacyShutdownDialog> legacyPtr;
+        //if (CoCreateInstance(CLSID_AuthUILegacyShutdownDialog,0,1u, GUID_b1325ef5_dd4d_4988_a2b3_c776ad45d0d6,(LPVOID*)&legacyPtr.p))
+        //{
+        //    int two = 2;
+        //    legacyPtr->ShowSETOnly(duiManager::Get()->pWndHost->GetHWND(),1,(long long*)&two);
+        //}
+    }
+
     if (iev->target->GetID() == DirectUI::StrToID((DirectUI::UCString)L"buttonEaseOfAccess"))
     {
         if (iev->type == DirectUI::Button::Click)

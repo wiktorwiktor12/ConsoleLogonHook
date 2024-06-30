@@ -11,7 +11,7 @@
 
 namespace memory
 {
-    inline const int VersionNumber = 104;
+    inline const int VersionNumber = 105;
     inline const std::string offsetCacheFileName = "ConsoleLogonHookOffsetCache.txt";
 
     inline std::vector<std::pair<std::string, uintptr_t>> offsetCache;
