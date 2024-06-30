@@ -4,18 +4,18 @@
             <element background="argb(0, 0, 0, 0)" foreground="white" font="11;normal;shadow;Segoe UI" shadowintensity="75"/>
             <button foreground="white" font="11;normal;shadow;Segoe UI" shadowintensity="75" contentalign="middlecenter" margin="rect(6rp, 0rp, 6rp, 0rp)" accessible="true" accrole="43"/>
             <if class="GenericButton">
-                <button minsize="size(93rp,28rp)" padding="rect(10rp, 0rp, 10rp, 2rp)" borderthickness="rect(4rp, 3rp, 4rp, 3rp)" background="resbmp(12263,7,-1,0,0,1,1,library(au7hui.dll))" bordercolor="gray" borderstyle="raised"/>
+                <button minsize="size(93rp,28rp)" padding="rect(10rp, 0rp, 10rp, 2rp)" borderthickness="rect(4rp, 3rp, 4rp, 3rp)" background="resbmp(12263,7,-1,0,0,1,1)" bordercolor="gray" borderstyle="raised"/>
                 <if keyfocused="true">
-                    <button background="resbmp(12259,7,-1,0,0,1,1,library(au7hui.dll))" bordercolor="windowtext" borderstyle="solid"/>
+                    <button background="resbmp(12259,7,-1,0,0,1,1)" bordercolor="windowtext" borderstyle="solid"/>
                 </if>
                 <if mousefocused="true">
-                    <button background="resbmp(12260,7,-1,0,0,1,1,library(au7hui.dll))" bordercolor="windowtext" borderstyle="solid"/>
+                    <button background="resbmp(12260,7,-1,0,0,1,1)" bordercolor="windowtext" borderstyle="solid"/>
                 </if>
                 <if mousefocused="true" keyfocused="true" pressed="false">
-                    <button background="resbmp(12261,7,-1,0,0,1,1,library(au7hui.dll))" bordercolor="windowtext" borderstyle="solid"/>
+                    <button background="resbmp(12261,7,-1,0,0,1,1)" bordercolor="windowtext" borderstyle="solid"/>
                 </if>
                 <if pressed="true">
-                    <button background="resbmp(12262,7,-1,0,0,1,1,library(au7hui.dll))" bordercolor="windowtext" borderstyle="sunken"/>
+                    <button background="resbmp(12262,7,-1,0,0,1,1)" bordercolor="windowtext" borderstyle="sunken"/>
                 </if>
             </if>
         </style>
@@ -44,26 +44,26 @@
                 <element padding="rect(16rp, 16rp, 16rp, 16rp)"/>
             </if>
             <if id="atom(Overlay)">
-                <element width="80rp" height="80rp" borderthickness="rect(1rp, 1rp, 1rp, 1rp)" background="resbmp(12222,7,-1,0,0,1,1,library(au7hui.dll))"/>
+                <element width="80rp" height="80rp" borderthickness="rect(1rp, 1rp, 1rp, 1rp)" background="resbmp(12222,7,-1,0,0,1,1)"/>
                 <if HighDPI="true">
-                    <element background="resbmp(12237, 7,-1,0,0,1,1,library(au7hui.dll))"/>
+                    <element background="resbmp(12237, 7,-1,0,0,1,1)"/>
                 </if>
                 <if selected="true">
-                    <element background="resbmp(12219,7,-1,0,0,1,1,library(au7hui.dll))"/>
+                    <element background="resbmp(12219,7,-1,0,0,1,1)"/>
                     <if HighDPI="true">
-                        <element background="resbmp(12234, 7,-1,0,0,1,1,library(au7hui.dll))"/>
+                        <element background="resbmp(12234, 7,-1,0,0,1,1)"/>
                     </if>
                 </if>
                 <if mousefocused="true">
-                    <element background="resbmp(12218,7,-1,0,0,1,1,library(au7hui.dll))"/>
+                    <element background="resbmp(12218,7,-1,0,0,1,1)"/>
                     <if HighDPI="true">
-                        <element background="resbmp(12233, 7,-1,0,0,1,1,library(au7hui.dll))"/>
+                        <element background="resbmp(12233, 7,-1,0,0,1,1)"/>
                     </if>
                 </if>
                 <if selected="true" mousefocused="true">
-                    <element background="resbmp(12220,7,-1,0,0,1,1,library(au7hui.dll))"/>
+                    <element background="resbmp(12220,7,-1,0,0,1,1)"/>
                     <if HighDPI="true">
-                        <element background="resbmp(12235, 7,-1,0,0,1,1,library(au7hui.dll))"/>
+                        <element background="resbmp(12235, 7,-1,0,0,1,1)"/>
                     </if>
                 </if>
             </if>
@@ -86,41 +86,41 @@
                 <element font="9;normal;shadow;Segoe UI" shadowintensity="75" contentalign="topcenter | endellipsis"/>
             </if>
             <if class="RestrictedEdit">
-                <Edit width="225rp" height="25rp" font="9;normal;shadow;Segoe UI" shadowintensity="75" margin="rect(0rp, 3rp, 0rp, 3rp)" padding="rect(0rp, 1rp, 0rp, 0rp)" borderthickness="rect(4, 4, 4, 4)" bordercolor="gray" accessible="true" accrole="42" background="resbmp(11003, 7,-1,0,0,1,1,library(au7hui.dll))"/>
+                <Edit width="225rp" height="25rp" font="9;normal;shadow;Segoe UI" shadowintensity="75" margin="rect(0rp, 3rp, 0rp, 3rp)" padding="rect(0rp, 1rp, 0rp, 0rp)" borderthickness="rect(4, 4, 4, 4)" bordercolor="gray" accessible="true" accrole="42" background="resbmp(11003, 7,-1,0,0,1,1)"/>
                 <if mousefocused="true">
-                    <Edit background="resbmp(11002, 7,-1,0,0,1,1,library(au7hui.dll))" bordercolor="windowtext"/>
+                    <Edit background="resbmp(11002, 7,-1,0,0,1,1)" bordercolor="windowtext"/>
                 </if>
                 <if keyfocused="true">
-                    <Edit background="resbmp(11001, 7,-1,0,0,1,1,library(au7hui.dll))" bordercolor="windowtext"/>
+                    <Edit background="resbmp(11001, 7,-1,0,0,1,1)" bordercolor="windowtext"/>
                 </if>
                 <if enabled="false">
-                    <Edit background="resbmp(11000, 7,-1,0,0,1,1,library(au7hui.dll))"/>
+                    <Edit background="resbmp(11000, 7,-1,0,0,1,1)"/>
                 </if>
             </if>
             <if class="DUIComboBox">
                 <Combobox width="225rp" height="24rp" font="9;normal;shadow;Segoe UI" shadowintensity="75" margin="rect(0rp, 4rp, 0rp, 0rp)" padding="rect(0rp, 1rp, 0rp, 0rp)" accessible="true"/>
             </if>
             <if id="atom(Submit)">
-                <Button background="resbmp(12288,7,-1,0,0,1,1,library(au7hui.dll))" margin="rect(4rp, 0rp, 0rp, 0rp)" visible="false" enabled="false" borderthickness="rect(1rp, 1rp, 1rp, 1rp)" bordercolor="gray" borderstyle="raised"/>
+                <Button background="resbmp(12288,7,-1,0,0,1,1)" margin="rect(4rp, 0rp, 0rp, 0rp)" visible="false" enabled="false" borderthickness="rect(1rp, 1rp, 1rp, 1rp)" bordercolor="gray" borderstyle="raised"/>
                 <if HighDPI="true">
-                    <Button background="resbmp(12291,7,-1,0,0,1,1,library(au7hui.dll))"/>
+                    <Button background="resbmp(12291,7,-1,0,0,1,1)"/>
                 </if>
                 <if keyfocused="true">
-                    <Button background="resbmp(12286,7,-1,0,0,1,1,library(au7hui.dll))" bordercolor="windowtext" borderstyle="solid"/>
+                    <Button background="resbmp(12286,7,-1,0,0,1,1)" bordercolor="windowtext" borderstyle="solid"/>
                     <if HighDPI="true">
-                        <Button background="resbmp(12289,7,-1,0,0,1,1,library(au7hui.dll))"/>
+                        <Button background="resbmp(12289,7,-1,0,0,1,1)"/>
                     </if>
                 </if>
                 <if mousefocused="true">
-                    <Button background="resbmp(12286,7,-1,0,0,1,1,library(au7hui.dll))" bordercolor="windowtext" borderstyle="solid"/>
+                    <Button background="resbmp(12286,7,-1,0,0,1,1)" bordercolor="windowtext" borderstyle="solid"/>
                     <if HighDPI="true">
-                        <Button background="resbmp(12289,7,-1,0,0,1,1,library(au7hui.dll))"/>
+                        <Button background="resbmp(12289,7,-1,0,0,1,1)"/>
                     </if>
                 </if>
                 <if pressed="true">
-                    <Button background="resbmp(12287,7,-1,0,0,1,1,library(au7hui.dll))" bordercolor="windowtext" borderstyle="sunken"/>
+                    <Button background="resbmp(12287,7,-1,0,0,1,1)" bordercolor="windowtext" borderstyle="sunken"/>
                     <if HighDPI="true">
-                        <Button background="resbmp(12290,7,-1,0,0,1,1,library(au7hui.dll))"/>
+                        <Button background="resbmp(12290,7,-1,0,0,1,1)"/>
                     </if>
                 </if>
             </if>
@@ -138,34 +138,34 @@
                 <ScrollBar layoutpos="nineright"/>
             </if>
             <if id="atom(lineup)">
-                <RepeatButton accessible="true" content="resbmp(12204, 2,-1,0,0,1,1,library(au7hui.dll))" contentalign="topcenter" accname="Line up" accrole="43"/>
+                <RepeatButton accessible="true" content="resbmp(12204, 2,-1,0,0,1,1)" contentalign="topcenter" accname="Line up" accrole="43"/>
                 <if pressed="true">
-                    <RepeatButton content="resbmp(12205,2,-1,0,0,1,1,library(au7hui.dll))"/>
+                    <RepeatButton content="resbmp(12205,2,-1,0,0,1,1)"/>
                 </if>
                 <if mousefocused="true">
-                    <RepeatButton content="resbmp(12205,2,-1,0,0,1,1,library(au7hui.dll))"/>
+                    <RepeatButton content="resbmp(12205,2,-1,0,0,1,1)"/>
                 </if>
             </if>
             <if id="atom(pageup)">
                 <RepeatButton accessible="true" accname="Page up" accrole="43"/>
             </if>
-            <Thumb borderthickness="rect(1, 10, 1, 10)" background="resbmp(12201, 7,-1,0,0,1,1,library(au7hui.dll))" contentalign="middlecenter" accessible="true" accname="Position" accrole="39"/>
+            <Thumb borderthickness="rect(1, 10, 1, 10)" background="resbmp(12201, 7,-1,0,0,1,1)" contentalign="middlecenter" accessible="true" accname="Position" accrole="39"/>
             <if pressed="true">
-                <Thumb background="resbmp(12203, 7,-1,0,0,1,1,library(au7hui.dll))" content="resbmp(12212,2,-1,0,0,1,1,library(au7hui.dll))"/>
+                <Thumb background="resbmp(12203, 7,-1,0,0,1,1)" content="resbmp(12212,2,-1,0,0,1,1)"/>
             </if>
             <if mousefocused="true" pressed="false">
-                <Thumb background="resbmp(12202, 7,-1,0,0,1,1,library(au7hui.dll))" content="resbmp(12211,2,-1,0,0,1,1,library(au7hui.dll))"/>
+                <Thumb background="resbmp(12202, 7,-1,0,0,1,1)" content="resbmp(12211,2,-1,0,0,1,1)"/>
             </if>
             <if id="atom(pagedown)">
                 <RepeatButton accessible="true" accname="Page down" accrole="43"/>
             </if>
             <if id="atom(linedown)">
-                <RepeatButton accessible="true" content="resbmp(12207,2,-1,0,0,1,1,library(au7hui.dll))" contentalign="topcenter" accname="Line down" accrole="43"/>
+                <RepeatButton accessible="true" content="resbmp(12207,2,-1,0,0,1,1)" contentalign="topcenter" accname="Line down" accrole="43"/>
                 <if pressed="true">
-                    <RepeatButton content="resbmp(12208,2,-1,0,0,1,1,library(au7hui.dll))"/>
+                    <RepeatButton content="resbmp(12208,2,-1,0,0,1,1)"/>
                 </if>
                 <if mousefocused="true">
-                    <RepeatButton content="resbmp(12208,2,-1,0,0,1,1,library(au7hui.dll))"/>
+                    <RepeatButton content="resbmp(12208,2,-1,0,0,1,1)"/>
                 </if>
             </if>
         </style>

@@ -13,84 +13,84 @@
 
             <if class="passwordBox">
                 <edit width="225rp" height="25rp" font="resstr(11800)" shadowintensity="75" margin = "rect(0rp, 3rp, 0rp, 3rp)" padding="rect(0rp, 1rp, 0rp, 0rp)" borderthickness = "rect(4, 4, 4, 4)"
-				bordercolor="gray" accessible="true" accrole="42" background="resbmp(11003, 7,-1,0,0,1,1,library(au7hui.dll))" passwordcharacter="9679"/>
+				bordercolor="gray" accessible="true" accrole="42" background="resbmp(11003, 7,-1,0,0,1,1)" passwordcharacter="9679"/>
             </if>
 
             <if class="button">
-                <button background="resbmp(12282,7,-1,0,0,1,1,library(au7hui.dll))" width="30rp" height="30rp"/>
+                <button background="resbmp(12282,7,-1,0,0,1,1)" width="30rp" height="30rp"/>
                 <if mousefocused="true">
-                    <button background="resbmp(12286,7,-1,0,0,1,1,library(au7hui.dll))"/>
+                    <button background="resbmp(12286,7,-1,0,0,1,1)"/>
                 </if>
                 <if pressed="true">
-                    <button background="resbmp(12287,7,-1,0,0,1,1,library(au7hui.dll))"/>
+                    <button background="resbmp(12287,7,-1,0,0,1,1)"/>
                 </if>
             </if>
 
             <if id="atom(buttonEaseOfAccess)">
-                <button width="38rp" height="28rp" padding="rect(0,0,0,0)" contentalign="MiddleCenter" content="resbmp(12213,2,-1,0,0,0,1,library(au7hui.dll))" accname="resstr(12122)" accdesc="resstr(12122)" borderthickness="rect(4rp, 2rp, 4rp, 2rp)" background="resbmp(12263,7,-1,0,0,1,1,library(au7hui.dll))" bordercolor="gray" borderstyle="raised"/>
+                <button width="38rp" height="28rp" padding="rect(0,0,0,0)" contentalign="MiddleCenter" content="resbmp(12213,2,-1,0,0,0,1)" accname="resstr(12122)" accdesc="resstr(12122)" borderthickness="rect(4rp, 2rp, 4rp, 2rp)" background="resbmp(12263,7,-1,0,0,1,1)" bordercolor="gray" borderstyle="raised"/>
                 <if keyfocused="true">
-                    <button borderthickness="rect(4rp, 2rp, 4rp, 2rp)" background="resbmp(12259,7,-1,0,0,1,1,library(au7hui.dll))" bordercolor="windowtext" borderstyle="solid"/>
+                    <button borderthickness="rect(4rp, 2rp, 4rp, 2rp)" background="resbmp(12259,7,-1,0,0,1,1)" bordercolor="windowtext" borderstyle="solid"/>
                 </if>
                 <if mousefocused="true">
-                    <button borderthickness="rect(4rp, 2rp, 4rp, 2rp)" background="resbmp(12260,7,-1,0,0,1,1,library(au7hui.dll))" bordercolor="windowtext" borderstyle="solid"/>
+                    <button borderthickness="rect(4rp, 2rp, 4rp, 2rp)" background="resbmp(12260,7,-1,0,0,1,1)" bordercolor="windowtext" borderstyle="solid"/>
                 </if>
                 <if keyfocused="true" mousefocused="true" pressed="false">
-                    <button borderthickness="rect(4rp, 2rp, 4rp, 2rp)" background="resbmp(12261,7,-1,0,0,1,1,library(au7hui.dll))" bordercolor="windowtext" borderstyle="solid"/>
+                    <button borderthickness="rect(4rp, 2rp, 4rp, 2rp)" background="resbmp(12261,7,-1,0,0,1,1)" bordercolor="windowtext" borderstyle="solid"/>
                 </if>
                 <if pressed="true">
-                    <button borderthickness="rect(4rp, 2rp, 4rp, 2rp)" background="resbmp(12262,7,-1,0,0,1,1,library(au7hui.dll))" bordercolor="windowtext" borderstyle="sunken"/>
+                    <button borderthickness="rect(4rp, 2rp, 4rp, 2rp)" background="resbmp(12262,7,-1,0,0,1,1)" bordercolor="windowtext" borderstyle="sunken"/>
                 </if>
             </if>
 
             <if id="atom(ToggleTabletKeyboard)">
-                <button width="45rp" height="28rp" padding="rect(0,0,0,0)" content="resbmp(12214,2,-1,0,0,0,1,library(au7hui.dll))" accname="resstr(12142)" accdesc="resstr(12142)" borderthickness="rect(4rp, 2rp, 4rp, 2rp)" background="resbmp(12263,7,-1,0,0,1,1,library(au7hui.dll))" bordercolor="gray" borderstyle="raised"/>
+                <button width="45rp" height="28rp" padding="rect(0,0,0,0)" content="resbmp(12214,2,-1,0,0,0,1)" accname="resstr(12142)" accdesc="resstr(12142)" borderthickness="rect(4rp, 2rp, 4rp, 2rp)" background="resbmp(12263,7,-1,0,0,1,1)" bordercolor="gray" borderstyle="raised"/>
                 <if keyfocused="true">
-                    <button borderthickness="rect(4rp, 2rp, 4rp, 2rp)" background="resbmp(12259,7,-1,0,0,1,1,library(au7hui.dll))" bordercolor="windowtext" borderstyle="solid"/>
+                    <button borderthickness="rect(4rp, 2rp, 4rp, 2rp)" background="resbmp(12259,7,-1,0,0,1,1)" bordercolor="windowtext" borderstyle="solid"/>
                 </if>
                 <if mousefocused="true">
-                    <button borderthickness="rect(4rp, 2rp, 4rp, 2rp)" background="resbmp(12260,7,-1,0,0,1,1,library(au7hui.dll))" bordercolor="windowtext" borderstyle="solid"/>
+                    <button borderthickness="rect(4rp, 2rp, 4rp, 2rp)" background="resbmp(12260,7,-1,0,0,1,1)" bordercolor="windowtext" borderstyle="solid"/>
                 </if>
                 <if keyfocused="true" mousefocused="true" pressed="false">
-                    <button borderthickness="rect(4rp, 2rp, 4rp, 2rp)" background="resbmp(12261,7,-1,0,0,1,1,library(au7hui.dll))" bordercolor="windowtext" borderstyle="solid"/>
+                    <button borderthickness="rect(4rp, 2rp, 4rp, 2rp)" background="resbmp(12261,7,-1,0,0,1,1)" bordercolor="windowtext" borderstyle="solid"/>
                 </if>
                 <if pressed="true">
-                    <button borderthickness="rect(4rp, 2rp, 4rp, 2rp)" background="resbmp(12262,7,-1,0,0,1,1,library(au7hui.dll))" bordercolor="windowtext" borderstyle="sunken"/>
+                    <button borderthickness="rect(4rp, 2rp, 4rp, 2rp)" background="resbmp(12262,7,-1,0,0,1,1)" bordercolor="windowtext" borderstyle="sunken"/>
                 </if>
             </if>
             <if id="atom(ShutdownFrame)">
                 <element margin="rect(6rp, 0rp, 6rp, 0rp)"/>
             </if>
             <if id="atom(Shutdown)">
-                <button width="38rp" height="28rp" borderthickness="rect(4rp, 1rp, 4rp, 1rp)" background="resbmp(12296,7,-1,0,0,1,1,library(au7hui.dll))" contentalign="middlecenter" content="resbmp(12215,2,-1,0,0,1,1,library(au7hui.dll))" margin="rect(0,0,0,0)" accdesc="resstr(12128)" bordercolor="gray" borderstyle="raised"/>
+                <button width="38rp" height="28rp" borderthickness="rect(4rp, 1rp, 4rp, 1rp)" background="resbmp(12296,7,-1,0,0,1,1)" contentalign="middlecenter" content="resbmp(12215,2,-1,0,0,1,1)" margin="rect(0,0,0,0)" accdesc="resstr(12128)" bordercolor="gray" borderstyle="raised"/>
                 <if selected="true">
-                    <button content="resbmp(12216,2,-1,0,0,1,1,library(au7hui.dll))" accdesc="resstr(12133)" bordercolor="windowtext" borderstyle="solid"/>
+                    <button content="resbmp(12216,2,-1,0,0,1,1)" accdesc="resstr(12133)" bordercolor="windowtext" borderstyle="solid"/>
                 </if>
                 <if keyfocused="true">
-                    <button background="resbmp(12293,7,-1,0,0,1,1,library(au7hui.dll))" bordercolor="windowtext" borderstyle="solid"/>
+                    <button background="resbmp(12293,7,-1,0,0,1,1)" bordercolor="windowtext" borderstyle="solid"/>
                 </if>
                 <if mousefocused="true">
-                    <button background="resbmp(12294,7,-1,0,0,1,1,library(au7hui.dll))" bordercolor="windowtext" borderstyle="solid"/>
+                    <button background="resbmp(12294,7,-1,0,0,1,1)" bordercolor="windowtext" borderstyle="solid"/>
                 </if>
                 <if mousefocused="true" keyfocused="true" pressed="false">
-                    <button background="resbmp(12292,7,-1,0,0,1,1,library(au7hui.dll))" bordercolor="windowtext" borderstyle="solid"/>
+                    <button background="resbmp(12292,7,-1,0,0,1,1)" bordercolor="windowtext" borderstyle="solid"/>
                 </if>
                 <if pressed="true">
-                    <button background="resbmp(12295,7,-1,0,0,1,1,library(au7hui.dll))" bordercolor="windowtext" borderstyle="sunken"/>
+                    <button background="resbmp(12295,7,-1,0,0,1,1)" bordercolor="windowtext" borderstyle="sunken"/>
                 </if>
             </if>
             <if id="atom(ShutdownOptions)">
-                <button width="20rp" height="28rp" contentalign="middlecenter" content="resbmp(12217,2,-1,0,0,1,1,library(au7hui.dll))" background="resbmp(12302,7,-1,0,0,1,1,library(au7hui.dll))" borderthickness="rect(4rp, 3rp, 4rp, 3rp)" margin="rect(0,0,0,0)" bordercolor="gray" borderstyle="raised"/>
+                <button width="20rp" height="28rp" contentalign="middlecenter" content="resbmp(12217,2,-1,0,0,1,1)" background="resbmp(12302,7,-1,0,0,1,1)" borderthickness="rect(4rp, 3rp, 4rp, 3rp)" margin="rect(0,0,0,0)" bordercolor="gray" borderstyle="raised"/>
                 <if keyfocused="true">
-                    <button background="resbmp(12299,7,-1,0,0,1,1,library(au7hui.dll))" bordercolor="windowtext" borderstyle="solid"/>
+                    <button background="resbmp(12299,7,-1,0,0,1,1)" bordercolor="windowtext" borderstyle="solid"/>
                 </if>
                 <if mousefocused="true">
-                    <button background="resbmp(12300,7,-1,0,0,1,1,library(au7hui.dll))" bordercolor="windowtext" borderstyle="solid"/>
+                    <button background="resbmp(12300,7,-1,0,0,1,1)" bordercolor="windowtext" borderstyle="solid"/>
                 </if>
                 <if mousefocused="true" keyfocused="true" pressed="false">
-                    <button background="resbmp(12298,7,-1,0,0,1,1,library(au7hui.dll))" bordercolor="windowtext" borderstyle="solid"/>
+                    <button background="resbmp(12298,7,-1,0,0,1,1)" bordercolor="windowtext" borderstyle="solid"/>
                 </if>
                 <if pressed="true">
-                    <button background="resbmp(12301,7,-1,0,0,1,1,library(au7hui.dll))" bordercolor="windowtext" borderstyle="sunken"/>
+                    <button background="resbmp(12301,7,-1,0,0,1,1)" bordercolor="windowtext" borderstyle="sunken"/>
                 </if>
             </if>
 
