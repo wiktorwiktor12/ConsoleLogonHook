@@ -234,7 +234,7 @@ void duiManager::LoadBackground()
         if (!PathFileExistsW(oemPath)) return;
 
         HBITMAP bitmap = GetHBITMAPFromImageFile(oemPath);
-        auto graphic = DirectUI::Value::CreateGraphic(bitmap, (unsigned char)2, (unsigned int)0xFFFFFFFF, (bool)0, 0, 0);
+        auto graphic = DirectUI::Value::CreateGraphic(bitmap, (unsigned char)4, (unsigned int)0xFFFFFFFF, (bool)0, 0, false);
         if (!graphic) return;
 
         backgroundElement->SetValue(DirectUI::Element::BackgroundProp, 1, graphic);
