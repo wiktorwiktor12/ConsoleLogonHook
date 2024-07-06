@@ -83,5 +83,5 @@ public:
     void LoadBranding();
     void LoadBackground();
     void LoadHighResImageForDPI();
-    bool UseOEMBackground();
+    static bool UseOEMBackground();
 };

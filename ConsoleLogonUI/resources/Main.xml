@@ -1,14 +1,11 @@
 <duixml>
     <stylesheets>
         <style resid="LogonStyle">
-
+            <if id="atom(MainFrame)">
+                <element background="gradient(rgb(0,132,217), rgb(0,36,58), 1)" accessible="true" accrole="9" accname="Logon Frame"/>
+            </if>
             <if class="status">
                 <element background="argb(0,0,0,0)" foreground="argb(255,255,255,255)" shadowintensity="75" fontsize="18pt" fontstyle="Shadow" padding="rect(24rp,0,0,100rp)"/>
-            </if>
-
-
-            <if id="atom(Background)">
-                <element background="resbmp(113,4,-1,0,0,0,0)"/>
             </if>
 
             <if class="passwordBox">
@@ -101,10 +98,13 @@
     </stylesheets>
 
 
-    <element resid="Main" layout="flowlayout(1,2,2,2)" sheet="LogonStyle">
-        <duiBackgroundWindow width="2560rp" height="1600rp" id="atom(InsideFrame)" layout="filllayout()">
+    <element resid="Main" sheet="LogonStyle" layout="verticalflowlayout(1,2,2,2)" id="atom(MainFrame)">
+        <duiBackgroundWindow layout="filllayout()" width="2560rp" height="1600rp" background="gradient(rgb(0,132,217), rgb(0,36,58), 1)" id="atom(InsideFrame)">
+            <element layout="flowlayout(0, 0, 0, 0)" padding="rect(5rp,5rp,5rp,5rp)" > <!--TODO: style this -->
+                <element id="atom(LanguageBarParent)" layout="filllayout()" visible="false"/>
+            </element>
             <!--This is the footer for the branding and the options buttons such as the shutdown,ease of access and power options-->
-            <element layout="borderlayout()" id="atom(Background)">
+            <element layout="borderlayout()">
                 <element id="atom(SoftKeyboardParent)" layout="borderlayout()" layoutpos="none" />
                 <element id="atom(Options)" layoutpos="bottom" visible="true" enabled="true" layout="filllayout()" background="argb(0,116,184,252)" height="96rp">
 

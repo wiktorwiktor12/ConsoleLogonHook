@@ -79,6 +79,8 @@ static HBITMAP GetHBITMAPFromImageFile(WCHAR* pFilePath)
     return result;
 }
 
+HBITMAP GetHBITMAPFromImageResource(int resourceID);
+
 static __int64 DirectUIElementAdd(DirectUI::Element* Parent, DirectUI::Element* Child)
 {
     //ELEMENT::ADD

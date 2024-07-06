@@ -139,6 +139,7 @@ DWORD WINAPI DuiInitThread(LPVOID lparam)
                                 }
                             }
 
+
                             TranslateMessage(&Msg);
                             DispatchMessageW(&Msg);
                         }
@@ -220,64 +221,294 @@ void duiManager::SendWorkToUIThread(std::function<void(void*)> workfunction, voi
     SendMessageW(duiManager::Get()->pWndElement->GetHWND(), WM_USER+69, (WPARAM)&workfunction, (LPARAM)params);
 }
 
+struct ImageData
+{
+    DWORD w;
+    DWORD h;
+    unsigned long long resIdConsumer;
+    unsigned long long resIdServer;
+    const wchar_t* OEMPath;
+};
+
+struct ratioItem
+{
+    float ratio;
+    int numberOfImages;
+    ImageData* RatioImageDatas;
+};
+
+ImageData imageDatas125[] = {{1280, 1024, 5031, 5044, L"%windir%\\system32\\oobe\\info\\backgrounds\\background1280x1024.jpg"}};
+ImageData imageDatas1333333[] = 
+{ 
+    {1280, 960, 5032, 5045, L"%windir%\\system32\\oobe\\info\\backgrounds\\background1280x960.jpg"},
+    {1024, 768, 5033, 5046, L"%windir%\\system32\\oobe\\info\\backgrounds\\background1024x768.jpg"},
+    {1600, 1200, 5034, 5047, L"%windir%\\system32\\oobe\\info\\backgrounds\\background1600x1200.jpg"} 
+};
+ImageData imageDatas16[] = 
+{ 
+    {1440, 900, 5035, 5048, L"%windir%\\system32\\oobe\\info\\backgrounds\\background1440x900.jpg"},
+    {1920, 1200, 5036, 5049, L"%windir%\\system32\\oobe\\info\\backgrounds\\background1920x1200.jpg"} 
+};
+ImageData imageData166666[] = { {1280, 768, 5037, 5050, L"%windir%\\system32\\oobe\\info\\backgrounds\\background1280x768.jpg"} };
+ImageData imageData177[] = { {1360, 768, 5038, 5051, L"%windir%\\system32\\oobe\\info\\backgrounds\\background1360x768.jpg"} };
+ImageData imageData08[] = { {1024, 1280, 5039, 5052, L"%windir%\\system32\\oobe\\info\\backgrounds\\background1024x1280.jpg"} };
+ImageData imageData075[] = { {960, 1280, 5040, 5053, L"%windir%\\system32\\oobe\\info\\backgrounds\\background960x1280.jpg"} };
+ImageData imageData0625[] = { {900, 1440, 5041, 5054, L"%windir%\\system32\\oobe\\info\\backgrounds\\background900x1440.jpg"} };
+ImageData imageData06000[] = { {768, 1280, 5042, 5055, L"%windir%\\system32\\oobe\\info\\backgrounds\\background768x1280.jpg"} };
+ImageData imageData0564[] = { {768, 1360, 5043, 5056, L"%windir%\\system32\\oobe\\info\\backgrounds\\background768x1360.jpg"} };
+
+ratioItem ratioItems[10] = { {1.25, 1, imageDatas125 },
+    {1.3333334,3,imageDatas1333333},
+    {1.6, 2, imageDatas16},
+    {1.6666666, 1,imageData166666},
+    {1.7708334, 1, imageData177},
+    {0.80000001, 1, imageData08},
+    {0.75, 1, imageData075},
+    {0.625, 1, imageData0625},
+    {0.60000002, 1, imageData06000},
+    {0.56470591, 1, imageData0564} };
+
+bool __fastcall OEMBackgroundFileExists(ImageData* a1)
+{
+    bool v1; // bl
+    WCHAR Dst[264]; // [rsp+20h] [rbp-228h] BYREF
+
+    v1 = 0;
+    if (ExpandEnvironmentStringsW(a1->OEMPath, Dst, 260) - 1 <= 259)
+    {
+        v1 = PathFileExistsW(Dst);
+    }
+    return v1;
+}
+
+bool BitmapAspectRatioEqualsScreen(HBITMAP h)
+{
+    bool v1 = 0; // di
+    float w = 0; // xmm6_4
+    float ratio = 0; // xmm6_4
+    float v5 = 0; // xmm1_4
+    float v6 = 0; // xmm0_4
+    float v7 = 0; // xmm2_4
+    
+    BITMAP pv;
+    if (GetObjectW(h, (int)sizeof(BITMAP), &pv))
+    {
+        w = (float)GetSystemMetrics(0);
+        ratio = w / (float)GetSystemMetrics(1);
+        v5 = (float)pv.bmWidth / (float)pv.bmHeight;
+        if (ratio <= v5)
+            v6 = (float)pv.bmWidth / (float)pv.bmHeight;
+        else
+            v6 = ratio;
+        if (v5 <= ratio)
+            v7 = (float)pv.bmWidth / (float)pv.bmHeight;
+        else
+            v7 = ratio;
+        if (ratio <= v5)
+            ratio = (float)pv.bmWidth / (float)pv.bmHeight;
+        if ((float)((float)(v6 - v7) / ratio) < 0.01)
+            v1 = 1;
+    }
+    return v1;
+}
+
+// this is messy as hell, but i do not care, this was reverse engineered from windows 7 authui, and likely due to compiler optimizations, there were a lot of jmps/gotos
+// if anyone wants to pull request and clean this up, feel free to do so!
+static bool GetBackground(HBITMAP* OutBitmap)
+{
+    int MemoryFlag = 0;
+    *OutBitmap = 0;
+
+    int ScreenWidth = GetSystemMetrics(SM_CXSCREEN);
+    int ScreenHeight = GetSystemMetrics(SM_CYSCREEN);
+    float lastDistance = 1.0e7;
+
+    int ScreenWidthCopy = ScreenWidth;
+    int Height = ScreenHeight;
+    int iterations = 10;
+    int swapIt = 10;
+
+    float ScreenRatio = (float)ScreenWidth / (float)ScreenHeight;
+    float difference = 0;
+
+    ImageData* dataToUse = 0;
+
+    int i = 0;
+
+    do
+    {
+        ratioItem item = ratioItems[i];
+        difference = ScreenRatio - item.ratio;
+        if (difference < 0.0)
+            difference = difference * -1.0;
+        if (lastDistance <= difference)
+        {
+            ScreenHeight = Height;
+            ScreenWidth = (int)ScreenWidthCopy;
+            i++;
+            swapIt = --iterations;
+            continue;
+        }
+
+        lastDistance = difference;
+        dataToUse = 0;
+        if (!duiManager::UseOEMBackground())
+        {
+            int imageDataNumIterations = 0;
+            if (item.numberOfImages <= 0)
+            {
+                dataToUse = &item.RatioImageDatas[0];
+            }
+            else
+            {
+                bool bBroke = false;
+                ImageData* ImageDataIt = &item.RatioImageDatas[0];
+                while (ImageDataIt->w != ScreenWidth || ImageDataIt->h != ScreenHeight)
+                {
+                    ++imageDataNumIterations;
+                    if (imageDataNumIterations >= item.numberOfImages)
+                    {
+                        bBroke = true;
+                        break;
+                    }
+
+                    ImageDataIt = &item.RatioImageDatas[imageDataNumIterations];
+                }
+                if (!bBroke)
+                    dataToUse = ImageDataIt;
+
+                if (!dataToUse)
+                    dataToUse = &item.RatioImageDatas[0];
+            }
+
+            ScreenHeight = Height;
+            ScreenWidth = (int)ScreenWidthCopy;
+            i++;
+            swapIt = --iterations;
+            
+            continue;
+        }
+        int imageDataIterations = 0;
+        if (item.numberOfImages <= 0)
+        {
+            ScreenWidth = (int)ScreenWidthCopy;
+            dataToUse = &item.RatioImageDatas[0];
+            ScreenHeight = Height;
+            ScreenWidth = (int)ScreenWidthCopy;
+            continue;
+        }
+        bool bBroke = false;
+        ImageData* OEMImageDataIt = 0;
+        while (1)
+        {
+            bool bNotEqual = false;
+            OEMImageDataIt = &item.RatioImageDatas[imageDataIterations];
+            if (OEMImageDataIt->w != ScreenWidthCopy || OEMImageDataIt->h != Height)
+            {
+                if (OEMBackgroundFileExists(OEMImageDataIt))
+                    dataToUse = OEMImageDataIt;
+
+                bNotEqual = true;
+            }
+
+            if (!bNotEqual && OEMBackgroundFileExists(OEMImageDataIt))
+            {
+                break;
+            }
+            ++imageDataIterations;
+            if (imageDataIterations >= item.numberOfImages)
+            {
+                bBroke = true;
+                break;
+            }
+        }
+        if (!bBroke)
+            dataToUse = OEMImageDataIt;
+
+        iterations = swapIt;
+        if (!dataToUse)
+        {
+            ScreenHeight = Height;
+            ScreenWidth = (int)ScreenWidthCopy;
+
+            int imageDataNumIterations = 0;
+            if (item.numberOfImages <= 0)
+            {
+                dataToUse = &item.RatioImageDatas[0];
+            }
+            else
+            {
+                bBroke = false;
+                ImageData* ImageDataIt = &item.RatioImageDatas[0];
+                while (ImageDataIt->w != ScreenWidth || ImageDataIt->h != ScreenHeight)
+                {
+                    ++imageDataNumIterations;
+                    if (imageDataNumIterations >= item.numberOfImages)
+                    {
+                        bBroke = true;
+                        break;
+                    }
+                    ImageDataIt = &item.RatioImageDatas[imageDataNumIterations];
+                }
+                if (!bBroke)
+                    dataToUse = ImageDataIt;
+                if (!dataToUse)
+                    dataToUse = &item.RatioImageDatas[0];
+            }
+            
+        }
+        ScreenHeight = Height;
+        ScreenWidth = (int)ScreenWidthCopy;
+        swapIt = --iterations;
+        i++;
+    } 
+    while (iterations);
+
+    WCHAR path[MAX_PATH] = L"C:\\Windows\\system32\\oobe\\info\\backgrounds\\backgroundDefault.jpg";
+
+    if (duiManager::UseOEMBackground() && (PathFileExistsW(path) || OEMBackgroundFileExists(dataToUse)))
+    {
+        if (OEMBackgroundFileExists(dataToUse))
+        {
+            WCHAR Dst[264];
+
+            if (ExpandEnvironmentStringsW(dataToUse->OEMPath, Dst, 260) - 1 <= 259)
+                wcscpy_s(path, MAX_PATH, Dst);
+        }
+
+        HBITMAP bitmaplocal = GetHBITMAPFromImageFile(path);
+        *OutBitmap = bitmaplocal;
+    }
+    else
+    {
+        unsigned long long resIdToUse = IsOS(OS_ANYSERVER) ? dataToUse->resIdServer : dataToUse->resIdConsumer;
+        *OutBitmap = GetHBITMAPFromImageResource(resIdToUse);
+    }
+
+    if (*OutBitmap)
+    {
+        return BitmapAspectRatioEqualsScreen(*OutBitmap);
+    }
+    
+    return 0;
+}
+
 void duiManager::LoadBackground()
 {
     if (!this->pUIElement) return;
 
-    auto backgroundElement = this->pUIElement->FindDescendent(ATOMID(L"Background"));
-    if (!backgroundElement) return;
+    auto InsideFrameElement = this->pUIElement->FindDescendent(ATOMID(L"InsideFrame"));
+    if (!InsideFrameElement) return;
 
-    if (UseOEMBackground())
-    {
-        WCHAR oemPath[] = L"C:\\Windows\\system32\\oobe\\info\\backgrounds\\backgroundDefault.jpg";
+    
+    HBITMAP bitmap;
+    bool ratioMatches = GetBackground(&bitmap);
+    auto graphic = DirectUI::Value::CreateGraphic(bitmap, (unsigned char)(4), (unsigned int)0xFFFFFFFF, (bool)0, 0, false);
+    if (!graphic) return;
 
-        if (!PathFileExistsW(oemPath)) return;
-
-        HBITMAP bitmap = GetHBITMAPFromImageFile(oemPath);
-        auto graphic = DirectUI::Value::CreateGraphic(bitmap, (unsigned char)4, (unsigned int)0xFFFFFFFF, (bool)0, 0, false);
-        if (!graphic) return;
-
-        backgroundElement->SetValue(DirectUI::Element::BackgroundProp, 1, graphic);
-        graphic->Release();
-    }
-
-    /*WCHAR path[] = L"C:\\Windows\\System32\\logonhookimage.jpg";
-    if (!PathFileExistsW(path))
-    {
-        if (UseOEMBackground())
-        {
-            WCHAR oemPath[] = L"C:\\Windows\\system32\\oobe\\info\\backgrounds\\backgroundDefault.jpg";
-
-            if (!PathFileExistsW(oemPath)) return;
-
-            HBITMAP bitmap = GetHBITMAPFromImageFile(oemPath);
-            auto graphic = DirectUI::Value::CreateGraphic(bitmap, (unsigned char)2, (unsigned int)0xFFFFFFFF, (bool)0, 0, 0);
-            if (!graphic) return;
-
-            backgroundElement->SetValue(DirectUI::Element::BackgroundProp, 1, graphic);
-            graphic->Release();
-        }
-
-
-    }
-    else
-    {
-        HBITMAP bitmap = GetHBITMAPFromImageFile(path);
-        auto graphic = DirectUI::Value::CreateGraphic(bitmap, (unsigned char)2, (unsigned int)0xFFFFFFFF, (bool)0, 0, 0);
-        if (!graphic) return;
-
-        backgroundElement->SetValue(DirectUI::Element::BackgroundProp, 1, graphic);
-        graphic->Release();
-    }*/
-}
-
-void duiManager::LoadHighResImageForDPI()
-{
-    int DPI = GetDpiForSystem();
-    if (DPI <= 96) // no change
-        return;
-
-
+    InsideFrameElement->SetValue(DirectUI::Element::BackgroundProp, 1, graphic);
+    graphic->Release();
+    
 }
 
 void duiManager::LoadBranding()
@@ -450,6 +681,11 @@ LRESULT duiWindowListener::WndProcCustom(HWND hwnd, UINT uMsg, WPARAM wParam, LP
             int v20 = 0;
             if (SystemParametersInfoW(SPI_GETWORKAREA, 0, &pvParam, 0))
                 duiManager::FrameResize(pvParam, v18, v19 - pvParam, v20 - v18);
+            break;
+        }
+        case WM_CLOSE:
+        {
+            MessageBox(0,L"close",0,0);
             break;
         }
         //case (WM_DISPLAYCHANGE):
