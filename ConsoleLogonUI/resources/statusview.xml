@@ -1,26 +1,34 @@
 <duixml>
-    <stylesheets>
-        <style resid="statusViewSheet">
-            <if id="atom(StatusText)">
-                <element foreground="white" contentalign="wrapcenter" font="18;normal;shadow;Segoe UI" shadowintensity="75" accessible="true" accrole="41"/>
-            </if>
-        </style>
-    </stylesheets>
-    
-    <element resid="Main" layout="filllayout()" accessible="true" sheet="statusViewSheet" background="argb(0,0,0,0)">
-        <duiStatusView id="atom(StatusViewFrame)" layout="filllayout()">
-            <element layout="borderlayout()" >
-                <element layoutpos="client" layout="verticalflowlayout(1,2,2,2)">
-                    <element layout="filllayout()">
-                        
-                    </element>
-                    <element id="atom(Status)" visible="true" Enabled="true" layout="flowlayout(0,0,2,2)" minsize="size(0rp,36rp)">
-                        <AnimationStrip id="atom(WaitAnimation)" content="resbmp(110)" visible="true" play="true" framewidth="20rp" frameduration="33" frameindex="0" width="20rp" height="20rp" margin="rect(0rp,0rp,5rp,0rp)"/>
-                        <element content="STATUS VIEW" id="atom(StatusText)"/>
-                    </element>
-                </element>
-            </element>
-        </duiStatusView>
-    </element>
+	<stylesheets>
+		<style resid="StatusMessageSheet">
+			<if id="atom(WaitAnimation)">
+				<ModernProgressRing foreground="white" width="40rp" height="40rp" padding="rect(0rp,5rp,0rp,0rp)" margin="rect(0rp,0rp,10rp,0rp)"/>
+			</if>
+			<if id="atom(StatusText)">
+				<richtext font="20;Light;none;Segoe UI" foreground="20151" accessible="true" accrole="statictext" enabled="true" padding="rect(0rp, 4rp, 0rp, 0rp)"/>
+			</if>
+			<if id="atom(Status)">
+				<element padding="rect(20rp, 30rp, 0rp, 0rp)"/>
+			</if>
+
+		</style>
+	</stylesheets>
+
+
+	<element resid="Main" layout="filllayout()" accessible="true" sheet="StatusMessageSheet" background="argb(0,0,0,0)">	
+		<duiStatusView id="atom(StatusViewFrame)" layout="filllayout()">
+			<element layout="borderlayout()" >
+				<element layoutpos="client" layout="verticalflowlayout(1,2,2,2)">
+					<element layout="filllayout()">
+
+					</element>
+					<element id="atom(Status)" layout="flowlayout(0,0,0,0)" layoutpos="auto" visible="true" enabled="true" sheet="StatusMessageSheet">
+						<ModernProgressRing id="atom(WaitAnimation)" />
+						<richtext id="atom(StatusText)" contentalign="wrapleft" active="keyboard"/>
+					</element>
+				</element>
+			</element>
+		</duiStatusView>
+	</element>
 
 </duixml>
