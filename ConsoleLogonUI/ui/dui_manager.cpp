@@ -311,8 +311,24 @@ bool BitmapAspectRatioEqualsScreen(HBITMAP h)
     }
     return v1;
 }
+bool GetBitmapResolution(HBITMAP ha, int* w, int* h)
+{
+    bool v1 = 0; // di
 
-// this is messy as hell, but i do not care, this was reverse engineered from windows 7 authui, and likely due to compiler optimizations, there were a lot of jmps/gotos
+    BITMAP pv;
+    if (GetObjectW(ha, (int)sizeof(BITMAP), &pv))
+    {
+        if (w && h)
+        {
+            *w = pv.bmWidth;
+            *h = pv.bmHeight;
+            v1 = 1;
+        }
+    }
+    return v1;
+}
+
+// this is messy as hell, but i do not care, this was mostly reverse engineered from windows 7 authui, and likely due to compiler optimizations, there were a lot of jmps/gotos
 // if anyone wants to pull request and clean this up, feel free to do so!
 static bool GetBackground(HBITMAP* OutBitmap)
 {
@@ -473,7 +489,24 @@ static bool GetBackground(HBITMAP* OutBitmap)
             WCHAR Dst[264];
 
             if (ExpandEnvironmentStringsW(dataToUse->OEMPath, Dst, 260) - 1 <= 259)
-                wcscpy_s(path, MAX_PATH, Dst);
+            {
+                HBITMAP bitmapDefault = GetHBITMAPFromImageFile(path);
+                
+                bool bDefaultBetter = false; //check if src fallback is better, just so u can have nice images if u have a src image
+
+                int dw = 0; int dh = 0;
+                if (GetBitmapResolution(bitmapDefault, &dw, &dh) && BitmapAspectRatioEqualsScreen(bitmapDefault))
+                {
+                    if (dw > dataToUse->w || dh > dataToUse->h)
+                        bDefaultBetter = true;
+                }
+
+                if (!bDefaultBetter)
+                {
+                    wcscpy_s(path, MAX_PATH, Dst);
+                    DeleteObject(bitmapDefault);
+                }
+            }
         }
 
         HBITMAP bitmaplocal = GetHBITMAPFromImageFile(path);
