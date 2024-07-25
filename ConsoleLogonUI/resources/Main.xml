@@ -114,13 +114,11 @@
                         <element layout="flowlayout(0,1,2,2)" layoutpos="right">
                             <element id="atom(ShutDownFrame)" layout="flowlayout()">
                                 <button id="atom(ShutDown)" accname="resstr(12128)" tooltip="true"/>
-                                <button id="atom(ShutDownOptions)" accname="resstr(12131)" accdesc="resstr(12131)" tooltip="true" shortcut="115"/>
+                                <!-- removed the shutdown option button, now we will need to change the shutdown button style -->
                             </element>
                         </element>
                     </element>
-                    <element layout="flowlayout(0,2,2,2)">
-                        <element id="atom(BrandingImage)" class="branding" />
-                    </element>
+	          <!-- deleted the branding -->
                 </element>
                 <element layoutpos="auto" visible="true" enabled="true" layout="filllayout()" background="argb(0,116,184,252)" height="1504rp">
                     <element layout="filllayout()" id="atom(activePageContainer)" >
