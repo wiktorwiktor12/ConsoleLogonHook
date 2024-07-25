@@ -24,7 +24,8 @@
             </if>
 
             <if id="atom(buttonEaseOfAccess)">
-                <button width="38rp" height="28rp" padding="rect(0,0,0,0)" contentalign="MiddleCenter" content="resbmp(12213,2,-1,0,0,0,1)" accname="resstr(12122)" accdesc="resstr(12122)" borderthickness="rect(4rp, 2rp, 4rp, 2rp)" background="resbmp(12263,7,-1,0,0,1,1)" bordercolor="gray" borderstyle="raised"/>
+               <button width="50rp" height="50rp" contentalign="MiddleCenter" font="24;normal;none;Segoe UI Symbol" foreground="white" content="&#xE07F;"/>
+<!-- 		    oh no... -->
                 <if keyfocused="true">
                     <button borderthickness="rect(4rp, 2rp, 4rp, 2rp)" background="resbmp(12259,7,-1,0,0,1,1)" bordercolor="windowtext" borderstyle="solid"/>
                 </if>
@@ -58,7 +59,8 @@
                 <element margin="rect(6rp, 0rp, 6rp, 0rp)"/>
             </if>
             <if id="atom(Shutdown)">
-                <button width="38rp" height="28rp" borderthickness="rect(4rp, 1rp, 4rp, 1rp)" background="resbmp(12296,7,-1,0,0,1,1)" contentalign="middlecenter" content="resbmp(12215,2,-1,0,0,1,1)" margin="rect(0,0,0,0)" accdesc="resstr(12128)" bordercolor="gray" borderstyle="raised"/>
+                <button width="50rp" height="50rp" contentalign="middlecenter" font="24;normal;none;Segoe UI Symbol" foreground="white" content="&#xE07D;"/>
+<!-- 		    we need to modify the rest now -->
                 <if selected="true">
                     <button content="resbmp(12216,2,-1,0,0,1,1)" accdesc="resstr(12133)" bordercolor="windowtext" borderstyle="solid"/>
                 </if>
@@ -99,7 +101,8 @@
 
 
     <element resid="Main" sheet="LogonStyle" layout="verticalflowlayout(1,2,2,2)" id="atom(MainFrame)">
-        <duiBackgroundWindow layout="filllayout()" width="2560rp" height="1600rp" background="gradient(rgb(0,132,217), rgb(0,36,58), 1)" id="atom(InsideFrame)">
+	    <!-- i think we need to remove the windows 7 logon backgrounds just to get the background to be metro blue -->
+        <duiBackgroundWindow layout="filllayout()" width="2560rp" height="1600rp" background="argb(255,24,0,83)" id="atom(InsideFrame)">
             <element layout="flowlayout(0, 0, 0, 0)" padding="rect(5rp,5rp,5rp,5rp)" > <!--TODO: style this -->
                 <element id="atom(LanguageBarParent)" layout="filllayout()" visible="false"/>
             </element>
@@ -114,13 +117,11 @@
                         <element layout="flowlayout(0,1,2,2)" layoutpos="right">
                             <element id="atom(ShutDownFrame)" layout="flowlayout()">
                                 <button id="atom(ShutDown)" accname="resstr(12128)" tooltip="true"/>
-                                <button id="atom(ShutDownOptions)" accname="resstr(12131)" accdesc="resstr(12131)" tooltip="true" shortcut="115"/>
+                                <!-- bye bye shutdown options button -->
                             </element>
                         </element>
                     </element>
-                    <element layout="flowlayout(0,2,2,2)">
-                        <element id="atom(BrandingImage)" class="branding" />
-                    </element>
+                  <!-- no way branding image is missing!!11 -->
                 </element>
                 <element layoutpos="auto" visible="true" enabled="true" layout="filllayout()" background="argb(0,116,184,252)" height="1504rp">
                     <element layout="filllayout()" id="atom(activePageContainer)" >
