@@ -59,9 +59,7 @@
     <button resid="securityoptionid" layoutpos="auto" layout="flowlayout()" class="SecurityCommandLink" margin="rect(0rp, 0rp, 0rp, 6rp)" sheet="CommandLinks">
         <element id="atom(atomid)" content="Lock this computer"/>
     </button>
-
-    <button resid="securitycancelid" layoutpos="auto" class="GenericButton" contentalign="MiddleCenter" sheet="SecurityMenu" content="Cancel" />
-
+<!-- 	i'll just try to make the cancel button of 8.x -->
     <element resid="Main" layout="filllayout()" accessible="true"  sheet="SecurityMenu" background="argb(0,0,0,0)">
         <duiSecurityControl id="atom(SecurityOptionsFrame)" layout="filllayout()">
             <element layout="borderlayout()" padding="rect(0rp,248rp,0rp,0rp)">
