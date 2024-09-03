@@ -22,28 +22,28 @@
 				</if>
 			</if>
 
-			<element background="argb(0, 0, 0, 0)" foreground="white" font="9;normal;shadow;Tahoma" shadowintensity="75"/>
-			<button foreground="white" font="11;normal;shadow;Tahoma" shadowintensity="75" contentalign="middlecenter" margin="rect(6rp, 0rp, 6rp, 0rp)" accessible="true" accrole="43"/>
+			<element background="argb(0, 0, 0, 0)" foreground="white" font="11;normal;shadow;Segoe UI" shadowintensity="75"/>
+			<button foreground="white" font="11;normal;shadow;Segoe UI" shadowintensity="75" contentalign="middlecenter" margin="rect(6rp, 0rp, 6rp, 0rp)" accessible="true" accrole="43"/>
 			<if class="GenericButton">
 				<button minsize="size(93rp,28rp)" padding="rect(10rp, 0rp, 10rp, 2rp)" borderthickness="rect(4rp, 3rp, 4rp, 3rp)" background="resbmp(12263,7,-1,0,0,1,1)" bordercolor="gray" borderstyle="raised"/>
 				<if keyfocused="true">
-					<button background="resbmp(12259,7,-1,0,0,1,1)" bordercolor="windowtext" borderstyle="solid" font="11;normal;underline|shadow;Tahoma" shadowintensity="75"/>
+					<button background="resbmp(12259,7,-1,0,0,1,1)" bordercolor="windowtext" borderstyle="solid"/>
 				</if>
 				<if mousefocused="true">
-					<button background="resbmp(12260,7,-1,0,0,1,1)" bordercolor="windowtext" borderstyle="solid" fontstyle="underline" font="11;normal;underline|shadow;Tahoma" shadowintensity="75"/>
+					<button background="resbmp(12260,7,-1,0,0,1,1)" bordercolor="windowtext" borderstyle="solid"/>
 				</if>
 				<if mousefocused="true" keyfocused="true" pressed="false">
-					<button background="resbmp(12261,7,-1,0,0,1,1)" bordercolor="windowtext" borderstyle="solid" fontstyle="underline" font="11;normal;underline|shadow;Tahoma" shadowintensity="75"/>
+					<button background="resbmp(12261,7,-1,0,0,1,1)" bordercolor="windowtext" borderstyle="solid"/>
 				</if>
 				<if pressed="true">
 					<button background="resbmp(12262,7,-1,0,0,1,1)" bordercolor="windowtext" borderstyle="sunken"/>
 				</if>
 			</if>
 		</style>
-
+		
         <style resid="CommandLinks">
             <button layoutpos="top" contentalign="bottomleft" content="resbmp(12227,2,-1,0,0,1,1)" padding="rect(6,5,11,5)" accessible="true" accrole="43" minsize="size(190rp,26rp)" bordercolor="gray" borderstyle="raised"/>
-            <element font="11;normal;shadow;Tahoma" shadowintensity="75" contentalign="middleleft" padding="rect(20rp,0rp,0rp,1rp)" background="argb(0,0,0,0)"/>
+            <element font="11;normal;shadow;Segoe UI" foreground="argb(255,255,255,255)" shadowintensity="75" contentalign="middleleft" padding="rect(20rp,0rp,0rp,1rp)" background="argb(0,0,0,0)"/>
             <if keyfocused="true">
                 <button content="resbmp(12224,2,-1,0,0,1,1)" background="resbmp(12228,7,-1,0,0,1,1)" borderthickness="rect(5,5,5,4)" padding="rect(1,0,6,1)" bordercolor="gray" borderstyle="solid"/>
             </if>
@@ -56,7 +56,7 @@
         </style>
     </stylesheets>
 
-    <button resid="securityoptionid" layoutpos="auto" layout="flowlayout()" class="SecurityCommandLink" margin="rect(0rp, 0rp, 0rp, 0rp)" sheet="CommandLinks">
+    <button resid="securityoptionid" layoutpos="auto" layout="flowlayout()" class="SecurityCommandLink" margin="rect(0rp, 0rp, 0rp, 6rp)" sheet="CommandLinks">
         <element id="atom(atomid)" content="Lock this computer"/>
     </button>
 
@@ -64,20 +64,20 @@
 
     <element resid="Main" layout="filllayout()" accessible="true"  sheet="SecurityMenu" background="argb(0,0,0,0)">
         <duiSecurityControl id="atom(SecurityOptionsFrame)" layout="filllayout()">
-            <element layout="borderlayout()" padding="rect(0rp,96rp,0rp,0rp)">
+            <element layout="borderlayout()" padding="rect(0rp,248rp,0rp,0rp)">
                 <element layoutpos="client" layout="verticalflowlayout(1,2,2,2)">
                     <element layout="filllayout()">
                         <element id="atom(Locked)" visible="false" layout="verticalflowlayout(1,2,2,2)">
                             <element id="atom(LockedMessage)"/>
                             <element id="atom(LockedSubMessage)"/>
                         </element>
-                        <element id="atom(Window)" layout="borderlayout()" width="536rp" height="337rp" background="resbmp(12,7,-1,0,0,1,1)" borderthickness="rect(45rp, 140rp, 45rp, 45rp)" padding="rect(0rp, 0rp, 0rp, -40rp)" animation="rectanglev|s|fast">
-                            <element id="atom(InsideWindow)" layoutpos="client" layout="filllayout()" animation="rectanglev|s|fast">
-                                <element id="atom(LogonUserList)" visible="false" layout="filllayout()" animation="rectanglev|s|fast" />
+                        <element id="atom(Window)" layout="borderlayout()">
+                            <element id="atom(InsideWindow)" layoutpos="client" layout="filllayout()">
+                                <element id="atom(LogonUserList)" visible="false" layout="filllayout()"/>
                                 <element id="atom(PLAPUserList)" visible="false" layout="filllayout()"/>
                                 <element id="atom(SecurityOptions)" layout="verticalflowlayout(1,2,2,4)" visible="true">
-                                    <element class="SecurityOptions" layout="verticalflowlayout(0,0,0,1)" sheet="CommandLinks" padding="rect(0rp, 2rp, 0rp, 2rp)" id="atom(SecurityOptionsContainer)">
-                                        <button id="atom(PLACEHOLDER)" layout="filllayout()" margin="rect(0rp, 0rp, 0rp, 0rp)" sheet="CommandLinks"/>
+                                    <element class="SecurityOptions" layout="verticalflowlayout(0,0,0,1)" sheet="CommandLinks" padding="rect(0rp, 9rp, 0rp, 9rp)" id="atom(SecurityOptionsContainer)">
+                                        <button id="atom(PLACEHOLDER)" layout="filllayout()" margin="rect(0rp, 0rp, 0rp, 6rp)" sheet="CommandLinks"/>
 
                                     </element>
                                 </element>

@@ -192,10 +192,10 @@
                 <element contentalign="wrapleft" padding="rect(0rp,10rp,0rp,0rp)"/>
             </if>
             <if id="atom(LockedMessage)">
-                <element font="18;normal;shadow;Tahoma" shadowintensity="75" padding="rect(34rp,0rp,34rp,0rp)" contentalign="wrapcenter" accessible="true" accrole="41"/>
+                <element font="18;normal;shadow;Segoe UI" shadowintensity="75" padding="rect(34rp,0rp,34rp,0rp)" contentalign="wrapcenter" accessible="true" accrole="41"/>
             </if>
             <if id="atom(LockedSubMessage)">
-                <element font="9;normal;shadow;Tahoma" shadowintensity="75" contentalign="wrapcenter" padding="rect(0rp,10rp,0rp,10rp)" accessible="true" accrole="41"/>
+                <element font="9;normal;shadow;Segoe UI" shadowintensity="75" contentalign="wrapcenter" padding="rect(0rp,10rp,0rp,10rp)" accessible="true" accrole="41"/>
             </if>
             <if id="atom(SecurityOptions)">
                 <element contentalign="middlecenter"/>
@@ -203,7 +203,7 @@
             <if id="atom(SecurityInformation)">
                 <element contentalign="wrapleft" padding="rect(0rp, 0rp, 0rp, 20rp)" accessible="true" accrole="41"/>
             </if>
-            <button foreground="white" font="11;normal;shadow;Tahoma" shadowintensity="75" fontface="Segoe UI" cursor="arrow" accessible="true" accrole="43"/>
+            <button foreground="white" font="11;normal;shadow;Segoe UI" shadowintensity="75" fontface="Segoe UI" cursor="arrow" accessible="true" accrole="43"/>
         </style>
 
     </stylesheets>
@@ -219,20 +219,20 @@
                             <element id="atom(LockedMessage)"/>
                             <element id="atom(LockedSubMessage)"/>
                         </element>
-                        <element id="atom(Window)" layout="borderlayout()" width="536rp" height="337rp" background="resbmp(12,7,-1,0,0,1,1)" borderthickness="rect(45rp, 140rp, 45rp, 45rp)" padding="rect(0rp, 0rp, 0rp, -40rp)" animation="rectanglev|s|fast">
-                            <element id="atom(InsideWindow)" layoutpos="client" layout="filllayout()" animation="rectanglev|s|fast">
+                        <element id="atom(Window)" layout="borderlayout()">
+                            <element id="atom(InsideWindow)" layoutpos="client" layout="filllayout()">
                                 <element id="atom(MessageFrame)" layout="filllayout()" visible="true">
                                     <element id="atom(FullMessageFrame)" layout="borderlayout()">
                                         <macro layoutpos="bottom" expand="hr" margin="rect(0,0,0,8rp)" id="atom(LowerDiv)"/>
                                         <StyledScrollviewer sheet="ScrollStyle" id="atom(MessageScrollviewer)" xscrollable="false" padding="rect(0rp,0rp,0rp,0rp)" layoutpos="bottom" width="600rp" height="300rp">
-                                            <element layoutpos="top" content="" sheet="MainFrameStyle" id="atom(Message)" width="600rp" font="9;normal;shadow;Tahoma" shadowintensity="75" contentalign="wrapleft" accessible="true" accrole="41"/>
+                                            <element layoutpos="top" content="" sheet="MainFrameStyle" id="atom(Message)" width="600rp" font="9;normal;shadow;Segoe UI" shadowintensity="75" contentalign="wrapleft" accessible="true" accrole="41"/>
                                         </StyledScrollviewer>
                                         <macro expand="hr" layoutpos="bottom" id="atom(UpperDiv)" margin="rect(0rp, 5rp, 0rp, 0rp)"/>
                                         <element layoutpos="bottom" layout="flowlayout()">
                                             <element layout="flowlayout(0,2,1)" padding="rect(0rp,0rp,8rp,0rp)">
                                                 <element id="atom(FullIcon)" width="sysmetric(11)" height="sysmetric(12)"/>
                                             </element>
-                                            <element id="atom(MessageCaption)" content="" font="12;normal;shadow;Tahoma" shadowintensity="75" accessible="true" accrole="41"/>
+                                            <element id="atom(MessageCaption)" content="" font="12;normal;shadow;Segoe UI" shadowintensity="75" accessible="true" accrole="41"/>
                                         </element>
                                     </element>
                                     <element id="atom(ShortMessageFrame)" layout="borderlayout()" height="406rp" width="600rp" visible="true">
@@ -240,13 +240,13 @@
                                             <StyledScrollviewer layoutpos="bottom" sheet="ScrollStyle" id="atom(ShortScrollviewer)" visible="true" xscrollable="false" margin="rect(8rp, 10rp, 0rp, 0rp)">
                                                 <element layout="flowlayout(0, 0, 0, 0)" padding="rect(4rp, 0rp, 4rp, 0rp)" visible="true">
                                                     <element id="atom(ShortIcon)" width="sysmetric(11)" height="sysmetric(12)"/>
-                                                    <element sheet="MainFrameStyle" id="atom(ShortMessage)" content="short Message abcdef" font="9;normal;shadow;Tahoma" shadowintensity="75" contentalign="wrapleft" accessible="true" visible="true" accrole="41" padding="rect(8rp, 10rp, 0rp, 0rp)"/>
+                                                    <element sheet="MainFrameStyle" id="atom(ShortMessage)" content="short Message abcdef" font="9;normal;shadow;Segoe UI" shadowintensity="75" contentalign="wrapleft" accessible="true" visible="true" accrole="41" padding="rect(8rp, 10rp, 0rp, 0rp)"/>
                                                 </element>
                                             </StyledScrollviewer>
                                         </element>
                                     </element>
                                     <element id="atom(ConnectMessageFrame)" layout="verticalflowlayout(1,2,2,2)">
-                                        <element id="atom(ConnectMessage)" foreground="white" contentalign="wrapcenter" accessible="true" accrole="41" font="12;normal;shadow;Tahoma" shadowintensity="75"/>
+                                        <element id="atom(ConnectMessage)" foreground="white" contentalign="wrapcenter" accessible="true" accrole="41" font="12;normal;shadow;Segoe UI" shadowintensity="75"/>
                                     </element>
                                 </element>
                             </element>
