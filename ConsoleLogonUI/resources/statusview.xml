@@ -2,7 +2,7 @@
     <stylesheets>
         <style resid="statusViewSheet">
             <if id="atom(StatusText)">
-                <element foreground="white" contentalign="wrapcenter" font="18;normal;shadow;Segoe UI" shadowintensity="75" accessible="true" accrole="41"/>
+                <element foreground="white" contentalign="wrapcenter" font="18;normal;shadow;Tahoma" shadowintensity="75" accessible="true" accrole="41"/>
             </if>
         </style>
     </stylesheets>
@@ -14,9 +14,9 @@
                     <element layout="filllayout()">
                         
                     </element>
-                    <element id="atom(Status)" visible="true" Enabled="true" layout="flowlayout(0,0,2,2)" minsize="size(0rp,36rp)">
-                        <AnimationStrip id="atom(WaitAnimation)" content="resbmp(110)" visible="true" play="true" framewidth="20rp" frameduration="33" frameindex="0" width="20rp" height="20rp" margin="rect(0rp,0rp,5rp,0rp)"/>
-                        <element content="STATUS VIEW" id="atom(StatusText)"/>
+                    <element id="atom(Status)" visible="true" Enabled="true" layout="flowlayout(1,2,2,2)" animation="rectanglev|s|fast" minsize="size(75rp,75rp)">
+                        <AnimationStrip id="atom(WaitAnimation)" content="resbmp(110)" visible="true" play="true" framewidth="20rp" frameduration="33" frameindex="0" width="0rp" height="0rp" margin="rect(0rp,0rp,5rp,0rp)"/>
+                        <element content="STATUS VIEW" id="atom(StatusText)" width="600rp" background="resbmp(13,7,-1,0,0,1,1)" borderthickness="rect(0rp, 65rp, 0rp, 0rp)" padding="rect(0rp, 0rp, 0rp, 0rp)"/>
                     </element>
                 </element>
             </element>

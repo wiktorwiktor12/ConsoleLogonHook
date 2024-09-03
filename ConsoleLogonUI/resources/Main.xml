@@ -1,11 +1,14 @@
 <duixml>
     <stylesheets>
         <style resid="LogonStyle">
-            <if id="atom(MainFrame)">
-                <element background="gradient(rgb(0,132,217), rgb(0,36,58), 1)" accessible="true" accrole="9" accname="Logon Frame"/>
-            </if>
+
             <if class="status">
                 <element background="argb(0,0,0,0)" foreground="argb(255,255,255,255)" shadowintensity="75" fontsize="18pt" fontstyle="Shadow" padding="rect(24rp,0,0,100rp)"/>
+            </if>
+
+
+            <if id="atom(Background)">
+                <element background="resbmp(113,4,-1,0,0,0,0)"/>
             </if>
 
             <if class="passwordBox">
@@ -58,33 +61,33 @@
                 <element margin="rect(6rp, 0rp, 6rp, 0rp)"/>
             </if>
             <if id="atom(Shutdown)">
-                <button width="38rp" height="28rp" borderthickness="rect(4rp, 1rp, 4rp, 1rp)" background="resbmp(12296,7,-1,0,0,1,1)" contentalign="middlecenter" content="resbmp(12215,2,-1,0,0,1,1)" margin="rect(0,0,0,0)" accdesc="resstr(12128)" bordercolor="gray" borderstyle="raised"/>
+                <button height="28rp" borderthickness="rect(4rp, 1rp, 4rp, 1rp)" background="resbmp(12296,7,-1,0,0,1,1)" foreground="white" contentalign="middlecenter" content="Shut down" margin="rect(0,0,0,0)" accdesc="resstr(12128)" bordercolor="white" borderstyle="raised"/>
                 <if selected="true">
-                    <button content="resbmp(12216,2,-1,0,0,1,1)" accdesc="resstr(12133)" bordercolor="windowtext" borderstyle="solid"/>
+                    <button content="resstr(3008)" accdesc="resstr(12133)" bordercolor="windowtext" borderstyle="solid"/>
                 </if>
                 <if keyfocused="true">
-                    <button background="resbmp(12293,7,-1,0,0,1,1)" bordercolor="windowtext" borderstyle="solid"/>
+                    <button background="resbmp(12293,7,-1,0,0,1,1)" bordercolor="windowtext" borderstyle="solid" font="11;normal;underline|shadow;Tahoma" shadowintensity="75"/>
                 </if>
                 <if mousefocused="true">
-                    <button background="resbmp(12294,7,-1,0,0,1,1)" bordercolor="windowtext" borderstyle="solid"/>
+                    <button background="resbmp(12294,7,-1,0,0,1,1)" bordercolor="windowtext" borderstyle="solid" font="11;normal;underline|shadow;Tahoma" shadowintensity="75"/>
                 </if>
                 <if mousefocused="true" keyfocused="true" pressed="false">
-                    <button background="resbmp(12292,7,-1,0,0,1,1)" bordercolor="windowtext" borderstyle="solid"/>
+                    <button background="resbmp(12292,7,-1,0,0,1,1)" borderstyle="solid" font="11;normal;underline|shadow;Tahoma" shadowintensity="75"/>
                 </if>
                 <if pressed="true">
                     <button background="resbmp(12295,7,-1,0,0,1,1)" bordercolor="windowtext" borderstyle="sunken"/>
                 </if>
             </if>
             <if id="atom(ShutdownOptions)">
-                <button width="20rp" height="28rp" contentalign="middlecenter" content="resbmp(12217,2,-1,0,0,1,1)" background="resbmp(12302,7,-1,0,0,1,1)" borderthickness="rect(4rp, 3rp, 4rp, 3rp)" margin="rect(0,0,0,0)" bordercolor="gray" borderstyle="raised"/>
+                <button width="20rp" height="28rp" foreground="white" contentalign="middlecenter" background="resbmp(12302,7,-1,0,0,1,1)" borderthickness="rect(4rp, 3rp, 4rp, 3rp)" margin="rect(0,0,0,0)" bordercolor="gray" borderstyle="raised" content=">"/>
                 <if keyfocused="true">
-                    <button background="resbmp(12299,7,-1,0,0,1,1)" bordercolor="windowtext" borderstyle="solid"/>
+                    <button background="resbmp(12299,7,-1,0,0,1,1)" bordercolor="windowtext" borderstyle="solid" font="11;normal;underline|shadow;Tahoma" shadowintensity="75"/>
                 </if>
                 <if mousefocused="true">
-                    <button background="resbmp(12300,7,-1,0,0,1,1)" bordercolor="windowtext" borderstyle="solid"/>
+                    <button background="resbmp(12300,7,-1,0,0,1,1)" bordercolor="windowtext" borderstyle="solid" font="11;normal;underline|shadow;Tahoma" shadowintensity="75"/>
                 </if>
                 <if mousefocused="true" keyfocused="true" pressed="false">
-                    <button background="resbmp(12298,7,-1,0,0,1,1)" bordercolor="windowtext" borderstyle="solid"/>
+                    <button background="resbmp(12298,7,-1,0,0,1,1)" bordercolor="windowtext" borderstyle="solid" font="11;normal;underline|shadow;Tahoma" shadowintensity="75"/>
                 </if>
                 <if pressed="true">
                     <button background="resbmp(12301,7,-1,0,0,1,1)" bordercolor="windowtext" borderstyle="sunken"/>
@@ -98,28 +101,25 @@
     </stylesheets>
 
 
-    <element resid="Main" sheet="LogonStyle" layout="verticalflowlayout(1,2,2,2)" id="atom(MainFrame)">
-        <duiBackgroundWindow layout="filllayout()" width="2560rp" height="1600rp" background="gradient(rgb(0,132,217), rgb(0,36,58), 1)" id="atom(InsideFrame)">
-            <element layout="flowlayout(0, 0, 0, 0)" padding="rect(5rp,5rp,5rp,5rp)" > <!--TODO: style this -->
-                <element id="atom(LanguageBarParent)" layout="filllayout()" visible="false"/>
-            </element>
+    <element resid="Main" layout="flowlayout(1,2,2,2)" sheet="LogonStyle">
+        <duiBackgroundWindow width="2560rp" height="1600rp" id="atom(InsideFrame)" layout="filllayout()">
             <!--This is the footer for the branding and the options buttons such as the shutdown,ease of access and power options-->
-            <element layout="borderlayout()">
+            <element layout="borderlayout()" id="atom(Background)">
                 <element id="atom(SoftKeyboardParent)" layout="borderlayout()" layoutpos="none" />
                 <element id="atom(Options)" layoutpos="bottom" visible="true" enabled="true" layout="filllayout()" background="argb(0,116,184,252)" height="96rp">
 
                     <element id="atom(OptionsButton)" layout="borderlayout()" padding="rect(34rp, 34rp, 34rp, 34rp)">
-                        <button id="atom(buttonEaseOfAccess)" tooltip="true" layoutpos="left"/>
+                        <button id="atom(buttonEaseOfAccess)" tooltip="true" layoutpos="none"/>
                         <button id="atom(ToggleTabletKeyboard)" tooltip="true" layoutpos="none"/>
-                        <element layout="flowlayout(0,1,2,2)" layoutpos="right">
+                        <element layout="flowlayout(0,1,2,2)" layoutpos="left">
                             <element id="atom(ShutDownFrame)" layout="flowlayout()">
                                 <button id="atom(ShutDown)" accname="resstr(12128)" tooltip="true"/>
-                                <button id="atom(ShutDownOptions)" accname="resstr(12131)" accdesc="resstr(12131)" tooltip="true" shortcut="115"/>
+                                <button id="atom(ShutDownOptions)" accname="resstr(12131)" accdesc="resstr(12131)" tooltip="true"/>
                             </element>
                         </element>
                     </element>
                     <element layout="flowlayout(0,2,2,2)">
-                        <element id="atom(BrandingImage)" class="branding" />
+                        <element id="atom(BrandingImage)" class="branding" layoutpos="none"/>
                     </element>
                 </element>
                 <element layoutpos="auto" visible="true" enabled="true" layout="filllayout()" background="argb(0,116,184,252)" height="1504rp">
