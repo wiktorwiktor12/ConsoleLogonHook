@@ -497,7 +497,7 @@ static bool GetBackground(HBITMAP* OutBitmap)
                 int dw = 0; int dh = 0;
                 if (GetBitmapResolution(bitmapDefault, &dw, &dh) && BitmapAspectRatioEqualsScreen(bitmapDefault))
                 {
-                    if (dw > dataToUse->w || dh > dataToUse->h)
+                    if ((dw > dataToUse->w || dh > dataToUse->h) && dw <= GetSystemMetrics(SM_CXSCREEN) && dh <= GetSystemMetrics(SM_CYSCREEN))
                         bDefaultBetter = true;
                 }
 
