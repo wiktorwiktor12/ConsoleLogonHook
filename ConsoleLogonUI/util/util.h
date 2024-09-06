@@ -99,6 +99,39 @@ static std::wstring GetStringFromConsoleLogon(UINT str)
     return buf;
 }
 
+static std::wstring GetStringFromMUI(const std::wstring& mui, UINT str)
+{
+    WCHAR buf[256];
+    buf[0] = '\0';
+
+    WCHAR windowsDir[MAX_PATH];
+    if (GetWindowsDirectoryW(windowsDir, MAX_PATH))
+    {
+        WCHAR lang[LOCALE_NAME_MAX_LENGTH] = { 0 };
+        if (GetLocaleInfoW(LOCALE_USER_DEFAULT, LOCALE_SISO639LANGNAME, lang, LOCALE_NAME_MAX_LENGTH) > 0)
+        {
+            std::wstring localeName(lang);
+            localeName += L"-";
+            if (GetLocaleInfoW(LOCALE_USER_DEFAULT, LOCALE_SISO3166CTRYNAME, lang, LOCALE_NAME_MAX_LENGTH) > 0)
+            {
+                localeName += lang;
+            }
+
+            std::wstring muiPath = std::wstring(windowsDir) + L"\\System32\\" + localeName + L"\\" + mui;
+
+            HMODULE hMUI = LoadLibraryEx(muiPath.c_str(), NULL, LOAD_LIBRARY_AS_DATAFILE);
+            if (hMUI)
+            {
+                LoadStringW(hMUI, str, buf, sizeof(buf) / sizeof(WCHAR));
+
+                FreeLibrary(hMUI);
+            }
+        }
+    }
+
+    return buf;
+}
+
 static std::wstring AtomToStr(ATOM atom)
 {
     WCHAR atomName[256];
