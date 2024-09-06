@@ -150,7 +150,7 @@ void external::SelectedCredentialView_SetActive(const wchar_t* accountNameToDisp
 					field->SetID((DirectUI::UCString)std::format(L"editControl:{}", i).c_str());
 			}
 
-			std::wstring text = isChangePassword ? /*Cancel*/GetStringFromConsoleLogon(107) : /*Switch User*/GetStringFromConsoleLogon(114);
+			std::wstring text = isChangePassword ? /*Cancel*/GetStringFromMUI(L"ConsoleLogon.dll.mui", 107) : /*Switch User*/GetStringFromMUI(L"ConsoleLogon.dll.mui", 114);
 
 			DirectUI::Button* optbtn = 0;
 			hr = pDuiManager->pParser->CreateElement(
