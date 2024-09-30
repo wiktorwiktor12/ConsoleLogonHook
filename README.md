@@ -4,6 +4,16 @@ Welcome!
 This project hooks onto and provides a graphical user interface for the console logon screen in Windows 10.
 
 > [!WARNING]
+> CREDITS GO TO @mishaproductions FOR THE DUI LIBRARY
+> 
+> https://github.com/MishaProductions/dui70
+> 
+> check out the original repo for the dui library here
+> 
+> i was too lazy to properly embed into the clh repo
+
+
+> [!WARNING]
 > **THIS PROJECT IS IN EARLY DEVELOPMENT AND MIGHT BE UNSTABLE**
 >
 > You may encounter issues using a Microsoft account, however, this will work perfectly fine on local accounts.
