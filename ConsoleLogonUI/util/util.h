@@ -63,6 +63,7 @@ static std::vector<std::wstring> split(std::wstring s, std::wstring delimiter)
     return res;
 }
 
+HBITMAP ScaleBitmapToRes(HBITMAP oldBitmap);
 static HBITMAP GetHBITMAPFromImageFile(WCHAR* pFilePath)
 {
     Gdiplus::GdiplusStartupInput gpStartupInput;
@@ -73,6 +74,7 @@ static HBITMAP GetHBITMAPFromImageFile(WCHAR* pFilePath)
     if (bitmap)
     {
         bitmap->GetHBITMAP(Gdiplus::Color(255, 255, 255), &result);
+        result = ScaleBitmapToRes(result);
         delete bitmap;
     }
     Gdiplus::GdiplusShutdown(gpToken);
