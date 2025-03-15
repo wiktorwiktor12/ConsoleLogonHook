@@ -214,7 +214,7 @@ namespace memory
             {
                 auto signature = signatures[i];
                 uintptr_t address = FindPattern(base_address, signature.c_str(), bFindTop);
-                if (address <= 0)
+                if (!address)
                 {
                     SPDLOG_INFO(std::format("{} {} ADDRESS IS NULL", functionName,i));
                     //return (T)(0);

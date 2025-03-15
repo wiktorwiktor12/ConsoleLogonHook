@@ -1,5 +1,6 @@
 #pragma once
 #include <windows.h>
+#include <string>
 
 #define EXTERNAL(a,b) (a)(GetProcAddress(externalHookModule, b))
 
@@ -249,6 +250,8 @@ namespace external
     extern "C" __declspec(dllexport) void SelectableUserOrCredentialControl_Sort();
     extern "C" __declspec(dllexport) void SelectableUserOrCredentialControl_Create(void* actualInstance, const wchar_t* path);
     extern "C" __declspec(dllexport) void SelectableUserOrCredentialControl_Destroy(void* actualInstance);
+
+    extern "C" __declspec(dllexport) void LockedView_SetActive();
 }
 
 #ifdef EXTERNAL

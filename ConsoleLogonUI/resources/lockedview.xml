@@ -1,0 +1,25 @@
+<duixml>
+    <stylesheets>
+        <style resid="LockedViewSheet">
+            <if id="atom(LockedText)">
+                <element foreground="white" contentalign="wrapcenter" font="18;normal;shadow;Segoe UI" shadowintensity="75" accessible="true" accrole="41"/>
+            </if>
+        </style>
+    </stylesheets>
+    
+    <element resid="Main" layout="filllayout()" accessible="true" sheet="LockedViewSheet" background="argb(0,0,0,0)">
+        <duiStatusView id="atom(LockedViewFrame)" layout="filllayout()">
+            <element layout="borderlayout()" >
+                <element layoutpos="client" layout="verticalflowlayout(1,2,2,2)">
+                    <element layout="filllayout()">
+                        
+                    </element>
+                    <element id="atom(Locked)" visible="true" Enabled="true" layout="flowlayout(0,0,2,2)" minsize="size(0rp,36rp)">
+                        <element content="LOCKED VIEW" id="atom(LockedText)"/>
+                    </element>
+                </element>
+            </element>
+        </duiStatusView>
+    </element>
+
+</duixml>

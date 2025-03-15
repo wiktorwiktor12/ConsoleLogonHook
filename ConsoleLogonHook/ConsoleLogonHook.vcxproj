@@ -274,6 +274,7 @@
     <ClInclude Include="spdlog\stopwatch.h" />
     <ClInclude Include="spdlog\tweakme.h" />
     <ClInclude Include="spdlog\version.h" />
+    <ClInclude Include="ui\ui_lockedview.h" />
     <ClInclude Include="ui\ui_messageview.h" />
     <ClInclude Include="ui\ui_securitycontrol.h" />
     <ClInclude Include="ui\ui_selectedcredentialview.h" />
@@ -294,6 +295,7 @@
     <ClCompile Include="imgui\imgui_tables.cpp" />
     <ClCompile Include="imgui\imgui_widgets.cpp" />
     <ClCompile Include="init\init.cpp" />
+    <ClCompile Include="ui\ui_lockedview.cpp" />
     <ClCompile Include="ui\ui_messageview.cpp" />
     <ClCompile Include="ui\ui_securitycontrol.cpp" />
     <ClCompile Include="ui\ui_selectedcredentialview.cpp" />

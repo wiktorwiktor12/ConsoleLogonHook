@@ -150,6 +150,7 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="dllmain.cpp" />
+    <ClCompile Include="ui\dui_lockedview.cpp" />
     <ClCompile Include="ui\dui_manager.cpp" />
     <ClCompile Include="ui\dui_messageview.cpp" />
     <ClCompile Include="ui\dui_securitycontrol.cpp" />
@@ -267,6 +268,7 @@
     <ClInclude Include="spdlog\stopwatch.h" />
     <ClInclude Include="spdlog\tweakme.h" />
     <ClInclude Include="spdlog\version.h" />
+    <ClInclude Include="ui\dui_lockedview.h" />
     <ClInclude Include="ui\dui_manager.h" />
     <ClInclude Include="ui\dui_messageview.h" />
     <ClInclude Include="ui\dui_securitycontrol.h" />
@@ -289,6 +291,7 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
+    <Xml Include="resources\lockedview.xml" />
     <Xml Include="resources\Main.xml" />
     <Xml Include="resources\messageview.xml" />
     <Xml Include="resources\securitycontrol.xml" />

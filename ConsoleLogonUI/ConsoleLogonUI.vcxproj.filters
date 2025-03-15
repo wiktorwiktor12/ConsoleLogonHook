@@ -39,6 +39,9 @@
     <ClCompile Include="util\util.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="ui\dui_lockedview.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="spdlog\cfg\argv.h">
@@ -392,6 +395,9 @@
     <ClInclude Include="dui\templates.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="ui\dui_lockedview.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="spdlog\fmt\bundled\fmt.license.rst" />
@@ -409,6 +415,7 @@
     <Xml Include="resources\selectedcredentialview.xml" />
     <Xml Include="resources\statusview.xml" />
     <Xml Include="resources\userselect.xml" />
+    <Xml Include="resources\lockedview.xml" />
   </ItemGroup>
   <ItemGroup>
     <Image Include="Bitmap120.bmp">

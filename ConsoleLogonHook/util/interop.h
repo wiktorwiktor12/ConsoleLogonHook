@@ -1,5 +1,6 @@
 #pragma once
 #include <windows.h>
+#include <string>
 
 #define EXTERNAL(a,b) (a)(GetProcAddress(externalUiModule, b))
 
@@ -168,6 +169,13 @@ namespace external
         static auto fMessageOrStatusView_Destroy = EXTERNAL(void(*)(), "MessageOrStatusView_Destroy");
         if (fMessageOrStatusView_Destroy)
             fMessageOrStatusView_Destroy();
+    }
+
+    static void LockedView_SetActive()
+    {
+        static auto fLockedView_SetActive = EXTERNAL(void(*)(), "LockedView_SetActive");
+        if (fLockedView_SetActive)
+            fLockedView_SetActive();
     }
 
     extern "C" __declspec(dllexport) void MessageOptionControl_Press(void* actualInstance, const struct _KEY_EVENT_RECORD* keyrecord, int* success);

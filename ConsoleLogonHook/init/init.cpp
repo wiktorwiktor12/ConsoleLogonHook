@@ -14,6 +14,7 @@
 #include "../util/util.h"
 #include "../ui/ui_messageview.h"
 #include "../ui/ui_statusview.h"
+#include "../ui/ui_lockedview.h"
 #include "ui/ui_selectedcredentialview.h"
 #include "ui/ui_userselect.h"
 #include "util\interop.h"
@@ -110,6 +111,7 @@ namespace init
         //MessageBox(0, L"dbg3.4", 0, 0);
         uiSelectedCredentialView::InitHooks(baseaddress);
         //MessageBox(0, L"dbg4", 0, 0);
+        uiLockedView::InitHooks(baseaddress);
         memory::SaveOffsetCache();
 
         MinimizeLogonConsole();

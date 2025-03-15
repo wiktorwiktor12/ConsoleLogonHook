@@ -20,7 +20,6 @@ void external::SecurityControl_SetActive()
     if (!duiManager::Get()->IsReady)
         MessageBoxW(0,L"not ready",0,0);
     duiManager::SetPageActive((DirectUI::UCString)MAKEINTRESOURCEW(IDUIF_SECURITYCONTROL), [](DirectUI::Element* elm) -> void {
-        
         auto secOptsFrame = duiManager::Get()->pUIElement->FindDescendent(ATOMID(L"SecurityOptionsFrame"));
         if (secOptsFrame)
             secOptsFrame->SetKeyFocus();

@@ -6,6 +6,7 @@ IDUIF_SECURITYCONTROL					UIFILE				  "securitycontrol.xml"
 IDUIF_SELECTEDCREDENTIALVIEW			UIFILE				  "selectedcredentialview.xml"
 IDUIF_STATUSVIEW						UIFILE				  "statusview.xml"
 IDUIF_USERSELECT						UIFILE				  "userselect.xml"
+IDUIF_LOCKEDVIEW                        UIFILE                "lockedview.xml"
 
 IDB_BRAND								BITMAP                "Bitmap120.bmp"
 IDB_BRAND2								BITMAP				  "Bitmap1120.bmp"
