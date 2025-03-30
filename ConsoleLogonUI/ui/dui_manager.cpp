@@ -556,8 +556,8 @@ void duiManager::LoadBranding()
     int residToUse = 122;
     int lastdist = 9999999;
     int DPI = GetDpiForSystem();
-    int scalecompare = MulDiv(350, DPI, 96);/* 350 * (DPI / 96);*/
-    for (int i = 0; i < 3; ++i)
+    int scalecompare = MulDiv(350, 96, DPI);/* 350 * (DPI / 96);*/ // For some reason, Reversing the values makes the branding in basebrd.dll happy. This fix 
+    for (int i = 0; i < 3; ++i)										// was included in 21H2to7 and nothing seems to went wrong with it. 
     {
         auto pair = brandingSizes[i];
         int resid = pair[0];

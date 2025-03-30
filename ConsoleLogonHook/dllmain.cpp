@@ -10,12 +10,17 @@ HMODULE consoleLogon = 0;
 
 HMODULE GetConsoleLogonDLL()
 {
+	static HMODULE consoleLogon = nullptr;
     if (consoleLogon)
         return consoleLogon;
 
-    consoleLogon = LoadLibraryW(L"C:\\Windows\\System32\\ConsoleLogon.dll");
+    wchar_t systemRoot[MAX_PATH]; // There's 100% a way to not duplicate this part. But it's a mess
+    GetEnvironmentVariableW(L"SYSTEMROOT", systemRoot, MAX_PATH); // so i'm not going to do it. Someone else can do it.
+    wchar_t dllPath[MAX_PATH];									 							
+    swprintf(dllPath, MAX_PATH, L"%s\\System32\\ConsoleLogon.dll", systemRoot);
+    consoleLogon = LoadLibraryW(dllPath);
     if (!consoleLogon)
-        MessageBox(0, L"FAILED TO LOAD", L"FAILED TO LOAD", 0);
+        MessageBox(0, L"FAILED TO LOAD (DLLMAIN.CPP ConsoleLogon.dll)", L"FAILED TO LOAD", 0); // It helps a lot to know where it fails instead of a generic error.
     return consoleLogon;
 }
 
