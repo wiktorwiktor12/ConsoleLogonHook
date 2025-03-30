@@ -278,7 +278,6 @@ static void GetProfilePicturePathFromSID(std::wstring sid, const wchar_t* outUse
         return;
     }
 
-    if (bHighRes)
         std::wstring finalpath = std::wstring(programDataPath) + L"\\Microsoft\\User Account Pictures\\user-48.png";
 	
 	if (bHighRes)
