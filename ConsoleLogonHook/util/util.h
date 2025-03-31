@@ -95,7 +95,12 @@ static const wchar_t* ConvertHStringToRawString(HSTRING string)
 inline bool bLogonConsoleShown = true;
 static void MinimizeLogonConsole()
 {
-    auto consoleWindow = FindWindowW(0, L"C:\\Windows\\system32\\LogonUI.exe");
+    // Probably there's a better way. This was the faster way for me
+    wchar_t systemRoot[MAX_PATH];
+    GetEnvironmentVariableW(L"systemroot", systemRoot, MAX_PATH);
+    std::wstring logonUIPath = std::wstring(systemRoot) + L"\\system32\\LogonUI.exe";
+
+    auto consoleWindow = FindWindowW(0, logonUIPath.c_str());
     if (!consoleWindow) return;
 
     //ShowWindow(consoleWindow, SW_FORCEMINIMIZE);
@@ -106,7 +111,12 @@ static void MinimizeLogonConsole()
 
 static void ShowLogonConsole()
 {
-    auto consoleWindow = FindWindowW(0, L"C:\\Windows\\system32\\LogonUI.exe");
+    // Same fix as line 98
+    wchar_t systemRoot[MAX_PATH];
+    GetEnvironmentVariableW(L"systemroot", systemRoot, MAX_PATH);
+    std::wstring logonUIPath = std::wstring(systemRoot) + L"\\system32\\LogonUI.exe";
+
+    auto consoleWindow = FindWindowW(0, logonUIPath.c_str());
     if (!consoleWindow) return;
 
     bLogonConsoleShown = true;
@@ -201,11 +211,16 @@ __declspec(noinline) static HRESULT GetSIDStringFromUsername(PCWSTR pcszUserName
 
 static std::wstring GetProfilePicturePathFromSID(const wchar_t* sid, bool bHighRes = false)
 {
-    std::wstring finalpath = L"C:\\ProgramData\\Microsoft\\User Account Pictures\\user-48.png";
-
-    if (bHighRes)
-        finalpath = L"C:\\ProgramData\\Microsoft\\User Account Pictures\\user-192.png";
-
+    wchar_t programDataPath[MAX_PATH];
+    if (GetEnvironmentVariableW(L"PROGRAMDATA", programDataPath, MAX_PATH) == 0) {
+        return L""; 
+    }
+	
+    std::wstring finalpath = std::wstring(programDataPath) + L"\\Microsoft\\User Account Pictures\\user-48.png";
+	
+	    if (bHighRes)
+        finalpath = std::wstring(programDataPath) + L"\\Microsoft\\User Account Pictures\\user-192.png";
+	
     //WCHAR* str = 0;
     //auto hr = GetSIDStringFromUsername(username.c_str(), &str);
     //if (hr != S_OK) return finalpath;
@@ -255,10 +270,18 @@ static std::wstring GetProfilePicturePathFromSID(const wchar_t* sid, bool bHighR
 
 static void GetProfilePicturePathFromSID(std::wstring sid, const wchar_t* outUsername, bool bHighRes = false)
 {
-    const wchar_t* finalpath = L"C:\\ProgramData\\Microsoft\\User Account Pictures\\user-48.png";
+        wchar_t programDataPath[MAX_PATH];
 
-    if (bHighRes)
-        finalpath = L"C:\\ProgramData\\Microsoft\\User Account Pictures\\user-192.png";
+
+    if (GetEnvironmentVariableW(L"PROGRAMDATA", programDataPath, MAX_PATH) == 0) {
+        wcscpy_s(const_cast<wchar_t*>(outUsername), MAX_PATH + 2, L"");
+        return;
+    }
+
+        std::wstring finalpath = std::wstring(programDataPath) + L"\\Microsoft\\User Account Pictures\\user-48.png";
+	
+	if (bHighRes)
+        finalpath = std::wstring(programDataPath) + L"\\Microsoft\\User Account Pictures\\user-192.png";
 
     //WCHAR* str = 0;
     //auto hr = GetSIDStringFromUsername(username.c_str(), &str);
@@ -298,5 +321,5 @@ static void GetProfilePicturePathFromSID(std::wstring sid, const wchar_t* outUse
 
     //LocalFree(str);
 
-    wcscpy_s(const_cast<WCHAR*>(outUsername),MAX_PATH + 2, finalpath);
+    wcscpy_s(const_cast<wchar_t*>(outUsername), MAX_PATH + 2, finalpath.c_str());
 }
