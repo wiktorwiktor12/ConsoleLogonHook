@@ -571,7 +571,7 @@ void duiManager::LoadBranding()
         }
     }
     //MessageBoxW(0,std::format(L"resid{} dist{} DPI {} scalecompare{}",residToUse,lastdist,DPI,scalecompare).c_str(),0,0);
-    HBITMAP bitmap = external::BrandingLoadImage(L"Basebrd", residToUse, 0, 0, 0, 0);
+    HBITMAP bitmap = external::BrandingLoadImage(L"Basebrd", 122, 0, 0, 0, 0); // Hardcode to 122, seems like brandingloadimage has stuff to handle dpi on its own
     if (!bitmap)
     {
         bitmap = LoadBitmapW(duiManager::Get()->hInstance, MAKEINTRESOURCEW(residToUse));
