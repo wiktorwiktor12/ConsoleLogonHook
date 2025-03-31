@@ -212,14 +212,15 @@ __declspec(noinline) static HRESULT GetSIDStringFromUsername(PCWSTR pcszUserName
 static std::wstring GetProfilePicturePathFromSID(const wchar_t* sid, bool bHighRes = false)
 {
     wchar_t programDataPath[MAX_PATH];
-    if (GetEnvironmentVariableW(L"PROGRAMDATA", programDataPath, MAX_PATH) == 0) {
+    if (GetEnvironmentVariableW(L"PROGRAMDATA", programDataPath, MAX_PATH) == 0) 
+	{
         return L""; 
     }
 	
-    std::wstring finalpath = std::wstring(programDataPath) + L"\\Microsoft\\User Account Pictures\\user-48.png";
+	std::wstring finalpath = std::wstring(programDataPath) + L"\\Microsoft\\User Account Pictures\\user-48.png";
 	
-	    if (bHighRes)
-        finalpath = std::wstring(programDataPath) + L"\\Microsoft\\User Account Pictures\\user-192.png";
+	if (bHighRes)
+		finalpath = std::wstring(programDataPath) + L"\\Microsoft\\User Account Pictures\\user-192.png";
 	
     //WCHAR* str = 0;
     //auto hr = GetSIDStringFromUsername(username.c_str(), &str);
@@ -278,10 +279,10 @@ static void GetProfilePicturePathFromSID(std::wstring sid, const wchar_t* outUse
         return;
     }
 
-        std::wstring finalpath = std::wstring(programDataPath) + L"\\Microsoft\\User Account Pictures\\user-48.png";
+	std::wstring finalpath = std::wstring(programDataPath) + L"\\Microsoft\\User Account Pictures\\user-48.png";
 	
 	if (bHighRes)
-        finalpath = std::wstring(programDataPath) + L"\\Microsoft\\User Account Pictures\\user-192.png";
+		finalpath = std::wstring(programDataPath) + L"\\Microsoft\\User Account Pictures\\user-192.png";
 
     //WCHAR* str = 0;
     //auto hr = GetSIDStringFromUsername(username.c_str(), &str);
