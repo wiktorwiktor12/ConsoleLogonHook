@@ -4,6 +4,11 @@ Welcome!
 This project hooks onto and provides a graphical user interface for the console logon screen in Windows 10.
 
 > [!WARNING]
+> This project is now considered obsolete by me due to the existance of AuthUX
+> Would recommend for you to use AuthUX instead please
+> https://github.com/explorer7-team/AuthUX
+
+> [!WARNING]
 > CREDITS GO TO @mishaproductions FOR THE DUI LIBRARY
 > 
 > https://github.com/MishaProductions/dui70
